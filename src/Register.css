@@ -1,0 +1,32 @@
+.table-striped-rows tr:nth-child(2n) td {
+    background-color: #fbfbfb;
+    font-size: 200%;
+}
+.table-striped-rows td{
+    font-size: 200%;
+}
+.table-striped-rows thead {
+    font-size: 200%;
+    background-color: #f1f1f1;
+    color: rgb(238, 245, 248);
+}
+
+.button-container {
+
+    background-color: #f1f1f1;
+    margin: 0px 10px 10px 10px;
+    padding: 10px;}
+
+.ant-btn-lg {
+    height: 200%;
+    padding: 6.4px 15px;
+    font-size: 200%;
+    border-radius: 2px;
+    }
+
+.button-container {
+    display: grid;
+    grid-template-areas: "button1 button2"
+                            "button3 button4";
+    grid-gap: 5pc 1pc;
+}
