@@ -1,38 +1,69 @@
 import React from 'react'
 import { Button, Menu, Layout } from 'antd'
+import Icon from '@ant-design/icons'
+import { HomeOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
 import './App.css'
 import Register from './Register'
-
-import { Footer, Header } from 'antd/lib/layout/layout'
+import { ReactComponent as EbrainsLogo } from './ebrains-ai.svg'
 
 const { Content } = Layout
 const { TabPane } = Tabs
 const items = [{ label: 'Registration' }, { label: 'Analysis' }]
 const App = () => (
-  <Layout>
+  <div className='App' style={{ 'background-color': 'red' }}>
     <Layout>
-      <Content style={{ padding: '5%' }}>
-        <div className='card-container' style={{ backgroundColor: 'white' }}>
-          <Tabs type='card' className='TabWrapper' size='large'>
-            <TabPane tab='Registration' key='1'>
-              <Register />
-            </TabPane>
-            <TabPane tab='Analysis' key='2'>
-              <p>Content of Tab Pane 2</p>
-              <p>Content of Tab Pane 2</p>
-              <p>Content of Tab Pane 2</p>
-            </TabPane>
-            <TabPane tab='Export' key='3'>
-              <p>Content of Tab Pane 3</p>
-              <p>Content of Tab Pane 3</p>
-              <p>Content of Tab Pane 3</p>
-            </TabPane>
-          </Tabs>
-        </div>
-      </Content>
+      <p></p>
+      <Icon
+        component={EbrainsLogo}
+        style={{
+          position: 'absolute',
+          right: '1pc',
+          'font-size': '2000%',
+          border: 0,
+          margin: '-2% 10% 0 0',
+          zIndex: 1
+        }}
+      />
+
+      <Layout>
+        <Button
+          type='primary'
+          shape='circle'
+          icon={<HomeOutlined style={{ scale: '300%' }} />}
+          style={{
+            backgroundColor: 'white',
+            borderColor: 'white',
+            color: 'black',
+            position: 'absolute',
+            'margin-left': '9%',
+            'margin-top': '1%',
+            marginBottom: 0,
+            width: '6rem',
+            height: '6rem',
+            zIndex: 1
+          }}
+        />
+        <Content style={{ padding: '5%' }}>
+          <div
+            className='card-container'
+            style={{
+              backgroundColor: '#e8efff',
+              'border-radius': '25px',
+              'margin-top': '-1%'
+            }}
+          >
+            <Tabs type='card' className='TabWrapper' size='large'>
+              <TabPane tab='Registration' key='1'>
+                <Register />
+              </TabPane>
+              <TabPane tab='Analysis' key='2'></TabPane>
+            </Tabs>
+          </div>
+        </Content>
+      </Layout>
     </Layout>
-  </Layout>
+  </div>
 )
 
 export default App

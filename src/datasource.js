@@ -96,7 +96,8 @@ const datasource: DataType[] = [
     WebAligned: 'false',
     WebWarped: 'false',
     Segmented: 'false',
-    Nutiled: 'false'
+    Nutiled: 'false',
+    
   },
   {
     key: '12',
