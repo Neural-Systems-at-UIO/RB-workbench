@@ -1,4 +1,16 @@
-const datasource: DataType[] = [
+function fetchData (url) {
+  const data = fetch(url).then(response => {
+    if (response.ok) {
+      return response.json()
+    }
+  })
+}
+
+// const datasource = fetchData('http://localhost:80/server.php')
+// console.log('success')
+// console.log(datasource)
+
+const datasource = [
   {
     key: '1',
     BrainID: '71717640',
@@ -96,8 +108,7 @@ const datasource: DataType[] = [
     WebAligned: 'false',
     WebWarped: 'false',
     Segmented: 'false',
-    Nutiled: 'false',
-    
+    Nutiled: 'false'
   },
   {
     key: '12',
@@ -163,5 +174,6 @@ const datasource: DataType[] = [
     Nutiled: 'false'
   }
 ]
-
+console.log('success')
+console.log(datasource)
 export default datasource
