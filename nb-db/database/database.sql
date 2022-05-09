@@ -16,6 +16,55 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `brain`
+--
+
+DROP TABLE IF EXISTS `brain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `brain` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `brain`
+--
+
+LOCK TABLES `brain` WRITE;
+/*!40000 ALTER TABLE `brain` DISABLE KEYS */;
+INSERT INTO `brain` VALUES (1,'71717640',1),(2,'71717642',2);
+/*!40000 ALTER TABLE `brain` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `processtype`
+--
+
+DROP TABLE IF EXISTS `processtype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `processtype` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `processtype`
+--
+
+LOCK TABLES `processtype` WRITE;
+/*!40000 ALTER TABLE `processtype` DISABLE KEYS */;
+INSERT INTO `processtype` VALUES (1,'nutil');
+/*!40000 ALTER TABLE `processtype` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `project`
 --
 
@@ -25,8 +74,9 @@ DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
+  `processtype_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +85,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (2,'p2'),(3,'halla');
+INSERT INTO `project` VALUES (2,'p2',0),(3,'halla',0),(4,'my named pro0ject',1);
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,6 +138,30 @@ LOCK TABLES `roletype` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `treatment_group`
+--
+
+DROP TABLE IF EXISTS `treatment_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `treatment_group` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `treatment_group`
+--
+
+LOCK TABLES `treatment_group` WRITE;
+/*!40000 ALTER TABLE `treatment_group` DISABLE KEYS */;
+INSERT INTO `treatment_group` VALUES (1,'Control'),(2,'Treatment');
+/*!40000 ALTER TABLE `treatment_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -99,7 +173,7 @@ CREATE TABLE `user` (
   `lastname` varchar(60) NOT NULL,
   `firstname` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +182,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Groeneboom','Nicolaas'),(2,'Yates','Sharon');
+INSERT INTO `user` VALUES (1,'Groeneboom','Nicolaas'),(2,'Yates','Sharon'),(7,'carey','harry');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -121,4 +195,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 12:13:21
+-- Dump completed on 2022-05-09 16:43:15
