@@ -7,51 +7,54 @@ import './App.css'
 import Register from './Register'
 import ListProjects from './ListProjects'
 import { ReactComponent as EbrainsLogo } from './ebrains-ai.svg'
+import { ReactComponent as HomeButton } from './home.svg'
 
 const { Content } = Layout
 const { TabPane } = Tabs
 const items = [{ label: 'Registration' }, { label: 'Analysis' },  { label: 'Projects' }]
 const App = () => (
   <div className='App' style={{ 'background-color': 'red' }}>
-    <Layout>
+    <Layout style={{ height: '100vh' }}>
       <p></p>
-      <Icon
-        component={EbrainsLogo}
-        style={{
-          position: 'absolute',
-          right: '1pc',
-          'font-size': '2000%',
-          border: 0,
-          margin: '-2% 10% 0 0',
-          zIndex: 1
-        }}
-      />
 
       <Layout>
         <Button
           type='primary'
           shape='circle'
-          icon={<HomeOutlined style={{ scale: '300%' }} />}
+          icon={<Icon component={HomeButton} style={{ 'font-size': '300%' }} />}
           style={{
+            position: 'absolute',
+            margin: '2% 0 0% 5%',
             backgroundColor: 'white',
             borderColor: 'white',
             color: 'black',
-            position: 'absolute',
-            'margin-left': '9%',
-            'margin-top': '1%',
+            position: 'relative',
             marginBottom: 0,
             width: '6rem',
             height: '6rem',
             zIndex: 1
           }}
         />
-        <Content style={{ padding: '5%' }}>
+        <div style={{ position: 'relative', margin: '0 0 2% 0' }}>
+          <Icon
+            component={EbrainsLogo}
+            style={{
+              position: 'absolute',
+              float: 'left',
+              right: '1pc',
+              'font-size': '2000%',
+              border: 0,
+              margin: '-4% 10% 2% 2%',
+              zIndex: 1
+            }}
+          />
+        </div>
+        <Content style={{ padding: '0 3% 0 3%', marginTop: '-2%' }}>
           <div
             className='card-container'
             style={{
               backgroundColor: '#e8efff',
-              'border-radius': '25px',
-              'margin-top': '-1%'
+              'margin-top': '0%'
             }}
           >
             <Tabs type='card' className='TabWrapper' size='large'>

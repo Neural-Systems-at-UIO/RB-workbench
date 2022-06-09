@@ -73,7 +73,7 @@
 }
 
 .ant-tabs-top > .ant-tabs-nav, .ant-tabs-bottom > .ant-tabs-nav, .ant-tabs-top > div > .ant-tabs-nav, .ant-tabs-bottom > div > .ant-tabs-nav {
-	margin: 0 0 11px 0;
+	margin: 0 0 0.5% 0;
 }
 .ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
 	border-bottom-color: #f1f4fa;
