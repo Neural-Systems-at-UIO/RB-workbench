@@ -5,11 +5,12 @@ import { HomeOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
 import './App.css'
 import Register from './Register'
+import ListProjects from './ListProjects'
 import { ReactComponent as EbrainsLogo } from './ebrains-ai.svg'
 
 const { Content } = Layout
 const { TabPane } = Tabs
-const items = [{ label: 'Registration' }, { label: 'Analysis' }]
+const items = [{ label: 'Registration' }, { label: 'Analysis' },  { label: 'Projects' }]
 const App = () => (
   <div className='App' style={{ 'background-color': 'red' }}>
     <Layout>
@@ -54,10 +55,13 @@ const App = () => (
             }}
           >
             <Tabs type='card' className='TabWrapper' size='large'>
-              <TabPane tab='Registration' key='1'>
+            <TabPane tab='Projects' key='1'>
+                <ListProjects />
+                </TabPane>
+              <TabPane tab='Registration' key='2'>
                 <Register />
               </TabPane>
-              <TabPane tab='Analysis' key='2'></TabPane>
+              <TabPane tab='Analysis' key='3'></TabPane>
             </Tabs>
           </div>
         </Content>

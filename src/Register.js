@@ -90,7 +90,7 @@ const StyledTable = styled(props => <Table {...props} />)`
 `
 
 function handleButtonClick (e) {
-  fetch('http://localhost:80/server.php').then(res => {
+  fetch('http://localhost:3000/server.php').then(res => {
     res.json().then(data => {
       console.log(data)
       message.info('done')
@@ -122,7 +122,7 @@ function handleAdd (DataSource) {
 function Buildtable () {
   const [DataSource, SetDataSource] = useState('')
   const updateTable = async () => {
-    const response = await fetch('http://localhost:80/server.php')
+    const response = await fetch('http://www.quint-tools.com:3000/server.php')
     const data = await response.json()
     SetDataSource(data)
     // SetDataSource(DataSource => ({ arrayvar: [DataSource, data] }))

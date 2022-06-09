@@ -1,0 +1,1 @@
+insert into user('lastname','firstname') values('leuat','')
