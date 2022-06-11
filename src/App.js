@@ -5,51 +5,38 @@ import { HomeOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
 import './App.css'
 import Register from './Register'
-import ListProjects from './ListProjects'
 import { ReactComponent as EbrainsLogo } from './ebrains-ai.svg'
 import { ReactComponent as HomeButton } from './home.svg'
+import { Header } from 'antd/lib/layout/layout'
 
 const { Content } = Layout
 const { TabPane } = Tabs
-const items = [{ label: 'Registration' }, { label: 'Analysis' },  { label: 'Projects' }]
+const items = [
+  { label: 'Registration' },
+  { label: 'Analysis' },
+  { label: 'Projects' }
+]
 const App = () => (
   <div className='App' style={{ 'background-color': 'red' }}>
     <Layout style={{ height: '100vh' }}>
       <p></p>
-
-      <Layout>
-        <Button
-          type='primary'
-          shape='circle'
-          icon={<Icon component={HomeButton} style={{ 'font-size': '300%' }} />}
+      <Header style={{ backgroundColor: '#e8efff' }}>
+        <Icon
+          component={EbrainsLogo}
           style={{
             position: 'absolute',
-            margin: '2% 0 0% 5%',
-            backgroundColor: 'white',
-            borderColor: 'white',
-            color: 'black',
-            position: 'relative',
-            marginBottom: 0,
-            width: '6rem',
-            height: '6rem',
+            float: 'left',
+            right: '5pc',
+            height: '1vw',
+            margin: '-68px 0 0 0px',
+            'font-size': '1500%',
+            border: 0,
             zIndex: 1
           }}
         />
-        <div style={{ position: 'relative', margin: '0 0 2% 0' }}>
-          <Icon
-            component={EbrainsLogo}
-            style={{
-              position: 'absolute',
-              float: 'left',
-              right: '1pc',
-              'font-size': '2000%',
-              border: 0,
-              margin: '-4% 10% 2% 2%',
-              zIndex: 1
-            }}
-          />
-        </div>
-        <Content style={{ padding: '0 3% 0 3%', marginTop: '-2%' }}>
+      </Header>
+      <Layout>
+        <Content style={{ padding: '0 3% 0 3%', marginTop: '0%' }}>
           <div
             className='card-container'
             style={{
@@ -58,9 +45,8 @@ const App = () => (
             }}
           >
             <Tabs type='card' className='TabWrapper' size='large'>
-            <TabPane tab='Projects' key='1'>
-                <ListProjects />
-                </TabPane>
+              {/*               <TabPane tab='Projects' key='1'></TabPane>
+               */}{' '}
               <TabPane tab='Registration' key='2'>
                 <Register />
               </TabPane>

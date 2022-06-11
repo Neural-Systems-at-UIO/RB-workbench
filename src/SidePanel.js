@@ -1,4 +1,4 @@
-import { Table, Button, Form, message, Typography } from 'antd'
+import { Table, Form, message, Typography } from 'antd'
 import './SidePanel.css'
 
 const { Title } = Typography
@@ -17,44 +17,106 @@ function SidePanel () {
       <div
         className='button-container'
         style={{
-          zIndex: 2
+          zIndex: 2,
+          width: '100%'
         }}
       >
-        <Button danger size='large' onClick={handleButtonClick}>
+        <button danger size='large' onClick={handleButtonClick}>
           WebAlign
-        </Button>
-        <Button danger size='large'>
+        </button>
+        <button danger size='large'>
           WebIlastik
-        </Button>
-        <Button danger size='large'>
+        </button>
+        <button danger size='large'>
           Nutil
-        </Button>
+        </button>
       </div>
-      <div className='info-card'>
-        {/* set bold font */}
-        <Title
-          level={1}
+      <div
+        style={{
+          marginBottom: '0px',
+          marginTop: '40%',
+          fontSize: '1.5rem',
+          border: '1px solid #f8fafb'
+        }}
+      >
+        <p
           style={{
-            color: '#f8fafb',
-            border: 'solid #f8fafb 1px',
-            padding: '2%',
-            marginBottom: '0%'
+            fontWeight: 'bold',
+            marginTop: '0.3rem',
+            marginBottom: '0.3rem',
+            color: '#f8fafb'
           }}
         >
-          <strong>Brain ID</strong>
-        </Title>
-
-        <div
-          style={{
-            'overflow-y': 'scroll',
-            height: '80%',
-            fontSize: '1.4em',
-            border: 'solid #f8fafb 1px'
-          }}
-        >
-          <p>
-            Card content <br></br>Card
+          Dataset Title
+        </p>
+      </div>
+      <div
+        className='CardCont'
+        style={{
+          height: '30vh',
+          overflowY: 'scroll',
+          marginTop: '0',
+          color: '#f8fafb',
+          fontSize: '1.5rem',
+          border: '1px solid #f8fafb'
+        }}
+      >
+        <div className='CardBody'>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
           </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+            Card content
+          </p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
+          <p>Card content</p>
           <p>Card content</p>
           <p>Card content</p>
           <p>Card content</p>
@@ -72,3 +134,39 @@ function SidePanel () {
   )
 }
 export default SidePanel
+
+/* 
+<div className='info-card'>
+<Title
+  level={1}
+  style={{
+    color: '#f8fafb',
+    border: 'solid #f8fafb 1px',
+    padding: '2%',
+    marginBottom: '0%'
+  }}
+>
+  <strong>Brain ID</strong>
+</Title>
+
+<div
+  style={{
+    border: 'solid #f8fafb 1px'
+  }}
+>
+  <p>
+    Card content <br></br>Card
+  </p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+  <p>Card content</p>
+</div>
+</div> */
