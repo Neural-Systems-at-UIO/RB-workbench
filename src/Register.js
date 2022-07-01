@@ -8,69 +8,57 @@ import { render } from '@umijs/deps/compiled/mustache'
 import { useState } from 'react'
 
 const { Title } = Typography
+
 const columns = [
   {
-    title: 'id',
-    dataIndex: 'id',
-    key: 'id'
+    title: 'Brain ID',
+    dataIndex: 'BrainID',
+    key: 'BrainID',
+    sorter: (a, b) => a.key - b.key,
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 150
+  },
+  {
+    title: 'Group',
+    dataIndex: 'Group',
+    key: 'Group',
+    sorter: (a, b) => a.Group.localeCompare(b.Group),
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 150
+  },
+  {
+    title: 'WebAligned',
+    dataIndex: 'WebAligned',
+    key: 'WebAligned',
+    sorter: (a, b) => a.WebAligned.localeCompare(b.WebAligned),
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 240
+  },
+  {
+    title: 'WebWarped',
+    dataIndex: 'WebWarped',
+    key: 'WebWarped',
+    sorter: (a, b) => a.WebWarped.localeCompare(b.WebWarped),
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 240
+  },
+  {
+    title: 'Segmented',
+    dataIndex: 'Segmented',
+    key: 'Segmented',
+    sorter: (a, b) => a.Segmented.localeCompare(b.Segmented),
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 210
+  },
+  {
+    title: 'Nutiled',
+    dataIndex: 'Nutiled',
+    key: 'Nutiled',
+    sorter: (a, b) => a.Nutiled.localeCompare(b.Nutiled),
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: 200
   }
 ]
-
-// const columns = [
-//   {
-//     title: 'id',
-//     dataIndex: 'id',
-//     key: 'id'
-//   },
-//   {
-//     title: 'Brain ID',
-//     dataIndex: 'BrainID',
-//     key: 'BrainID',
-//     sorter: (a, b) => a.key - b.key,
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 150
-//   },
-//   {
-//     title: 'Group',
-//     dataIndex: 'Group',
-//     key: 'Group',
-//     sorter: (a, b) => a.Group.localeCompare(b.Group),
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 150
-//   },
-//   {
-//     title: 'WebAligned',
-//     dataIndex: 'WebAligned',
-//     key: 'WebAligned',
-//     sorter: (a, b) => a.WebAligned.localeCompare(b.WebAligned),
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 240
-//   },
-//   {
-//     title: 'WebWarped',
-//     dataIndex: 'WebWarped',
-//     key: 'WebWarped',
-//     sorter: (a, b) => a.WebWarped.localeCompare(b.WebWarped),
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 240
-//   },
-//   {
-//     title: 'Segmented',
-//     dataIndex: 'Segmented',
-//     key: 'Segmented',
-//     sorter: (a, b) => a.Segmented.localeCompare(b.Segmented),
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 210
-//   },
-//   {
-//     title: 'Nutiled',
-//     dataIndex: 'Nutiled',
-//     key: 'Nutiled',
-//     sorter: (a, b) => a.Nutiled.localeCompare(b.Nutiled),
-//     sortDirections: ['descend', 'ascend', 'descend'],
-//     width: 200
-//   }
-// ]
 
 // const [DataSource, SetDataSource] = useState(datasource)
 // rowSelection object indicates the need for row selection
@@ -91,7 +79,7 @@ const StyledTable = styled(props => <Table {...props} />)`
 `
 
 function handleButtonClick (e) {
-  fetch('http://localhost:3000/server.php').then(res => {
+  fetch('http://localhost:3000/list_projects.php').then(res => {
     res.json().then(data => {
       console.log(data)
       message.info('done')
@@ -126,9 +114,10 @@ function Buildtable () {
   const updateTable = async () => {
     const response = await fetch('http://www.quint-tools.com:3000/server.php')
     const data = await response.json()
-    SetDataSource(data)
+    // SetDataSource(datasource)
     // SetDataSource(DataSource => ({ arrayvar: [DataSource, data] }))
   }
+  updateTable()
 
   return (
     <div>
@@ -139,11 +128,11 @@ function Buildtable () {
           ...rowSelection
         }}
         columns={columns}
-        dataSource={DataSource}
-        scroll={{ y: '20rem', x: 'max-content' }}
+        dataSource={datasource}
+        scroll={{ y: '55vh', x: 'max-content' }}
         pagination={false}
       />
-      <Button onClick={updateTable}>Add</Button>
+      {/* <Button onClick={updateTable}>Add</Button> */}
     </div>
   )
 }
