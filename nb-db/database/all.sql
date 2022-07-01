@@ -62,6 +62,19 @@ CREATE TABLE `taskmetadatatype`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL
 );
+<<<<<<< HEAD
+=======
+ALTER TABLE
+    `project` ADD CONSTRAINT `project_projecttype_id_foreign` FOREIGN KEY(`projecttype_id`) REFERENCES `projecttype`(`id`);
+ALTER TABLE
+    `projectrole` ADD CONSTRAINT `projectrole_project_id_foreign` FOREIGN KEY(`project_id`) REFERENCES `project`(`id`);
+ALTER TABLE
+    `projectrole` ADD CONSTRAINT `projectrole_roletype_id_foreign` FOREIGN KEY(`roletype_id`) REFERENCES `roletype`(`id`);
+ALTER TABLE
+    `brain` ADD CONSTRAINT `brain_group_id_foreign` FOREIGN KEY(`group_id`) REFERENCES `treatment_group`(`id`);
+ALTER TABLE
+    `task` ADD CONSTRAINT `task_project_id_foreign` FOREIGN KEY(`project_id`) REFERENCES `project`(`id`);
+>>>>>>> c0e85d33ec8f3033668c25d7f016b244d3e1eed0
 use nbw;
 insert into user(lastname,firstname) values('Nicolaas','G');
 insert into user(lastname,firstname) values('Harry','C');
