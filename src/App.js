@@ -4,8 +4,7 @@ import Icon from '@ant-design/icons'
 import { HomeOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
 import './App.css'
-import Register from './Register'
-import ProjectPage from './ProjectPage'
+import Register from './Register.js'
 
 import { ReactComponent as EbrainsLogo } from './ebrains-ai.svg'
 import { ReactComponent as HomeButton } from './home.svg'
@@ -19,30 +18,34 @@ const items = [
   { label: 'Projects' }
 ]
 const App = () => (
-  <div className='App' style={{ 'background-color': 'red' }}>
+  <div className='App' style={{ 'background-color': 'red', overflow: 'hidden', height: '100%' }}>
+
     <Layout style={{ height: '100vh' }}>
-      <p></p>
-      <Header style={{ backgroundColor: '#e8efff' }}>
+
+      <Header style={{ backgroundColor: '#d8e2dc', height: '2vh' }}>
         <Icon
           component={EbrainsLogo}
           style={{
             position: 'absolute',
             float: 'left',
-            right: '5pc',
-            height: '1vw',
-            margin: '-68px 0 0 0px',
+            right: '8vw',
+            top: '-4rem',
+            // margin: '-2.5% 0 0 0px',
             'font-size': '1500%',
             border: 0,
             zIndex: 1
           }}
         />
+        {/* <img src={EbrainsLogo} style={{ height: '30vh' }} /> */}
+        {/* display ebrains logo */}
+
       </Header>
       <Layout>
-        <Content style={{ padding: '0 3% 0 3%', marginTop: '0%' }}>
+        <Content style={{ padding: '0 0', marginTop: '0%' }}>
           <div
             className='card-container'
             style={{
-              backgroundColor: '#e8efff',
+              backgroundColor: '#d8e2dc',
               'margin-top': '0%'
             }}
           >

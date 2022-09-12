@@ -3,7 +3,7 @@ import './SidePanel.css'
 
 const { Title } = Typography
 
-export function handleButtonClick (e) {
+export function handleButtonClick(e) {
   fetch('http://localhost:80/server.php').then(res => {
     res.json().then(data => {
       console.log(data)
@@ -11,7 +11,7 @@ export function handleButtonClick (e) {
     })
   })
 }
-function SidePanel () {
+function SidePanel() {
   return (
     <div className='SidePanel'>
       <div
@@ -23,7 +23,7 @@ function SidePanel () {
       >
         <a
           target='_blank'
-          href='https://webalign.apps-dev.hbp.eu/webalign.html?%7B%22clb-collab-id%22%3A%22quint-demo%22%2C%22clb-doc-path%22%3A%22%22%2C%22clb-doc-name%22%3A%22WebAlign%22%2C%22clb-drive-id%22%3A%228eabbdd3-6c21-49ef-b18b-1e90e58f3f9b%22%2C%22token%22%3A%22eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJfNkZVSHFaSDNIRmVhS0pEZDhXcUx6LWFlZ3kzYXFodVNJZ1RXaTA1U2k0In0.eyJleHAiOjE2NTc1Mjk3MTgsImlhdCI6MTY1NjkyNDkxOSwiYXV0aF90aW1lIjoxNjU2OTI0OTE4LCJqdGkiOiJjMmUzZWJmZC1lY2I2LTQxYWYtOWFjYS1iM2NlMjZhNTZhNDAiLCJpc3MiOiJodHRwczovL2lhbS5lYnJhaW5zLmV1L2F1dGgvcmVhbG1zL2hicCIsImF1ZCI6InRlYW0iLCJzdWIiOiIyY2U1MGVkOC1mNDJiLTQ2MGItODRmNy1mYTU3ZDA4ZmQyYzgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ3ZWJhbGlnbi1kZXYiLCJzZXNzaW9uX3N0YXRlIjoiYjg4ZTQ1MzYtOTk2NS00MWQwLTljOGUtYTQxNjkyZWE1OGI4IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL3dlYmFsaWduLmFwcHMtZGV2LmhicC5ldSJdLCJzY29wZSI6InByb2ZpbGUgZW1haWwgcm9sZXMgb3BlbmlkIHRlYW0iLCJzaWQiOiJiODhlNDUzNi05OTY1LTQxZDAtOWM4ZS1hNDE2OTJlYTU4YjgiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkhhcnJ5IENhcmV5IiwibWl0cmVpZC1zdWIiOiIzMDM5ODIzMTE4NDgwNDA1IiwicHJlZmVycmVkX3VzZXJuYW1lIjoicG9sYXJiZWFuIiwiZ2l2ZW5fbmFtZSI6IkhhcnJ5IiwiZmFtaWx5X25hbWUiOiJDYXJleSIsImVtYWlsIjoiaGFycnkuY2FyZXlAbWVkaXNpbi51aW8ubm8ifQ.DwR-tKkn4rfq88nxhsCp-CanYGt8yHw-rViMrmgpfPa41TTxDwwIRLUThSk84ZkBcmefDt2UApL86UmRpzj6FCpYAvt1R5PZi-ZfMSX74j3gmPcSnfS8d7H0Yr_66g5Ch6te3Ro2YhtXZhE5BA_SnZ7-omFvvqJO63YypGfrE9pYyoar6Yr0HjVS9W7pxAVvBsFB2EPKoYJuUiFp1E8e7nWbSVxHFcg_IG_sL9G5WgELhohQoMON3tgtaK4Idsk9OcRx13mFIz8Pd4ClgiQQJliNTlPscbkRT_GdoM0JRENlV6Q2WdRRzuC-_TgmeRp47HUPRqKbsZSvuaJO7qzPqA%22%2C%22filename%22%3A%22demo_mouse_data.json%22%7D'
+          href='https://webalign.apps-dev.hbp.eu/webalign.html?%7B%22clb-collab-id%22%3A%22quint-demo%22%2C%22clb-doc-path%22%3A%22%22%2C%22clb-doc-name%22%3A%22WebAlign%22%2C%22clb-drive-id%22%3A%228eabbdd3-6c21-49ef-b18b-1e90e58f3f9b%22%2C%22token%22%3A%22eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJfNkZVSHFaSDNIRmVhS0pEZDhXcUx6LWFlZ3kzYXFodVNJZ1RXaTA1U2k0In0.eyJleHAiOjE2NTc1Mjk3MTgsImlhdCI6MTY1NjkyNDkxOSwiYXV0aF90aW1lIjoxNjU2OTI0OTE4LCJqdGkiOiJjMmUzZWJmZC1lY2I2LTQxYWYtOWFjYS1iM2NlMjZhNTZhNDAiLCJpc3MiOiJodHRwczovL2lhbS5lYnJhaW5zLmV1L2F1dGgvcmVhbG1zL2hicCIsImF1ZCI6InRlYW0iLCJzdWIiOiIyY2U1MGVkOC1mNDJiLTQ2MGItODRmNy1mYTU3ZDA4ZmQyYzgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ3ZWJhbGlnbi1kZXYiLCJzZXNzaW9uX3N0YXRlIjoiYjg4ZTQ1MzYtOTk2NS00MWQwLTljOGUtYTQxNjkyZWE1OGI4IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL3dlYmFsaWduLmFwcHMtZGV2LmhicC5ldSJdLCJzY29wZSI6InByb2ZpbGUgZW1haWwgcm9sZXMgb3BlbmlkIHRlYW0iLCJzaWQiOiJiODhlNDUzNi05OTY1LTQxZDAtOWM4ZS1hNDE2OTJlYTU4YjgiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkhhcnJ5IENhcmV5IiwibWl0cmVpZC1zdWIiOiIzMDM5ODIzMTE4NDgwNDA1IiwicHJlZmVycmVkX3VzZXJuYW1lIjoicG9sYXJiZWFuIiwiZ2l2ZW5fbmFtZSI6IkhhcnJ5IiwiZmFtaWx5X25hbWUiOiJDYXJleSIsImVtYWlsIjoiaGFycnkuY2FyZXlAbWVkaXNpbi51aW8ubm8ifQ.DwR-tKkn4rfq88nxhsCp-CanYGt8yHw-rViMrmgpfPa41TTxDwwIRLUThSk84ZkBcmefDt2UApL86UmRpzj6FCpYAvt1R5PZi-ZfMSX74j3gmPcSnfS8d7H0Yr_66g5Ch6te3Ro2YhtXZhE5BA_SnZ7-omFvvqJO63YypGfrE9pYyoar6Yr0HjVS9W0.4375remAVvBsFB2EPKoYJuUiFp1E8e7nWbSVxHFcg_IG_sL9G5WgELhohQoMON3tgtaK4Idsk9OcRx13mFIz8Pd4ClgiQQJliNTlPscbkRT_GdoM0JRENlV6Q2WdRRzuC-_TgmeRp47HUPRqKbsZSvuaJO7qzPqA%22%2C%22filename%22%3A%22demo_mouse_data.json%22%7D'
         >
           <button style={{ width: '100%', height: '100%' }}>WebAlign</button>
         </a>
@@ -45,17 +45,17 @@ function SidePanel () {
       </div>
       <div
         style={{
-          marginBottom: '0px',
+          marginBottom: '0rem',
           marginTop: '40%',
-          fontSize: '1.5rem',
-          border: '1px solid #f8fafb'
+          fontSize: '24px',
+          border: '0.0625rem solid #f8fafb'
         }}
       >
         <p
           style={{
             fontWeight: 'bold',
-            marginTop: '0.3rem',
-            marginBottom: '0.3rem',
+            marginTop: '4.8px',
+            marginBottom: '4.8px',
             color: '#f8fafb'
           }}
         >
@@ -66,35 +66,35 @@ function SidePanel () {
         className='CardCont'
         style={{
           'text-align': 'left',
-          'padding-left': '0.5rem',
+          'padding-left': '8px',
           height: '30vh',
           overflowY: 'scroll',
           marginTop: '0',
           color: '#f8fafb',
-          fontSize: '1rem',
-          border: '1px solid #f8fafb'
+          fontSize: '16px',
+          border: '0.0625rem solid #f8fafb'
         }}
       >
         <div className='CardBody'>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Species: </b> mus musculus
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Sex: </b> female
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Strain: </b> Tg-Drd1a-EGFP
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Strain type: </b> transgenic
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Age category: </b> adolescent
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Age: </b> 36 day
           </p>
-          <p style={{ marginTop: '0.2rem', marginBottom: '0.2rem' }}>
+          <p style={{ marginTop: '3.2px', marginBottom: '3.2px' }}>
             <b>Attributes: </b> stained
           </p>
         </div>
@@ -110,7 +110,7 @@ export default SidePanel
   level={1}
   style={{
     color: '#f8fafb',
-    border: 'solid #f8fafb 1px',
+    border: 'solid #f8fafb 0.0625rem',
     padding: '2%',
     marginBottom: '0%'
   }}
@@ -120,7 +120,7 @@ export default SidePanel
 
 <div
   style={{
-    border: 'solid #f8fafb 1px'
+    border: 'solid #f8fafb 0.0625rem'
   }}
 >
   <p>

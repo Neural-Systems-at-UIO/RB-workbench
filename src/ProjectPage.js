@@ -97,7 +97,7 @@ const StyledTable = styled(props => <Table {...props} />)`
   }
 `
 
-function handleButtonClick (e) {
+function handleButtonClick(e) {
   fetch('http://localhost:3000/list_projects.php').then(res => {
     res.json().then(data => {
       console.log(data)
@@ -106,7 +106,7 @@ function handleButtonClick (e) {
   })
 }
 
-function fetchData (url) {
+function fetchData(url) {
   const data = fetch(url).then(response => {
     if (response.ok) {
       return response.json()
@@ -149,7 +149,7 @@ function fetchData (url) {
 //     )
 //   }
 // }
-function handleAdd (DataSource) {
+function handleAdd(DataSource) {
   // const { count, datasource } = this.state
   // const newData = fetchData('http://localhost:80/server.php')
   // this.setState({ dataSource: [...datasource, newData] })
@@ -164,17 +164,17 @@ function handleAdd (DataSource) {
 // console.log('yay')
 
 class FormSubmitNewProject extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = { value: '' }
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange (event) {
+  handleChange(event) {
     this.setState({ value: event.target.value })
   }
-  handleSubmit (e) {
+  handleSubmit(e) {
     e.preventDefault()
     const data = {
       method: 'POST',
@@ -200,7 +200,7 @@ class FormSubmitNewProject extends React.Component {
   }
   // alert('A name was submitted: ' + this.state.value)
 
-  render () {
+  render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <input
@@ -214,7 +214,7 @@ class FormSubmitNewProject extends React.Component {
   }
 }
 
-function Buildtable () {
+function Buildtable() {
   const [DataSource, SetDataSource] = useState('')
   const updateTable = async () => {
     const response = await fetch(
@@ -238,7 +238,7 @@ function Buildtable () {
         }}
         columns={columns}
         dataSource={DataSource}
-        scroll={{ y: '20rem', x: 'max-content' }}
+        scroll={{ y: '320px', x: 'max-content' }}
         pagination={false}
       />
       <Button onClick={updateTable}>Add</Button>
@@ -255,22 +255,22 @@ const ProjectPage = () => (
         className='MainPanel'
         style={{
           'background-color': '#f8fafb',
-          'border-radius': '25px 0   0 25px',
+          'border-radius': '1.5625rem 0   0 1.5625rem',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          'box-shadow': '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
+          'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
 
-          'clip-path': 'inset(-250px -250px -250px -250px)'
+          'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
         }}
       >
         <div
           style={{
-            // outline: '5px solid black',
+            // outline: '0.3125rem solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'border-radius': '15px',
-            'box-shadow': '5px 8px 24px 5px rgba(208, 216, 243, 0.6)',
+            'border-radius': '0.9375rem',
+            'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
             height: '73.5vh'
           }}
         >
