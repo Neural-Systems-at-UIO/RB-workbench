@@ -34,7 +34,7 @@
 }
 
 .table-striped-rows thead {
-    font-size: 200%;
+    font-size: 2em;
     background-color: #f1f1f1;
     color: rgb(238, 245, 248);
 }

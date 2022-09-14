@@ -30,7 +30,8 @@ const defaultColumns = [
     },
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
-    width: 300,
+    // set the width of the column based on the title
+    width: '16em',
     // fixed: 'left',
     editable: true,
     filters: [
@@ -59,7 +60,7 @@ const defaultColumns = [
     },
 
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 150,
+    width: '16em',
     select: true
   },
   {
@@ -76,7 +77,7 @@ const defaultColumns = [
       return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 240,
+    width: '16em',
     editable: true,
     select: true
 
@@ -96,7 +97,7 @@ const defaultColumns = [
     },
     sortDirections: ['descend', 'ascend', 'descend'],
 
-    width: 240,
+    width: '16em',
     editable: true,
     select: true
   },
@@ -115,7 +116,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 210,
+    width: '16em',
     editable: true,
 
   },
@@ -134,7 +135,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
 
   },
@@ -151,7 +152,7 @@ const defaultColumns = [
       }
       return metadata['Strain'][a.Strain].localeCompare(metadata['Strain'][b.Strain])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
     select: true
 
@@ -171,7 +172,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
 
   },
@@ -188,7 +189,7 @@ const defaultColumns = [
       }
       return metadata['Phenotype'][a.Phenotype].localeCompare(metadata['Phenotype'][b.Phenotype])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
     select: true
 
@@ -206,7 +207,7 @@ const defaultColumns = [
       }
       return metadata['Handedness'][a.Handedness].localeCompare(metadata['Handedness'][b.Handedness])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
     select: true
 
@@ -224,7 +225,7 @@ const defaultColumns = [
       }
       return metadata['Laterality'][a.Laterality].localeCompare(metadata['Laterality'][b.Laterality])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
     select: true
 
@@ -244,7 +245,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
 
   },
@@ -263,7 +264,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: 200,
+    width: '16em',
     editable: true,
 
   }
