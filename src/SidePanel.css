@@ -33,10 +33,10 @@
 button {
     background-color: transparent;
     border-color: Red;
-    font-size: 19.2px;
+    font-size: 1.5em;
     font-weight: bold;
     color: Red;
-    border-radius: 4.8px;
+    border-radius: 0.4rem;
     cursor: pointer;
 }
 

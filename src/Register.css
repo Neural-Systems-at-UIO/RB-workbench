@@ -2,7 +2,7 @@
 
 .table-striped-rows tr:nth-child(2n) td {
     background-color: #fcf5f5;
-    font-size: 200%;
+    font-size: 1.6em;
 }
 
 /* .table-striped-rows :hover {
@@ -10,7 +10,7 @@
 
 } */
 .table-striped-rows td {
-    font-size: 200%;
+    font-size: 1.6em;
 
 }
 
@@ -26,7 +26,7 @@
 
 .ant-checkbox {
     margin: 0rem 0rem 0 0.25rem;
-    z-index: ;
+    /* z-index: ; */
 }
 
 .table-striped-rows {
@@ -34,7 +34,7 @@
 }
 
 .table-striped-rows thead {
-    font-size: 2em;
+    font-size: 1.6em;
     background-color: #f1f1f1;
     color: rgb(238, 245, 248);
 }
@@ -53,7 +53,7 @@
     display: grid;
     grid-template-areas: "button1""button2""button3""button4";
     grid-gap: 5% 6%;
-    height: 30%;
+    height: 28%;
     margin-top: 15%;
     padding-top: 5%;
     margin-left: -0%;
@@ -65,7 +65,7 @@
 }
 
 .div.ant-select {
-    size: 2000%;
+    /* size: 2000%; */
     background-color: #a3aac4;
 }
 
@@ -73,7 +73,7 @@
 .button-container>.ant-btn-lg {
     height: 90%;
     width: 100%;
-    font-size: 160%;
+    font-size: 1.6em;
     font-weight: bold;
     margin-bottom: -5%;
     margin-left: 5%;
@@ -97,8 +97,8 @@ rgb(248, 250, 251)
 
 /* center checkbox in line */
 .ant-checkbox-wrapper {
-    margin-bottom: 1.2em;
-    margin-top: 1.2em;
+    margin-bottom: 1.1.6em;
+    margin-top: 1.1.6em;
 
 
 }
@@ -159,7 +159,7 @@ rgb(248, 250, 251)
 .editable-cell-value-wrap {
     padding: 0.3125rem 0.75rem;
     cursor: pointer;
-    min-height: 48px;
+    min-height: 2.9rem;
 }
 
 .editable-cell-value-wrap:hover {
@@ -174,13 +174,17 @@ rgb(248, 250, 251)
 }
 
 .ant-input {
-    font-size: 200%;
+    font-size: 1.6em;
 }
 
 .ant-table-cell {
     padding-left: 3.125rem;
 }
 
-tr.ant-table-row {
-    padding-left: ;
+.ant-select {
+    /* font-size: 0.7em; */
 }
+
+/* tr.ant-table-row {
+    padding-left: ;
+} */

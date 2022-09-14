@@ -13,6 +13,65 @@ import { DownOutlined } from '@ant-design/icons'
 import './options-bar.css'
 const EditableContext = React.createContext(null);
 const { Option } = Select;
+function width_calc(column_name, font) {
+  var width = column_name.length
+
+  if (typeof font === 'undefined') {
+    font = '1.25'
+    if (width < 11) {
+      width = 11
+      font = '1.25'
+
+    }
+  }
+  else {
+    if (width < 11) {
+      width = 11
+      font = '1.35'
+
+    }
+    if (width > 11) {
+      font = '1.35'
+
+    }
+    // if (width > 16) {
+    //   // width = 11
+    //   font = '1.2'
+
+    // }
+    // if (width > 20) {
+    //   // width = 11
+    //   font = '1.1'
+
+    // }
+    // if (width > 25) {
+    //   // width = 11
+    //   font = '1.0'
+
+    // }
+  }
+
+  var css_value = "calc(" + font + "em * " + width + ")"
+  console.log('css_value', css_value)
+  return css_value
+}
+function width_calc_dropdown(input, font) {
+  console.log('input', input)
+  console.log('font', font)
+  var width = input.length
+  console.log('width', width)
+
+  var css_value = "calc(" + font + "em * " + width + ")"
+  console.log('bool', ((parseFloat(font))))
+  if ((parseFloat(width) * parseFloat(font)) < 1.25 * 11) {
+    // convert string to int
+    var width = 11
+    var font = '1.25'
+  }
+  var css_value = "calc(" + font + "em * " + width + ")"
+
+  return css_value
+}
 const defaultColumns = [
   {
     title: 'Subject',
@@ -31,7 +90,7 @@ const defaultColumns = [
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
     // set the width of the column based on the title
-    width: '16em',
+    width: width_calc('Subject'),
     // fixed: 'left',
     editable: true,
     filters: [
@@ -39,6 +98,46 @@ const defaultColumns = [
         text: '71717640',
         value: '71717640',
       }]
+  },
+  // {
+  //   title: 'Age Category',
+  //   dataIndex: 'AgeCategory',
+  //   key: 'AgeCategory',
+  //   sorter: (a, b) => {
+  //     if (a.AgeCategory == null) {
+  //       return 1;
+  //     }
+  //     if (b.AgeCategory == null) {
+  //       return -1;
+  //     }
+  //     return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
+  //   },
+  //   sortDirections: ['descend', 'ascend', 'descend'],
+  //   // width: width_calc('Age Category'),
+  //   editable: true,
+  //   select: true
+
+  // },
+  {
+
+    title: 'Age Category',
+    dataIndex: 'AgeCategory',
+    key: 'AgeCategory',
+
+    sorter: (a, b) => {
+      if (a.AgeCategory == null) {
+        return 1;
+      }
+      if (b.AgeCategory == null) {
+        return -1;
+      }
+      return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
+
+    },
+
+    sortDirections: ['descend', 'ascend', 'descend'],
+    width: width_calc('AgeCategory'),
+    select: true,
   },
   {
 
@@ -60,28 +159,10 @@ const defaultColumns = [
     },
 
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Sex'),
     select: true
   },
-  {
-    title: 'AgeCategory',
-    dataIndex: 'AgeCategory',
-    key: 'AgeCategory',
-    sorter: (a, b) => {
-      if (a.AgeCategory == null) {
-        return 1;
-      }
-      if (b.AgeCategory == null) {
-        return -1;
-      }
-      return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
-    },
-    sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
-    editable: true,
-    select: true
 
-  },
   {
     title: 'Species',
     dataIndex: 'Species',
@@ -97,7 +178,7 @@ const defaultColumns = [
     },
     sortDirections: ['descend', 'ascend', 'descend'],
 
-    width: '16em',
+    width: width_calc('Species'),
     editable: true,
     select: true
   },
@@ -116,7 +197,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Age'),
     editable: true,
 
   },
@@ -135,7 +216,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Weight'),
     editable: true,
 
   },
@@ -152,7 +233,7 @@ const defaultColumns = [
       }
       return metadata['Strain'][a.Strain].localeCompare(metadata['Strain'][b.Strain])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Strain'),
     editable: true,
     select: true
 
@@ -172,7 +253,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Pathology'),
     editable: true,
 
   },
@@ -189,7 +270,7 @@ const defaultColumns = [
       }
       return metadata['Phenotype'][a.Phenotype].localeCompare(metadata['Phenotype'][b.Phenotype])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Phenotype'),
     editable: true,
     select: true
 
@@ -207,7 +288,7 @@ const defaultColumns = [
       }
       return metadata['Handedness'][a.Handedness].localeCompare(metadata['Handedness'][b.Handedness])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Handedness'),
     editable: true,
     select: true
 
@@ -225,7 +306,7 @@ const defaultColumns = [
       }
       return metadata['Laterality'][a.Laterality].localeCompare(metadata['Laterality'][b.Laterality])
     }, sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Laterality'),
     editable: true,
     select: true
 
@@ -245,7 +326,7 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Origin'),
     editable: true,
 
   },
@@ -264,17 +345,34 @@ const defaultColumns = [
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: '16em',
+    width: width_calc('Sampletype'),
     editable: true,
 
   }
 ]
 
+var max_len = {
+  Subject: 0,
+  BiologicalSex: 0,
+  AgeCategory: 0,
+  Species: 0,
+  Age: 0,
+  Weight: 0,
+  Strain: 0,
+  Pathology: 0,
+  Phenotype: 0,
+  Handedness: 0,
+  Laterality: 0,
+  Origin: 0,
+  Sampletype: 0
 
+}
 
 var sel_rows = []
 
 function App() {
+  var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
+
   // datasource = {}
   var [DataSource, SetDataSource] = useState([{
     key: '1',
@@ -293,8 +391,9 @@ function App() {
     Sampletype: null
 
   }])
-  var count = DataSource.length
 
+  console.log('NOW')
+  var count = DataSource.length
   // add a new row
   const handleAdd = () => {
     count += 1;
@@ -353,35 +452,21 @@ function App() {
   const OptionsBar = () => (
     <div>
       <div style={{ padding: '0 ', textAlign: 'left' }} className='OptionsBar'>
-        <Button type='default'>Edit metadata</Button>
-        <Dropdown>
-          <Button>
-            Import
-            <DownOutlined />
-          </Button>
-        </Dropdown>
-        <Dropdown >
-          <Button>
-            Export
-            <DownOutlined />
-          </Button>
-        </Dropdown>
+
+        <Button onClick={handleAdd}>Add</Button>
         <Button onClick={handleDelete} type='default' danger>
           Delete
         </Button>
-        <Button onClick={handleAdd}>Add</Button>
+
 
         {/* {{ add_button }} */}
-        <Select>  <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option></Select>
+
       </div>
       <hr
         style={{
           backgroundColor: '#bfbfbf',
           border: 'none',
-          height: '1px'
+          height: '0.1025rem'
         }}
       ></hr>
     </div >
@@ -427,7 +512,9 @@ function App() {
     console.log('event2', event)
 
 
+
     var columns = (Object.keys(row))
+
     console.log('columns', columns)
     for (var key in Object.keys(row)) {
       var id = columns[key]
@@ -469,6 +556,38 @@ function App() {
       OldData.splice(sel_rows[i] - 1, 1, { ...temp_row });
 
     }
+    // get match col index
+    var match_col_index = columns.indexOf(match_col)
+    match_col_index = match_col_index - 1
+    // console.log('h', )
+    // check data type of match value
+    var match_value_type = typeof match_value
+    console.log('match_value_type', match_value_type)
+    console.log('max_len', max_len)
+
+    if (match_value_type == 'number') {
+      match_value = metadata[match_col][match_value]
+      console.log('match_value', match_value)
+      console.log('max_len2', max_len[match_col])
+      if (match_value.length > max_len[match_col]) {
+        console.log('here')
+        max_len[match_col] = match_value.length
+
+        console.log(statefulColumns[match_col_index].width)
+        statefulColumns[match_col_index].width = width_calc_dropdown(match_value, '0.82')
+      }
+
+    }
+    else {
+      if (match_value.length > max_len[match_col]) {
+        max_len[match_col] = match_value.length
+        statefulColumns[match_col_index].width = width_calc(match_value, '1.25')
+      }
+    }
+    console.log('match_value_length', match_value.length)
+    console.log('match_col_max_len', match_col)
+    console.log('max_len', max_len)
+    setStatefulColumns(statefulColumns)
     console.log(OldData)
     // OldData has now become newdata
     SetDataSource(OldData);
@@ -485,7 +604,7 @@ function App() {
       cell: EditableCell,
     },
   };
-  const columns = defaultColumns.map((col) => {
+  const columns = statefulColumns.map((col) => {
     if (!col.editable & !col.select) {
       return col;
     }
@@ -640,6 +759,7 @@ const EditableCell = ({
 
     console.log('values end', { ...values })
     setEditing(false);
+    // change column width to match content
 
 
   };
@@ -718,6 +838,9 @@ const EditableCell = ({
           // }}
           ref={inputRef} onChange={saveDropDown} value={children[1]} size={'large'}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+          // set select min width based on the longest option
+          dropdownMatchSelectWidth={false}
+
 
         >
           {
@@ -733,12 +856,20 @@ const EditableCell = ({
           optionFilterProp="children"
           placeholder='Select a option...'
 
-          id='select' onChange={saveDropDown} value={children[1]} size={'large'} >
+          id='select' onChange={saveDropDown} value={children[1]} size={'large'}
+          // set select min width based on the longest option
+          dropdownMatchSelectWidth={false}
+          // set box width 
+          style={{
+            width: '100%'
+          }}
+        >
           {
             Add.map((address, key) => <option value={key}>{address}</option>)
           }
 
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+
         </Select >
 
 

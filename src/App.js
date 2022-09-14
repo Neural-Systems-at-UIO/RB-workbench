@@ -31,7 +31,7 @@ const App = () => (
             right: '8vw',
             top: '-4rem',
             // margin: '-2.5% 0 0 0px',
-            'font-size': '1500%',
+            'font-size': '14em',
             border: 0,
             zIndex: 1
           }}
