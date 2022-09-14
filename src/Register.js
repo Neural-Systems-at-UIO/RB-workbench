@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import datasource from './datasource'
 import './Register.css'
 import SidePanel from './SidePanel'
+import SidePanelLeft from './Container/SidePanelLeft'
 import OptionsBar from './options-bar'
 import { render } from '@umijs/deps/compiled/mustache'
 import { useState } from 'react'
@@ -139,12 +140,13 @@ function Buildtable () {
 
 const Register = () => (
   <div className='Register'>
-    <div style={{ display: 'flex', height: '75vh' }}>
+    <div style={{ display: 'flex', width: '100vh', height: '75vh' }}>
+      <SidePanelLeft></SidePanelLeft>
       <div
         className='MainPanel'
         style={{
           'background-color': '#f8fafb',
-          'border-radius': '25px 0   0 25px',
+          'border-radius': '0 0 0 0',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
