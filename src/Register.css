@@ -1,55 +1,88 @@
+@import '~antd/dist/antd.css';
+
 .table-striped-rows tr:nth-child(2n) td {
-    background-color: #fbfbfb;
-    font-size: 200%;
+    background-color: #fcf5f5;
+    font-size: 1.6em;
 }
-.table-striped-rows td{
-    font-size: 200%;
-    
+
+/* .table-striped-rows :hover {
+    background-color: #1a1515;
+
+} */
+.table-striped-rows td {
+    font-size: 1.6em;
+
 }
+
+.ant-table-tbody>tr.ant-table-row-selected>td {
+    background-color: #e6f7ff;
+
+}
+
+.ant-table-tbody>tr.ant-table-row-selected:nth-child(2n)>td {
+    background-color: #e6f7ff;
+
+}
+
 .ant-checkbox {
-	margin: 0px 0px 0 4px;
-	z-index: 1;
+    margin: 0rem 0rem 0 0.25rem;
+    /* z-index: ; */
 }
-.table-striped-rows{
+
+.table-striped-rows {
     outline-color: black;
 }
+
 .table-striped-rows thead {
-    font-size: 200%;
+    font-size: 1.6em;
     background-color: #f1f1f1;
     color: rgb(238, 245, 248);
 }
 
 .button-container {
-    margin: 0px 10px 10px 10px;
-    padding: 10px;}
+    margin: 0rem 0.625rem 0.625rem 0.625rem;
+    padding: 0.625rem;
+}
 
-
+/* .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    height: 64px;
+    width: 80px;
+} */
 
 .button-container {
     display: grid;
-    grid-template-areas: "button1" "button2" "button3" "button4";
+    grid-template-areas: "button1""button2""button3""button4";
     grid-gap: 5% 6%;
-    height:30%;
+    height: 28%;
     margin-top: 15%;
     padding-top: 5%;
     margin-left: -0%;
-    }
-    
+}
 
-    
+    {
+    background-color: #18213e;
 
-.button-container > .ant-btn-lg {
-	height: 90%;
+}
+
+.div.ant-select {
+    /* size: 2000%; */
+    background-color: #a3aac4;
+}
+
+
+.button-container>.ant-btn-lg {
+    height: 90%;
     width: 100%;
-	font-size: 160%;
+    font-size: 1.6em;
     font-weight: bold;
     margin-bottom: -5%;
     margin-left: 5%;
     background-color: #18213e;
-    box-shadow: 0px 0px 14px 2px rgba(255, 120, 117, 0.6);
+    box-shadow: 0rem 0rem 0.875rem 0.125rem rgba(255, 120, 117, 0.6);
 
 }
 
+rgb(248, 250, 251)
 /* .ant-table-placeholder{
     min-height: 37pc
 }
@@ -57,46 +90,101 @@
 	min-height: 37pc;
 } */
 
-.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
-	margin-left: 20pc;
+.ant-tabs>.ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs>div>.ant-tabs-nav .ant-tabs-nav-wrap {
+    margin-left: 20pc;
 }
 
 /* center checkbox in line */
 .ant-checkbox-wrapper {
-    margin-bottom: 1.2em;
-    margin-top: 1.2em;
-    margin-left: 0.2em
+    margin-bottom: 1.1.6em;
+    margin-top: 1.1.6em;
 
 
 }
+
 .ant-checkbox-inner {
-    scale: 1.3
-    
+    scale: 1.3;
+
+
+
 }
+
 .ant-checkbox-checked .ant-checkbox-inner {
     background-color: #3350ac !important;
     border-color: #3350ac !important;
-  }
+}
 
-.ant-checkbox-checked > input:nth-child(1) {
+.ant-checkbox-checked>input:nth-child(1) {
     background-color: #3350ac !important;
     border-color: #3350ac !important;
-  }
+}
+
 .ant-checkbox-indeterminate .ant-checkbox-input {
     background-color: #3350ac !important;
     border-color: #3350ac !important;
     color: #3350ac !important;
 
 
-  }
-  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-	color: #3350ac;
-	/* text-shadow: 0 0 0.25px currentcolor; */
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #3350ac;
+    /* text-shadow: 0 0 0.0156rem currentcolor; */
 }
 
 
 .MainPanel {
-        background-color: 'red' ;
+    background-color: #F0F5FD;
+    width: 80vw;
 
-    }
+}
 
+.MainPanel>div:nth-child(1) {
+    width: 10vw;
+    background-color: #f8fafb;
+
+
+}
+
+.ant-form {
+    padding-left: 0.5rem;
+}
+
+.editable-cell {
+    position: relative;
+
+}
+
+.editable-cell-value-wrap {
+    padding: 0.3125rem 0.75rem;
+    cursor: pointer;
+    min-height: 2.9rem;
+}
+
+.editable-cell-value-wrap:hover {
+    padding: 0.25rem 0.6875rem;
+    border: 0.0625rem solid #8b8181;
+    border-radius: 0.125rem;
+
+}
+
+[data-theme='dark'] .editable-row:hover .editable-cell-value-wrap {
+    border: 0.0625rem solid #434343;
+}
+
+.ant-input {
+    font-size: 1.6em;
+}
+
+.ant-table-cell {
+    padding-left: 3.125rem;
+}
+
+.ant-select {
+    /* font-size: 0.7em; */
+}
+
+/* tr.ant-table-row {
+    padding-left: ;
+} */
