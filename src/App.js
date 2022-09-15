@@ -53,10 +53,10 @@ const App = () => (
               {/* <TabPane tab='Projects' key='1'>
                 <ProjectPage />
               </TabPane> */}
-              <TabPane tab='Registration' key='2'>
+              <TabPane tab='Metadata' key='2'>
                 <Register />
               </TabPane>
-              <TabPane tab='Analysis' key='3'></TabPane>
+              {/* <TabPane tab='Analysis' key='3'></TabPane> */}
             </Tabs>
           </div>
         </Content>

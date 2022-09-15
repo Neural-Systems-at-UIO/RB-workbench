@@ -59,10 +59,10 @@
     margin-left: -0%;
 }
 
-    {
+/* {
     background-color: #18213e;
 
-}
+} */
 
 .div.ant-select {
     /* size: 2000%; */
@@ -136,7 +136,7 @@ rgb(248, 250, 251)
 
 .MainPanel {
     background-color: #F0F5FD;
-    width: 80vw;
+    width: 100vw;
 
 }
 

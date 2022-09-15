@@ -2,7 +2,6 @@ import { Table, Button, Form, Input, Select, } from 'antd'
 // import styled from 'styled-components'
 import datasource from './datasource.js'
 import './Register.css'
-import useUndo from 'use-undo';
 import SidePanel from './SidePanel.js'
 // import OptionsBar from './options-bar.js'
 import metadata from './metadata'
@@ -368,15 +367,14 @@ var max_len = {
   Sampletype: 0
 
 }
-var history = []
+
 var sel_rows = []
-// var prev_row = null
-// var prev_index = null
+
 function App() {
   var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
 
   // datasource = {}
-  var datasource_template = [{
+  var [DataSource, SetDataSource] = useState([{
     key: '1',
     Subject: null,
     BiologicalSex: null,
@@ -392,63 +390,10 @@ function App() {
     Origin: null,
     Sampletype: null
 
-  }]
-  var [DataSource, { set: SetDataSource, reset: resetDataSource, undo: undoDataSource, redo: redoDataSource, canUndoDS, canRedoDS },] = useUndo(datasource_template, { useCheckpoints: true });
-  const { present: presentDS } = DataSource;
-  // console.log('undoDS')
-  // console.log(presentDS)
-  // // Define useUndo hook
-
-  // create undoable state
-  // const [state, setState, { undo, redo, canUndo, canRedo }] = useUndo(DataSource)
+  }])
 
   // console.log('NOW')
-  var count = presentDS.length
-  function handleUndoDS(e) {
-    // console.log(prev_row)
-    e.preventDefault()
-
-    undoDataSource()
-    // var step_back = [DataSource['past'].length - 1]
-    // console.log('step_back', step_back)
-    // // console.log('DataSourcePast')
-    // // console.log(DataSource.past)
-    // // DataSource['present'][0]['Species'] = 1
-    // // undoDataSource()
-    // // SetDataSource(DataSource['present'])
-    // // handle undo for dropdowns
-    // console.log('onestepbackis')
-    // console.log(DataSource['past'][step_back])
-    // SetDataSource(DataSource['past'][step_back])
-    // DataSource['past'].pop()
-    // // DataSource['past'].pop()
-    // // SetDataSource(DataSource.present, false)
-    // console.log('DataSourcePost')
-    // console.log(DataSource)
-    // handle undo for dropdowns
-
-
-    // DataSource.future = [DataSource.present, ...DataSource.future]
-    // DataSource.present = DataSource.past[DataSource.past.length - 1]
-    // DataSource.past = DataSource.past.slice(0, DataSource.past.length - 1)
-    // SetDataSource(DataSource.present)
-    // DataSource.past.pop()
-    // DataSource.past.pop()
-
-    // console.log('DataSourcePast', DataSource.past)
-    // undo state
-    // undo()
-
-
-    // console.log('postundo')
-    // console.log(presentDS)
-  }
-  function handleRedoDS(e) {
-    e.preventDefault()
-    redoDataSource()
-    // console.log('postredo')
-    // console.log(presentDS)
-  }
+  var count = DataSource.length
   // add a new row
   const handleAdd = () => {
     count += 1;
@@ -471,131 +416,30 @@ function App() {
     };
     // DataSource.push(newData)
 
-    SetDataSource([...presentDS, newData], true);
-    console.log(DataSource)
+    SetDataSource([...DataSource, newData]);
   };
-
   const handleDuplicate = () => {
     count += 1;
     // duplicate selected rows
-    var newDS = [...presentDS]
-
     for (var i = 0; i < sel_rows.length; i++) {
       console.log('i', i)
-      var new_row = JSON.parse(JSON.stringify(newDS[sel_rows[i] - 1]));
+      var new_row = JSON.parse(JSON.stringify(DataSource[sel_rows[i] - 1]));
 
+      console.log('ds')
+      console.log(DataSource)
+      console.log('--')
+      console.log(sel_rows[i])
+      console.log(DataSource[sel_rows[i] - 1])
       new_row['key'] = count.toString()
-
+      console.log('new_row', new_row)
+      console.log('DataSource', DataSource)
       // new_row.key = count.toString()
-      var newDS = [...newDS, new_row]
+      DataSource = [...DataSource, new_row]
       count += 1
     }
-    SetDataSource(newDS, true);
+    console.log(DataSource)
+    SetDataSource(DataSource);
   };
-  const DownloadCSV = () => {
-    var csv = 'Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n'
-    for (var i = 0; i < presentDS.length; i++) {
-      var row = presentDS[i]
-      csv += row.Subject + ';' + metadata['BiologicalSex'][row.BiologicalSex] + ';' + metadata['AgeCategory'][row.AgeCategory] + ';' + metadata['Species'][row.Species] + ';' + row.Age + ';' + row.Weight + ';' + metadata['Strain'][row.Strain] + ';' + row.Pathology + ';' + metadata['Phenotype'][row.Phenotype] + ';' + metadata['Handedness'][row.Handedness] + ';' + metadata['Laterality'][row.Laterality] + ';' + row.Origin + ';' + row.Sampletype + '\n'
-    }
-    var blob = new Blob([csv], { type: 'text/csv' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'metadata.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
-  const UploadCSVButton = () => {
-    var input = document.createElement('input');
-    input.type = 'file';
-
-    input.onchange = e => {
-      // getting a hold of the file reference
-      var file = e.target.files[0];
-
-      // setting up the reader
-      var reader = new FileReader();
-      reader.readAsText(file, 'UTF-8');
-
-      // here we tell the reader what to do when it's done reading...
-      reader.onload = readerEvent => {
-        var content = readerEvent.target.result; // this is the content!
-        // console.log(content)
-        var lines = content.split('\n')
-        // console.log(lines)
-        var new_data = []
-        for (var i = 0; i < lines.length; i++) {
-          // skip the header
-          if (i == 0) {
-            continue
-          }
-          var line = lines[i]
-          var line_data = line.split(';')
-          // console.log(line_data)
-          // console.log(line_data.length)
-          if (line_data.length == 13) {
-            // handle null values
-            for (var j = 0; j < line_data.length; j++) {
-              if (line_data[j] == 'null') {
-                line_data[j] = null
-              }
-              if (line_data[j] == "undefined") {
-                line_data[j] = null
-              }
-            }
-            console.log('line_data')
-            console.log(line_data)
-            var row = {
-              key: i.toString(),
-              Subject: line_data[0],
-              // handle if the value is not in the metadata
-              BiologicalSex: metadata['BiologicalSex'].indexOf(line_data[1]) == -1 ? null : metadata['BiologicalSex'].indexOf(line_data[1]),
-              AgeCategory: metadata['AgeCategory'].indexOf(line_data[2]) == -1 ? null : metadata['AgeCategory'].indexOf(line_data[2]),
-              Species: metadata['Species'].indexOf(line_data[3]) == -1 ? null : metadata['Species'].indexOf(line_data[3]),
-              Age: line_data[4],
-              Weight: line_data[5],
-              Strain: metadata['Strain'].indexOf(line_data[6]) == -1 ? null : metadata['Strain'].indexOf(line_data[6]),
-              Pathology: line_data[7],
-              Phenotype: metadata['Phenotype'].indexOf(line_data[8]) == -1 ? null : metadata['Phenotype'].indexOf(line_data[8]),
-              Handedness: metadata['Handedness'].indexOf(line_data[9]) == -1 ? null : metadata['Handedness'].indexOf(line_data[9]),
-              Laterality: metadata['Laterality'].indexOf(line_data[10]) == -1 ? null : metadata['Laterality'].indexOf(line_data[10]),
-              Origin: line_data[11],
-              Sampletype: line_data[12]
-            }
-
-            console.log('row', row)
-            new_data.push(row)
-          }
-        }
-        SetDataSource(new_data)
-      }
-    }
-
-    input.click();
-  }
-
-  // const handleDelete = () => {
-  //   console.log('delete')
-  //   console.log(sel_rows)
-  //   var new_data = []
-  //   for (var i = 0; i < DataSource.length; i++) {
-  //     var row = DataSource[i]
-  //     if (!sel_rows.includes(i)) {
-  //       new_data.push(row)
-  //     }
-  //   }
-  //   SetDataSource(new_data)
-  // }
-
-  // const handleSave = row => {
-  //   const newData = [...DataSource];
-  //   const index = newData.findIndex(item => row.key === item.key
-
-  // console.log(result)
   //   const newData = {
   //     key: count.toString(),
   //     Subject: null,
@@ -617,25 +461,16 @@ function App() {
   //   SetDataSource([...DataSource, newData]);
   // };
   const handleDelete = () => {
-    console.log('delete')
+
     // console.log(sel_rows)
-    var temp_ = presentDS
-    console.log(temp_)
     for (var i = 0; i < sel_rows.length; i++) {
       // console.log(i)
       // delete selected rows
-      temp_ = temp_.filter(item => item.key !== sel_rows[i])
+      DataSource = DataSource.filter(item => item.key !== sel_rows[i])
     }
-    console.log('sel_rows')
-    console.log(sel_rows)
-    console.log('temp_filter')
-    console.log(temp_)
-
     // reset keys 
-    for (var i = 0; i < temp_.length; i++) {
-      console.log(i)
-      console.log(temp_[i])
-      temp_[i].key = (i + 1).toString()
+    for (var i = 0; i < DataSource.length; i++) {
+      DataSource[i].key = (i + 1).toString()
     }
     // reset selected rows
     sel_rows = []
@@ -650,7 +485,7 @@ function App() {
 
     }
     // console.log(checkboxes)
-    SetDataSource(temp_)
+    SetDataSource(DataSource)
     setSelected([])
     // DataSource.push(newData)
 
@@ -661,13 +496,7 @@ function App() {
       <div style={{ padding: '0 ', textAlign: 'left' }} className='OptionsBar'>
 
         <Button onClick={handleAdd}>Add</Button>
-        <Button onClick={handleUndoDS} >Undo</Button>
-        <Button onClick={handleRedoDS} >Redo</Button>
-
         <Button onClick={handleDuplicate}>Duplicate Selected</Button>
-        <Button onClick={DownloadCSV}>Download CSV</Button>
-        <Button onClick={UploadCSVButton}>Upload CSV</Button>
-
 
         <Button onClick={handleDelete} type='default' danger>
           Delete
@@ -718,12 +547,13 @@ function App() {
   }
   const handleSave = (row, event, dataIndex) => {
 
-    const OldData = [...presentDS];
+    const OldData = [...DataSource];
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
+    console.log('index', index)
+    console.log('item', item)
     console.log('row', row)
-    // create a copy of the row
-    var original_data = { ...row }
+    console.log('event2', event)
 
 
 
@@ -739,7 +569,6 @@ function App() {
         // console.log('item_key', item[id])
         var match_col = id
         var match_value = row[id]
-        original_data[match_col] = item[id]
         OldData.splice(index, 1, { ...item, ...row });
 
       }
@@ -750,14 +579,12 @@ function App() {
       match_value = event
       var temp_row = OldData[index]
       temp_row[match_col] = match_value
-      // original_data[match_col] = match_value
       OldData.splice(index, 1, { ...temp_row });
       // console.log('temp_row1', temp_row)
       // console.log('olddata-debug', OldData)
 
 
     }
-
 
 
     // console.log('OldData1', OldData)
@@ -805,78 +632,10 @@ function App() {
     // console.log('match_value_length', match_value.length)
     // console.log('match_col_max_len', match_col)
     // console.log('max_len', max_len)
-    setStatefulColumns([...statefulColumns])
+    setStatefulColumns(statefulColumns)
     // console.log(OldData)
     // OldData has now become newdata
-    SetDataSource([...OldData], false);
-    // remove statefulness from the row
-
-    DataSource['present'] = { ...OldData }
-    console.log('setting data source')
-    var temp_data = [...OldData]
-    temp_data[index] = { ...original_data }
-
-    console.log('the original data is ', temp_data)
-    console.log('the new data', OldData)
-    // unpack and get values
-    // console.log([...Object.values(temp_data[0])], 'temp_data')
-    // for each object in temp_data get the values
-
-    var temp_data_values = []
-    var temp_data_keys = []
-    for (var i in temp_data) {
-      temp_data_values.push([...Object.values(temp_data[i])])
-      temp_data_keys.push([...Object.keys(temp_data[i])])
-    }
-
-    // recreate object from keys and values
-    var temp_data_obj = []
-    for (var i in temp_data_values) {
-      var temp_obj = {}
-      for (var j in temp_data_values[i]) {
-        temp_obj[temp_data_keys[i][j]] = temp_data_values[i][j]
-      }
-      temp_data_obj.push(temp_obj)
-    }
-    console.log('temp_data_obj', temp_data_obj)
-
-    history = [...history, temp_data_obj]
-
-    console.log('the entire history is', history)
-    DataSource['past'] = [...DataSource['past'], [...temp_data_obj]]
-
-    // console.log([...DataSource['past'], temp_data])
-    // DataSource['present'] = [...OldData]
-
-    // create copy of OldData
-
-    // if (DataSource['past'].length > 0) {
-
-    //   console.log('check')
-    //   var temp_ = [...DataSource['past'][DataSource['past'].length - 1]]
-    //   console.log('temp_', temp_)
-    //   temp_[index] = original_data
-    //   console.log('temp', temp_)
-    //   DataSource['past'] = [...DataSource['past'], temp_]
-    // }
-    // else {
-    //   var temp_data = [...OldData]
-    //   temp_data[index] = original_data
-    //   DataSource['past'] = [...DataSource['past'], temp_data]
-
-    // }
-
-    // prev_row = row
-    // prev_index = index
-    console.log('OldData')
-    console.log(OldData)
-    console.log('DataSourcePre')
-    console.log(DataSource)
-    // DataSource['past'][DataSource['past'].length - 1][prev_index] = prev_row
-    // console.log('DataSourcePost')
-    // console.log(DataSource)
-    // console.log('datasource', DataSource)
-
+    SetDataSource(OldData);
   };
 
 
@@ -925,7 +684,7 @@ function App() {
         components={components}
         columns={columns}
         // rowClassName={() => 'editable-row'}
-        dataSource={presentDS}
+        dataSource={DataSource}
         scroll={{ x: '30vh', y: '76vh' }}
         pagination={false}
       />
@@ -1026,8 +785,7 @@ const EditableCell = ({
     // console.log('selected_value', form);
     // console.log('event', event);
 
-    // setEditing(!editing);
-    toggleEdit();
+    setEditing(!editing);
 
     try {
       // event.preventDefault()
@@ -1050,17 +808,6 @@ const EditableCell = ({
 
 
   };
-  let options_antd = []
-  let options_ = metadata[dataIndex]
-  // const addItemToSelect = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  //   e.preventDefault();
-  //   setItems([...items, name || `New item ${index++}`]);
-  //   setName('');
-  //   setTimeout(() => {
-  //     inputRef.current?.focus();
-  //   }, 0);
-  // };
-
 
   let childNode = children;
   if (editable) {
@@ -1099,7 +846,8 @@ const EditableCell = ({
   // fetch_data()
 
   if (select) {
-
+    let options_antd = []
+    let options_ = metadata[dataIndex]
 
     const Add = options_.map(Add => Add
     )
@@ -1124,8 +872,6 @@ const EditableCell = ({
           },
         ]}
       >
-        {/* allow the user to add new options to a select  if missing*/}
-
         <Select
           showSearch
           optionFilterProp="children"
@@ -1135,8 +881,6 @@ const EditableCell = ({
           //   width: '100%'
 
           // }}
-          // allow us to add a new option
-
           ref={inputRef} onChange={saveDropDown} value={children[1]} size={'large'}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           // set select min width based on the longest option
@@ -1240,7 +984,7 @@ const Register = () => (
             'border-radius': '0.9375rem',
             'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
             height: '90.5vh',
-            width: '98vw'
+            width: '78.5vw'
           }}
         >
           {/* <OptionsBar /> */}

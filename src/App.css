@@ -35,7 +35,7 @@
 }
 
 .ant-layout-header>span:nth-child(1)>svg:nth-child(1) {
-  width: 8vw;
+  width: 10rem;
 }
 
 @keyframes App-logo-spin {
