@@ -6,6 +6,7 @@ import useUndo from 'use-undo';
 import SidePanel from './SidePanel.js'
 // import OptionsBar from './options-bar.js'
 import metadata from './metadata'
+import metadataDefinitions from './metadata-definitions'
 // import { render } from '@umijs/deps/compiled/mustache'
 import React, { useContext, useEffect, useRef, useState } from 'react';
 // const { Title } = Typography
@@ -73,6 +74,7 @@ function width_calc_dropdown(input, font) {
 
   return css_value
 }
+
 const defaultColumns = [
   {
     title: 'Subject',
@@ -493,10 +495,11 @@ function App() {
     SetDataSource(newDS, true);
   };
   const DownloadCSV = () => {
+    console.log(presentDS)
     var csv = 'Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n'
     for (var i = 0; i < presentDS.length; i++) {
       var row = presentDS[i]
-      csv += row.Subject + ';' + metadata['BiologicalSex'][row.BiologicalSex] + ';' + metadata['AgeCategory'][row.AgeCategory] + ';' + metadata['Species'][row.Species] + ';' + row.Age + ';' + row.Weight + ';' + metadata['Strain'][row.Strain] + ';' + row.Pathology + ';' + metadata['Phenotype'][row.Phenotype] + ';' + metadata['Handedness'][row.Handedness] + ';' + metadata['Laterality'][row.Laterality] + ';' + row.Origin + ';' + row.Sampletype + '\n'
+      csv += row.Subject + ';' + row.BiologicalSex + ';' + row.AgeCategory + ';' + row.Species + ';' + row.Age + ';' + row.Weight + ';' + row.Strain + ';' + row.Pathology + ';' + row.Phenotype + ';' + row.Handedness + ';' + row.Laterality + ';' + row.Origin + ';' + row.Sampletype + '\n'
     }
     var blob = new Blob([csv], { type: 'text/csv' });
     var url = URL.createObjectURL(blob);
@@ -549,20 +552,31 @@ function App() {
             }
             console.log('line_data')
             console.log(line_data)
+            console.log('here', metadata['AgeCategory'].indexOf(line_data[2]))
+            console.log(metadata['AgeCategory'])
+            console.log(line_data[2])
+            console.log('i', i)
             var row = {
               key: i.toString(),
               Subject: line_data[0],
               // handle if the value is not in the metadata
-              BiologicalSex: metadata['BiologicalSex'].indexOf(line_data[1]) == -1 ? null : metadata['BiologicalSex'].indexOf(line_data[1]),
-              AgeCategory: metadata['AgeCategory'].indexOf(line_data[2]) == -1 ? null : metadata['AgeCategory'].indexOf(line_data[2]),
-              Species: metadata['Species'].indexOf(line_data[3]) == -1 ? null : metadata['Species'].indexOf(line_data[3]),
+              // BiologicalSex: metadata['BiologicalSex'].indexOf(line_data[1]) == -1 ? null : metadata['BiologicalSex'].indexOf(line_data[1]),
+              // AgeCategory: metadata['AgeCategory'].indexOf(line_data[2]) == -1 ? null : metadata['AgeCategory'].indexOf(line_data[2]),
+              // Species: metadata['Species'].indexOf(line_data[3]) == -1 ? null : metadata['Species'].indexOf(line_data[3]),
+              BiologicalSex: line_data[1],
+              AgeCategory: line_data[2],
+              Species: line_data[3],
               Age: line_data[4],
               Weight: line_data[5],
-              Strain: metadata['Strain'].indexOf(line_data[6]) == -1 ? null : metadata['Strain'].indexOf(line_data[6]),
+              Strain: line_data[6],
+              // Strain: metadata['Strain'].indexOf(line_data[6]) == -1 ? null : metadata['Strain'].indexOf(line_data[6]),
               Pathology: line_data[7],
-              Phenotype: metadata['Phenotype'].indexOf(line_data[8]) == -1 ? null : metadata['Phenotype'].indexOf(line_data[8]),
-              Handedness: metadata['Handedness'].indexOf(line_data[9]) == -1 ? null : metadata['Handedness'].indexOf(line_data[9]),
-              Laterality: metadata['Laterality'].indexOf(line_data[10]) == -1 ? null : metadata['Laterality'].indexOf(line_data[10]),
+              Phenotype: line_data[8],
+              Handedness: line_data[9],
+              Laterality: line_data[10],
+              // Phenotype: metadata['Phenotype'].indexOf(line_data[8]) == -1 ? null : metadata['Phenotype'].indexOf(line_data[8]),
+              // Handedness: metadata['Handedness'].indexOf(line_data[9]) == -1 ? null : metadata['Handedness'].indexOf(line_data[9]),
+              // Laterality: metadata['Laterality'].indexOf(line_data[10]) == -1 ? null : metadata['Laterality'].indexOf(line_data[10]),
               Origin: line_data[11],
               Sampletype: line_data[12]
             }
@@ -1052,6 +1066,7 @@ const EditableCell = ({
   };
   let options_antd = []
   let options_ = metadata[dataIndex]
+  let definitions = metadataDefinitions[dataIndex]
   // const addItemToSelect = (e: React.MouseEvent<HTMLAnchorElement>) => {
   //   e.preventDefault();
   //   setItems([...items, name || `New item ${index++}`]);
@@ -1101,16 +1116,19 @@ const EditableCell = ({
   if (select) {
 
 
-    const Add = options_.map(Add => Add
-    )
-    for (let i = 0; i < options_.length; i++) {
-      // var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-      var option = (options_[i])
-      option = <Option value={option} >{option}</Option>
+    // const Add = options_.map(Add => Add
+    // )
+    // const definitionsMap = definitions.map(definitions => definitions
+    // )
+
+    // for (let i = 0; i < options_.length; i++) {
+    //   // var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+    //   var option = (options_[i])
+    //   option = <Option value={option} > {option}</Option >
 
 
-      options_antd.push(option);
-    }
+    //   options_antd.push(option);
+    // }
     childNode = editing ? (
       <Form.Item
         style={{
@@ -1144,9 +1162,11 @@ const EditableCell = ({
 
 
         >
-          {
-            Add.map((address, key) => <option value={key}>{address}</option>)
-          }
+
+          {options_.map((option, index) => (
+            <Option key={index} value={option} title={definitions[index]}>{option}</Option>
+          ))}
+
 
         </Select>
         {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
@@ -1165,10 +1185,12 @@ const EditableCell = ({
             width: '100%'
           }}
         >
-          {
-            Add.map((address, key) => <option value={key}>{address}</option>)
-          }
-
+          {/* {
+            Add.map((address, key) => <option title='test' value={key}>{address}</option>)
+          } */}
+          {options_.map((option, index) => (
+            <Option key={index} value={option} title={definitions[index]}>{option}</Option>
+          ))}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
 
         </Select >
