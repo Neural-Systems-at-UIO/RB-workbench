@@ -416,6 +416,9 @@ function App() {
     e.preventDefault()
 
     undoDataSource()
+    // limit size of history
+    DataSource.past = DataSource.past.slice(-50)
+
     // var step_back = [DataSource['past'].length - 1]
     // console.log('step_back', step_back)
     // // console.log('DataSourcePast')
