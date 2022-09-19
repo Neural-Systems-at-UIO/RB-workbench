@@ -13,8 +13,13 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Menu, Dropdown, message, Space } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import './options-bar.css'
+import { PlusOutlined } from '@ant-design/icons';
+
+import { Divider } from 'antd';
 const EditableContext = React.createContext(null);
 const { Option } = Select;
+let index = 0;
+
 function width_calc(column_name, font) {
   var width = column_name.length
 
@@ -1065,8 +1070,7 @@ const EditableCell = ({
 
   };
   let options_antd = []
-  let options_ = metadata[dataIndex]
-  let definitions = metadataDefinitions[dataIndex]
+
   // const addItemToSelect = (e: React.MouseEvent<HTMLAnchorElement>) => {
   //   e.preventDefault();
   //   setItems([...items, name || `New item ${index++}`]);
@@ -1076,7 +1080,15 @@ const EditableCell = ({
   //   }, 0);
   // };
 
-
+  // const [items, setItems] = useState(['jack', 'lucy']);
+  const [name, setName] = useState('');
+  var [statefulmetadata, setstatefulmetadata] = useState(metadata)
+  var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
+  let options_ = metadata[dataIndex]
+  let definitions = statefulmetadataDefinitions[dataIndex]
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
   let childNode = children;
   if (editable) {
     childNode = editing ? (
@@ -1129,6 +1141,26 @@ const EditableCell = ({
 
     //   options_antd.push(option);
     // }
+
+    const addItem = (e) => {
+      e.preventDefault();
+      var items = statefulmetadata[dataIndex]
+
+      var definitions = statefulmetadataDefinitions[dataIndex]
+
+      items = ([name, ...items]);
+      statefulmetadata[dataIndex] = items
+      var newdefinition = 'A custom option added by the user'
+      definitions = ([newdefinition, ...definitions]);
+      statefulmetadataDefinitions[dataIndex] = definitions
+      setstatefulmetadataDefinitions(statefulmetadataDefinitions)
+      setstatefulmetadata(statefulmetadata)
+      setName('');
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 0);
+    };
+
     childNode = editing ? (
       <Form.Item
         style={{
@@ -1149,6 +1181,10 @@ const EditableCell = ({
           optionFilterProp="children"
           placeholder='Select a option...'
           id='selectmain'
+          style={{
+            width: '100%',
+            cursor: 'pointer'
+          }}
           // style={{
           //   width: '100%'
 
@@ -1159,6 +1195,34 @@ const EditableCell = ({
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           // set select min width based on the longest option
           dropdownMatchSelectWidth={false}
+          dropdownRender={(menu) => (
+            <>
+              {menu}
+              <Divider
+                style={{
+                  margin: '8px 0',
+                }}
+              />
+              <Space
+                width='10px'
+
+                style={{
+                  padding: '0 8px 4px',
+
+                }}
+              >
+                <Input
+                  placeholder="Please enter item"
+                  ref={inputRef}
+                  value={name}
+                  onChange={onNameChange}
+                />
+                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                  Add item
+                </Button>
+              </Space>
+            </>
+          )}
 
 
         >
@@ -1173,7 +1237,9 @@ const EditableCell = ({
       </Form.Item >)
       : (
 
+
         <Select showSearch
+
           optionFilterProp="children"
           placeholder='Select a option...'
 
@@ -1182,13 +1248,41 @@ const EditableCell = ({
           dropdownMatchSelectWidth={false}
           // set box width 
           style={{
-            width: '100%'
+            width: '100%',
+            cursor: 'pointer'
           }}
+          dropdownRender={(menu) => (
+            <>
+              {menu}
+              <Divider
+                style={{
+                  margin: '8px 0',
+                }}
+              />
+              <Space
+                style={{
+                  padding: '0 8px 4px',
+                }}
+              >
+                <Input
+                  placeholder="Please enter item"
+                  ref={inputRef}
+                  value={name}
+                  onChange={onNameChange}
+                  style={{ 'fontSize': '1em' }}
+                />
+                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                  Add item
+                </Button>
+              </Space>
+            </>
+          )}
         >
           {/* {
             Add.map((address, key) => <option title='test' value={key}>{address}</option>)
           } */}
           {options_.map((option, index) => (
+
             <Option key={index} value={option} title={definitions[index]}>{option}</Option>
           ))}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
