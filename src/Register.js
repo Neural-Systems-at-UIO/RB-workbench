@@ -21,6 +21,7 @@ const { Option } = Select;
 let index = 0;
 
 function width_calc(column_name, font) {
+  console.log('column_name')
   var width = column_name.length
 
   if (typeof font === 'undefined') {
@@ -63,6 +64,7 @@ function width_calc(column_name, font) {
   return css_value
 }
 function width_calc_dropdown(input, font) {
+  console.log('wot')
   // console.log('input', input)
   // console.log('font', font)
   var width = input.length
@@ -358,6 +360,8 @@ const defaultColumns = [
 
   }
 ]
+var called_api = false;
+// a function to get the data from the api and set the state of statefulmetadata
 
 var max_len = {
   Subject: 0,
@@ -382,7 +386,25 @@ var sel_rows = []
 function App() {
   var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
 
+  var [statefulmetadata, setstatefulmetadata] = useState(metadata)
+  var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
   // datasource = {}
+  function get_metadata() {
+    if (called_api == false) {
+      console.log('getting metadata')
+
+      called_api = true;
+      fetch('/get_metadata')
+        .then(response => response.json())
+        .then(data => {
+          statefulmetadata = data[0];
+          statefulmetadataDefinitions = data[1];
+          setstatefulmetadata(statefulmetadata);
+          setstatefulmetadataDefinitions(statefulmetadataDefinitions);
+        });
+    }
+  }
+  get_metadata();
   var datasource_template = [{
     key: '1',
     Subject: null,
@@ -482,7 +504,7 @@ function App() {
     // DataSource.push(newData)
 
     SetDataSource([...presentDS, newData], true);
-    console.log(DataSource)
+    // console.log(DataSource)
   };
 
   const handleDuplicate = () => {
@@ -491,7 +513,6 @@ function App() {
     var newDS = [...presentDS]
 
     for (var i = 0; i < sel_rows.length; i++) {
-      console.log('i', i)
       var new_row = JSON.parse(JSON.stringify(newDS[sel_rows[i] - 1]));
 
       new_row['key'] = count.toString()
@@ -503,7 +524,6 @@ function App() {
     SetDataSource(newDS, true);
   };
   const DownloadCSV = () => {
-    console.log(presentDS)
     var csv = 'Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n'
     for (var i = 0; i < presentDS.length; i++) {
       var row = presentDS[i]
@@ -535,7 +555,6 @@ function App() {
       // here we tell the reader what to do when it's done reading...
       reader.onload = readerEvent => {
         var content = readerEvent.target.result; // this is the content!
-        // console.log(content)
         var lines = content.split('\n')
         // console.log(lines)
         var new_data = []
@@ -558,12 +577,7 @@ function App() {
                 line_data[j] = null
               }
             }
-            console.log('line_data')
-            console.log(line_data)
-            console.log('here', metadata['AgeCategory'].indexOf(line_data[2]))
-            console.log(metadata['AgeCategory'])
-            console.log(line_data[2])
-            console.log('i', i)
+
             var row = {
               key: i.toString(),
               Subject: line_data[0],
@@ -589,7 +603,6 @@ function App() {
               Sampletype: line_data[12]
             }
 
-            console.log('row', row)
             new_data.push(row)
           }
         }
@@ -600,58 +613,15 @@ function App() {
     input.click();
   }
 
-  // const handleDelete = () => {
-  //   console.log('delete')
-  //   console.log(sel_rows)
-  //   var new_data = []
-  //   for (var i = 0; i < DataSource.length; i++) {
-  //     var row = DataSource[i]
-  //     if (!sel_rows.includes(i)) {
-  //       new_data.push(row)
-  //     }
-  //   }
-  //   SetDataSource(new_data)
-  // }
 
-  // const handleSave = row => {
-  //   const newData = [...DataSource];
-  //   const index = newData.findIndex(item => row.key === item.key
-
-  // console.log(result)
-  //   const newData = {
-  //     key: count.toString(),
-  //     Subject: null,
-  //     BiologicalSex: null,
-  //     AgeCategory: null,
-  //     Species: null,
-  //     Age: null,
-  //     Weight: null,
-  //     Strain: null,
-  //     Pathology: null,
-  //     Phenotype: null,
-  //     Handedness: null,
-  //     Laterality: null,
-  //     Origin: null,
-  //     Sampletype: null
-  //   };
-  //   // DataSource.push(newData)
-
-  //   SetDataSource([...DataSource, newData]);
-  // };
   const handleDelete = () => {
-    console.log('delete')
     // console.log(sel_rows)
     var temp_ = presentDS
-    console.log(temp_)
     for (var i = 0; i < sel_rows.length; i++) {
       // console.log(i)
       // delete selected rows
       temp_ = temp_.filter(item => item.key !== sel_rows[i])
     }
-    console.log('sel_rows')
-    console.log(sel_rows)
-    console.log('temp_filter')
-    console.log(temp_)
 
     // reset keys 
     for (var i = 0; i < temp_.length; i++) {
@@ -725,9 +695,7 @@ function App() {
       //   selectedRows
       // )
       sel_rows = selectedRowKeys
-      for (var i in selectedRowKeys) {
-        console.log(i)
-      }
+
     },
     getCheckboxProps: (record) => {
       // set all checkboxes to true
@@ -806,6 +774,7 @@ function App() {
     // console.log('max_len', max_len)
 
     if (match_value_type == 'number') {
+      console.log('runnning')
       match_value = metadata[match_col][match_value]
       // console.log('match_value', match_value)
       // console.log('max_len2', max_len[match_col])
@@ -834,12 +803,10 @@ function App() {
     // remove statefulness from the row
 
     DataSource['present'] = { ...OldData }
-    console.log('setting data source')
     var temp_data = [...OldData]
     temp_data[index] = { ...original_data }
 
-    console.log('the original data is ', temp_data)
-    console.log('the new data', OldData)
+
     // unpack and get values
     // console.log([...Object.values(temp_data[0])], 'temp_data')
     // for each object in temp_data get the values
@@ -860,11 +827,9 @@ function App() {
       }
       temp_data_obj.push(temp_obj)
     }
-    console.log('temp_data_obj', temp_data_obj)
 
     history = [...history, temp_data_obj]
 
-    console.log('the entire history is', history)
     DataSource['past'] = [...DataSource['past'], [...temp_data_obj]]
 
     // console.log([...DataSource['past'], temp_data])
@@ -889,11 +854,7 @@ function App() {
     // }
 
     // prev_row = row
-    // prev_index = index
-    console.log('OldData')
-    console.log(OldData)
-    console.log('DataSourcePre')
-    console.log(DataSource)
+
     // DataSource['past'][DataSource['past'].length - 1][prev_index] = prev_row
     // console.log('DataSourcePost')
     // console.log(DataSource)
@@ -902,7 +863,18 @@ function App() {
   };
 
 
-
+  // title,
+  //   editable,
+  //   children,
+  //   dataIndex,
+  //   record,
+  //   select,
+  //   handleSave,
+  //   statefulmetadata,
+  //   statefulmetadataDefinitions,
+  //   setstatefulmetadata,
+  //   setstatefulmetadataDefinitions,
+  // ...restProps
 
 
 
@@ -926,6 +898,10 @@ function App() {
         dataIndex: col.dataIndex,
         title: col.title,
         handleSave,
+        statefulmetadata,
+        statefulmetadataDefinitions,
+        setstatefulmetadata,
+        setstatefulmetadataDefinitions
       }),
     };
   });
@@ -955,33 +931,32 @@ function App() {
   )
 }
 
-// function fetch_api() {
-//   var return_data
-//   const data = fetch('http://localhost:8080/print_statement', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({}),
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       return_data = data
-//       console.log('1:', return_data)
+function fetch_api() {
+  var return_data
+  const data = fetch('/print_statement', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  })
+    .then(response => response.json())
+    .then(data => {
+      return_data = data
+      console.log('1:', return_data)
 
-//       // for (let i = 0; i < data["data"].length; i++) {
-//       //   console.log('data_test', data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-//       //   var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-//       //   options_antd.push(<Option value={option} >{option}</Option>);
+      // for (let i = 0; i < data["data"].length; i++) {
+      //   console.log('data_test', data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+      //   var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+      //   options_antd.push(<Option value={option} >{option}</Option>);
 
-//     })
+    })
 
-//     // 
-//     .catch(error => {
-//       console.error('Error:', error)
-//     })
-//   console.log('2:', return_data)
-// }
+    // 
+    .catch(error => {
+      console.error('Error:', error)
+    })
+}
 
 
 const EditableRow = ({ index, ...props }) => {
@@ -1004,6 +979,10 @@ const EditableCell = ({
   record,
   select,
   handleSave,
+  statefulmetadata,
+  statefulmetadataDefinitions,
+  setstatefulmetadata,
+  setstatefulmetadataDefinitions,
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
@@ -1072,26 +1051,41 @@ const EditableCell = ({
 
 
   };
-  let options_antd = []
+  var options_antd = []
 
-  // const addItemToSelect = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  //   e.preventDefault();
-  //   setItems([...items, name || `New item ${index++}`]);
-  //   setName('');
-  //   setTimeout(() => {
-  //     inputRef.current?.focus();
-  //   }, 0);
-  // };
 
-  // const [items, setItems] = useState(['jack', 'lucy']);
   const [name, setName] = useState('');
-  var [statefulmetadata, setstatefulmetadata] = useState(metadata)
-  var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
-  let options_ = metadata[dataIndex]
-  let definitions = statefulmetadataDefinitions[dataIndex]
+
+
   const onNameChange = (event) => {
     setName(event.target.value);
   };
+
+
+  const addItem = (e) => {
+    e.preventDefault();
+    var items = statefulmetadata[dataIndex]
+
+    var definitions = statefulmetadataDefinitions[dataIndex]
+
+    items = ([name, ...items]);
+    statefulmetadata[dataIndex] = items
+    var newdefinition = 'A custom option added by the user'
+    definitions = ([newdefinition, ...definitions]);
+    statefulmetadataDefinitions[dataIndex] = definitions
+    setstatefulmetadataDefinitions(statefulmetadataDefinitions)
+    setstatefulmetadata(statefulmetadata)
+    setName('');
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
+  // if (called_api == false) {
+  //   fetch_data()
+  //   called_api = true
+  // }
+
+  // fetch_data()
   let childNode = children;
   if (editable) {
     childNode = editing ? (
@@ -1145,24 +1139,12 @@ const EditableCell = ({
     //   options_antd.push(option);
     // }
 
-    const addItem = (e) => {
-      e.preventDefault();
-      var items = statefulmetadata[dataIndex]
 
-      var definitions = statefulmetadataDefinitions[dataIndex]
+    for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
 
-      items = ([name, ...items]);
-      statefulmetadata[dataIndex] = items
-      var newdefinition = 'A custom option added by the user'
-      definitions = ([newdefinition, ...definitions]);
-      statefulmetadataDefinitions[dataIndex] = definitions
-      setstatefulmetadataDefinitions(statefulmetadataDefinitions)
-      setstatefulmetadata(statefulmetadata)
-      setName('');
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-    };
+      var option = <Option value={statefulmetadata[dataIndex][i]} title={statefulmetadataDefinitions[dataIndex][i]}>{statefulmetadata[dataIndex][i]}</Option>
+      options_antd.push(option);
+    }
 
     childNode = editing ? (
       <Form.Item
@@ -1188,6 +1170,7 @@ const EditableCell = ({
             width: '100%',
             cursor: 'pointer'
           }}
+          // options={options_antd}
           // style={{
           //   width: '100%'
 
@@ -1229,16 +1212,15 @@ const EditableCell = ({
 
 
         >
+          {options_antd}
 
-          {options_.map((option, index) => (
-            <Option key={index} value={option} title={definitions[index]}>{option}</Option>
-          ))}
 
 
         </Select>
         {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
       </Form.Item >)
       : (
+
 
 
         <Select showSearch
@@ -1254,6 +1236,8 @@ const EditableCell = ({
             width: '100%',
             cursor: 'pointer'
           }}
+          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+          // options={options_antd}
           dropdownRender={(menu) => (
             <>
               {menu}
@@ -1281,15 +1265,8 @@ const EditableCell = ({
             </>
           )}
         >
-          {/* {
-            Add.map((address, key) => <option title='test' value={key}>{address}</option>)
-          } */}
-          {options_.map((option, index) => (
 
-            <Option key={index} value={option} title={definitions[index]}>{option}</Option>
-          ))}
-          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-
+          {options_antd}
         </Select >
 
 
@@ -1303,10 +1280,11 @@ const EditableCell = ({
 };
 
 // a function that gets api data from a node function
+// connect to node backend to get data
 
 
 // function fetch_data() {
-//   fetch('/get_data', {
+//   fetch('/print_statement', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -1323,8 +1301,6 @@ const EditableCell = ({
 //     .catch(error => {
 //       console.error('Error:', error)
 //     })
-
-
 
 // }
 
