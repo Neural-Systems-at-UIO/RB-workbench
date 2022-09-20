@@ -3,7 +3,7 @@ import './SidePanel.css'
 
 const { Title } = Typography
 
-export function handleButtonClick (e) {
+export function handleButtonClick(e) {
   fetch('http://localhost:80/server.php').then(res => {
     res.json().then(data => {
       console.log(data)
@@ -11,7 +11,7 @@ export function handleButtonClick (e) {
     })
   })
 }
-function SidePanel () {
+function SidePanel() {
   return (
     <div className='SidePanel'>
       <div
@@ -48,7 +48,7 @@ function SidePanel () {
           marginBottom: '0px',
           marginTop: '40%',
           fontSize: '1.5rem',
-          border: '1px solid #f8fafb'
+          border: '0.0625rem solid #f8fafb'
         }}
       >
         <p
@@ -72,7 +72,7 @@ function SidePanel () {
           marginTop: '0',
           color: '#f8fafb',
           fontSize: '1rem',
-          border: '1px solid #f8fafb'
+          border: '0.0625rem solid #f8fafb'
         }}
       >
         <div className='CardBody'>
