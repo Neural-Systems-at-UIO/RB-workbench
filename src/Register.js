@@ -21,7 +21,6 @@ const { Option } = Select;
 let index = 0;
 
 function width_calc(column_name, font) {
-  console.log('column_name')
   var width = column_name.length
 
   if (typeof font === 'undefined') {
@@ -64,7 +63,7 @@ function width_calc(column_name, font) {
   return css_value
 }
 function width_calc_dropdown(input, font) {
-  console.log('wot')
+
   // console.log('input', input)
   // console.log('font', font)
   var width = input.length
@@ -391,7 +390,7 @@ function App() {
   // datasource = {}
   function get_metadata() {
     if (called_api == false) {
-      console.log('getting metadata')
+
 
       called_api = true;
       fetch('/get_metadata')
@@ -439,7 +438,7 @@ function App() {
 
     undoDataSource()
     // limit size of history
-    DataSource.past = DataSource.past.slice(-50)
+    DataSource.past = DataSource.past.slice(-15)
 
     // var step_back = [DataSource['past'].length - 1]
     // console.log('step_back', step_back)
@@ -625,8 +624,7 @@ function App() {
 
     // reset keys 
     for (var i = 0; i < temp_.length; i++) {
-      console.log(i)
-      console.log(temp_[i])
+
       temp_[i].key = (i + 1).toString()
     }
     // reset selected rows
@@ -711,7 +709,6 @@ function App() {
     const OldData = [...presentDS];
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
-    console.log('row', row)
     // create a copy of the row
     var original_data = { ...row }
 
@@ -752,9 +749,7 @@ function App() {
 
     // console.log('OldData1', OldData)
     if (sel_rows.includes(row["key"])) {
-      console.log('this works sel rows')
       for (var i in sel_rows) {
-        console.log(OldData[sel_rows[i] - 1])
         temp_row = OldData[sel_rows[i] - 1]
         temp_row[match_col] = match_value
         // console.log('temp row', temp_row)
@@ -774,7 +769,6 @@ function App() {
     // console.log('max_len', max_len)
 
     if (match_value_type == 'number') {
-      console.log('runnning')
       match_value = metadata[match_col][match_value]
       // console.log('match_value', match_value)
       // console.log('max_len2', max_len[match_col])
@@ -782,7 +776,6 @@ function App() {
         // console.log('here')
         max_len[match_col] = match_value.length
 
-        console.log(statefulColumns[match_col_index].width)
         statefulColumns[match_col_index].width = width_calc_dropdown(match_value, '0.82')
       }
 
@@ -943,7 +936,6 @@ function fetch_api() {
     .then(response => response.json())
     .then(data => {
       return_data = data
-      console.log('1:', return_data)
 
       // for (let i = 0; i < data["data"].length; i++) {
       //   console.log('data_test', data['data'][i]["https://openminds.ebrains.eu/vocab/name"])

@@ -52,7 +52,6 @@ function width_calc(column_name, font) {
   }
 
   var css_value = "calc(" + font + "em * " + width + ")"
-  // console.log('css_value', css_value)
   return css_value
 }
 function width_calc_dropdown(input, font) {
@@ -422,22 +421,16 @@ function App() {
     count += 1;
     // duplicate selected rows
     for (var i = 0; i < sel_rows.length; i++) {
-      console.log('i', i)
+
       var new_row = JSON.parse(JSON.stringify(DataSource[sel_rows[i] - 1]));
 
-      console.log('ds')
-      console.log(DataSource)
-      console.log('--')
-      console.log(sel_rows[i])
-      console.log(DataSource[sel_rows[i] - 1])
+
       new_row['key'] = count.toString()
-      console.log('new_row', new_row)
-      console.log('DataSource', DataSource)
+
       // new_row.key = count.toString()
       DataSource = [...DataSource, new_row]
       count += 1
     }
-    console.log(DataSource)
     SetDataSource(DataSource);
   };
   //   const newData = {
@@ -532,9 +525,7 @@ function App() {
       //   selectedRows
       // )
       sel_rows = selectedRowKeys
-      for (var i in selectedRowKeys) {
-        console.log(i)
-      }
+
     },
     getCheckboxProps: (record) => {
       // set all checkboxes to true
@@ -550,10 +541,7 @@ function App() {
     const OldData = [...DataSource];
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
-    console.log('index', index)
-    console.log('item', item)
-    console.log('row', row)
-    console.log('event2', event)
+
 
 
 
@@ -589,9 +577,7 @@ function App() {
 
     // console.log('OldData1', OldData)
     if (sel_rows.includes(row["key"])) {
-      console.log('this works sel rows')
       for (var i in sel_rows) {
-        console.log(OldData[sel_rows[i] - 1])
         temp_row = OldData[sel_rows[i] - 1]
         temp_row[match_col] = match_value
         // console.log('temp row', temp_row)
@@ -618,7 +604,6 @@ function App() {
         // console.log('here')
         max_len[match_col] = match_value.length
 
-        console.log(statefulColumns[match_col_index].width)
         statefulColumns[match_col_index].width = width_calc_dropdown(match_value, '0.82')
       }
 
