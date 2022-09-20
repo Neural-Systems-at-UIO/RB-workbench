@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-export function SineWave({ width = 5000, height = 100, frequency = 0.6, amplitude = 0.1, offset = 0, framerate = 60, increment = 0.5 }) {
+export function SineWave({ width = 5000, height = 100, frequency = 0.6, amplitude = 0.1, offset = 0, framerate = 20, increment = 0.2 }) {
     const svg = useRef();
     var [increment, setIncrement] = useState(increment);
     var [framerate, setFramerate] = useState(framerate);
