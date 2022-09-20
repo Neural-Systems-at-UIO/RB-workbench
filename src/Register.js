@@ -141,7 +141,7 @@ const defaultColumns = [
       if (b.AgeCategory == null) {
         return -1;
       }
-      return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
+      return a.AgeCategory.localeCompare(b.AgeCategory)
 
     },
 
@@ -164,7 +164,7 @@ const defaultColumns = [
       if (b.BiologicalSex == null) {
         return -1;
       }
-      return metadata['BiologicalSex'][a.BiologicalSex].localeCompare(metadata['BiologicalSex'][b.BiologicalSex])
+      return a.BiologicalSex.localeCompare(b.BiologicalSex)
 
     },
 
@@ -184,7 +184,7 @@ const defaultColumns = [
       if (b.Species == null) {
         return -1;
       }
-      return metadata['Species'][a.Species].localeCompare(metadata['Species'][b.Species])
+      return a.Species.localeCompare(b.Species)
     },
     sortDirections: ['descend', 'ascend', 'descend'],
 
@@ -241,7 +241,7 @@ const defaultColumns = [
       if (b.Strain == null) {
         return -1;
       }
-      return metadata['Strain'][a.Strain].localeCompare(metadata['Strain'][b.Strain])
+      return a.Strain.localeCompare(b.Strain)
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Strain'),
     editable: true,
@@ -253,13 +253,13 @@ const defaultColumns = [
     dataIndex: 'Pathology',
     key: 'Pathology',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Pathology == null) {
         return 1;
       }
-      if (b.Subject == null) {
+      if (b.Pathology == null) {
         return -1;
       }
-      return a.Subject.localeCompare(b.Subject)
+      return a.Pathology.localeCompare(b.Pathology)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
@@ -278,7 +278,7 @@ const defaultColumns = [
       if (b.Phenotype == null) {
         return -1;
       }
-      return metadata['Phenotype'][a.Phenotype].localeCompare(metadata['Phenotype'][b.Phenotype])
+      return a.Phenotype.localeCompare(b.Phenotype)
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Phenotype'),
     editable: true,
@@ -296,7 +296,7 @@ const defaultColumns = [
       if (b.Handedness == null) {
         return -1;
       }
-      return metadata['Handedness'][a.Handedness].localeCompare(metadata['Handedness'][b.Handedness])
+      return a.Handedness.localeCompare(b.Handedness)
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Handedness'),
     editable: true,
@@ -314,7 +314,7 @@ const defaultColumns = [
       if (b.Laterality == null) {
         return -1;
       }
-      return metadata['Laterality'][a.Laterality].localeCompare(metadata['Laterality'][b.Laterality])
+      return a.Laterality.localeCompare(b.Laterality)
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Laterality'),
     editable: true,
@@ -326,13 +326,13 @@ const defaultColumns = [
     dataIndex: 'Origin',
     key: 'Origin',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Origin == null) {
         return 1;
       }
-      if (b.Subject == null) {
+      if (b.Origin == null) {
         return -1;
       }
-      return a.Subject.localeCompare(b.Subject)
+      return a.Origin.localeCompare(b.Origin)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
@@ -345,13 +345,13 @@ const defaultColumns = [
     dataIndex: 'Sampletype',
     key: 'Sampletype',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Sampletype == null) {
         return 1;
       }
-      if (b.Subject == null) {
+      if (b.Sampletype == null) {
         return -1;
       }
-      return a.Subject.localeCompare(b.Subject)
+      return a.Sampletype.localeCompare(b.Sampletype)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
