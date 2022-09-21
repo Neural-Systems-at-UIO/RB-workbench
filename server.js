@@ -2,6 +2,7 @@
 // Get modules that are needed for the server
 const express = require('express');        // Express is a framework for creating web apps
 const path = require('path');              // Path is used for creating file paths
+const https = require('node:https');
 const fs = require('fs');             // Needed for deleting files that are uploaded to server
 const fileUpload = require('express-fileupload');
 const bodyparser = require('body-parser'); // Body-parser is needed for parsing incoming request bodies
@@ -88,8 +89,12 @@ setInterval(get_data, 86400000);
 // This is the route that the frontend will use to get the data from the api
 
 // console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
-
+// app.listen(port, () => console.log(`Listening on port ${port}`));
+https.createServer({
+	key:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/privkey.pem'),
+	cert:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/cert.pem'),
+	ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
+	app).listen(port)
 // Serve the react app for the default (/) route
 app.get('/', function (req, res) {
     res.render('index.html')
