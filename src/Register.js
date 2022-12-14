@@ -383,54 +383,45 @@ var sel_rows = []
 // var prev_row = null
 // var prev_index = null
 function App() {
+  var count = 0;
   var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
 
   var [statefulmetadata, setstatefulmetadata] = useState(metadata)
   var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
-  // datasource = {}
-  function get_metadata() {
-    if (called_api == false) {
+  var [loading, setLoading] = useState(false)
 
-
-      called_api = true;
-      fetch('/get_metadata')
-        .then(response => response.json())
-        .then(data => {
-          statefulmetadata = data[0];
-          statefulmetadataDefinitions = data[1];
-          setstatefulmetadata(statefulmetadata);
-          setstatefulmetadataDefinitions(statefulmetadataDefinitions);
-        });
+  const loadMoreData = () => {
+    if (loading) {
+      return;
     }
+    setLoading(true);
+    count += 1;
+    // fetch will go here
+    var new_data = metadata.slice(count * 10, (count + 1) * 10)
+    SetDataSource(new_data)
+    setLoading(false);
   }
-  get_metadata();
-  var datasource_template = [{
-    key: '1',
-    Subject: null,
-    BiologicalSex: null,
-    AgeCategory: null,
-    Species: null,
-    Age: null,
-    Weight: null,
-    Strain: null,
-    Pathology: null,
-    Phenotype: null,
-    Handedness: null,
-    Laterality: null,
-    Origin: null,
-    Sampletype: null
+  // function get_metadata() {
+  //   if (called_api == false) {
 
-  }]
+
+  //     called_api = true;
+  //     fetch('/get_metadata')
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         statefulmetadata = data[0];
+  //         statefulmetadataDefinitions = data[1];
+  //         setstatefulmetadata(statefulmetadata);
+  //         setstatefulmetadataDefinitions(statefulmetadataDefinitions);
+  //       });
+  //   }
+  // }
+  // get_metadata();
+
+  var datasource_template = datasource
   var [DataSource, { set: SetDataSource, reset: resetDataSource, undo: undoDataSource, redo: redoDataSource, canUndoDS, canRedoDS },] = useUndo(datasource_template, { useCheckpoints: true });
   const { present: presentDS } = DataSource;
-  // console.log('undoDS')
-  // console.log(presentDS)
-  // // Define useUndo hook
 
-  // create undoable state
-  // const [state, setState, { undo, redo, canUndo, canRedo }] = useUndo(DataSource)
-
-  // console.log('NOW')
   var count = presentDS.length
   function handleUndoDS(e) {
     // console.log(prev_row)
@@ -440,39 +431,6 @@ function App() {
     // limit size of history
     DataSource.past = DataSource.past.slice(-15)
 
-    // var step_back = [DataSource['past'].length - 1]
-    // console.log('step_back', step_back)
-    // // console.log('DataSourcePast')
-    // // console.log(DataSource.past)
-    // // DataSource['present'][0]['Species'] = 1
-    // // undoDataSource()
-    // // SetDataSource(DataSource['present'])
-    // // handle undo for dropdowns
-    // console.log('onestepbackis')
-    // console.log(DataSource['past'][step_back])
-    // SetDataSource(DataSource['past'][step_back])
-    // DataSource['past'].pop()
-    // // DataSource['past'].pop()
-    // // SetDataSource(DataSource.present, false)
-    // console.log('DataSourcePost')
-    // console.log(DataSource)
-    // handle undo for dropdowns
-
-
-    // DataSource.future = [DataSource.present, ...DataSource.future]
-    // DataSource.present = DataSource.past[DataSource.past.length - 1]
-    // DataSource.past = DataSource.past.slice(0, DataSource.past.length - 1)
-    // SetDataSource(DataSource.present)
-    // DataSource.past.pop()
-    // DataSource.past.pop()
-
-    // console.log('DataSourcePast', DataSource.past)
-    // undo state
-    // undo()
-
-
-    // console.log('postundo')
-    // console.log(presentDS)
   }
   function handleRedoDS(e) {
     e.preventDefault()
@@ -523,6 +481,8 @@ function App() {
     SetDataSource(newDS, true);
   };
   const DownloadCSV = () => {
+    console.log('here')
+    console.log(presentDS)
     var csv = 'Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n'
     for (var i = 0; i < presentDS.length; i++) {
       var row = presentDS[i]
@@ -919,6 +879,7 @@ function App() {
         dataSource={presentDS}
         scroll={{ x: '30vh', y: '76vh' }}
         pagination={false}
+
       />
     </div >
   )
