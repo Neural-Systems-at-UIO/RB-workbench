@@ -6,7 +6,6 @@ const { Title } = Typography
 export function handleButtonClick(e) {
   fetch('http://localhost:80/server.php').then(res => {
     res.json().then(data => {
-      console.log(data)
       message.info('done')
     })
   })

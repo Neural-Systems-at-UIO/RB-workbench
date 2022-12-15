@@ -1,0 +1,4 @@
+
+mysql -u nbw-user -p nbw <(cat drop.txt database.sql testdata.sql)
+#mysql -u nbw-user -p nbw < database.sql
+#mysql -u nbw-user -p nbw < testdata.sql

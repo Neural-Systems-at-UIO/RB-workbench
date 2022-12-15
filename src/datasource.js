@@ -415,6 +415,4 @@ const datasource = [
   //   Nutiled: '❌'
   // }
 ]
-console.log('success')
-console.log(datasource)
 export default datasource

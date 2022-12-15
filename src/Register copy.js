@@ -2,28 +2,17 @@ import { Table, Button, Form, Input, Select, } from 'antd'
 // import styled from 'styled-components'
 import datasource from './datasource.js'
 import './Register.css'
-
-import SidePanelLeft from './Container/SidePanelLeft'
-//import OptionsBar from './options-bar'
-
-import useUndo from 'use-undo';
 import SidePanel from './SidePanel.js'
 // import OptionsBar from './options-bar.js'
 import metadata from './metadata'
-import metadataDefinitions from './metadata-definitions'
 // import { render } from '@umijs/deps/compiled/mustache'
 import React, { useContext, useEffect, useRef, useState } from 'react';
 // const { Title } = Typography
 import { Menu, Dropdown, message, Space } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
 import './options-bar.css'
-import { PlusOutlined } from '@ant-design/icons';
-
-import { Divider } from 'antd';
 const EditableContext = React.createContext(null);
 const { Option } = Select;
-let index = 0;
-
 function width_calc(column_name, font) {
   var width = column_name.length
 
@@ -63,11 +52,9 @@ function width_calc(column_name, font) {
   }
 
   var css_value = "calc(" + font + "em * " + width + ")"
-  // console.log('css_value', css_value)
   return css_value
 }
 function width_calc_dropdown(input, font) {
-
   // console.log('input', input)
   // console.log('font', font)
   var width = input.length
@@ -84,7 +71,6 @@ function width_calc_dropdown(input, font) {
 
   return css_value
 }
-
 const defaultColumns = [
   {
     title: 'Subject',
@@ -144,7 +130,7 @@ const defaultColumns = [
       if (b.AgeCategory == null) {
         return -1;
       }
-      return a.AgeCategory.localeCompare(b.AgeCategory)
+      return metadata['AgeCategory'][a.AgeCategory].localeCompare(metadata['AgeCategory'][b.AgeCategory])
 
     },
 
@@ -167,7 +153,7 @@ const defaultColumns = [
       if (b.BiologicalSex == null) {
         return -1;
       }
-      return a.BiologicalSex.localeCompare(b.BiologicalSex)
+      return metadata['BiologicalSex'][a.BiologicalSex].localeCompare(metadata['BiologicalSex'][b.BiologicalSex])
 
     },
 
@@ -187,7 +173,7 @@ const defaultColumns = [
       if (b.Species == null) {
         return -1;
       }
-      return a.Species.localeCompare(b.Species)
+      return metadata['Species'][a.Species].localeCompare(metadata['Species'][b.Species])
     },
     sortDirections: ['descend', 'ascend', 'descend'],
 
@@ -244,7 +230,7 @@ const defaultColumns = [
       if (b.Strain == null) {
         return -1;
       }
-      return a.Strain.localeCompare(b.Strain)
+      return metadata['Strain'][a.Strain].localeCompare(metadata['Strain'][b.Strain])
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Strain'),
     editable: true,
@@ -256,13 +242,13 @@ const defaultColumns = [
     dataIndex: 'Pathology',
     key: 'Pathology',
     sorter: (a, b) => {
-      if (a.Pathology == null) {
+      if (a.Subject == null) {
         return 1;
       }
-      if (b.Pathology == null) {
+      if (b.Subject == null) {
         return -1;
       }
-      return a.Pathology.localeCompare(b.Pathology)
+      return a.Subject.localeCompare(b.Subject)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
@@ -281,7 +267,7 @@ const defaultColumns = [
       if (b.Phenotype == null) {
         return -1;
       }
-      return a.Phenotype.localeCompare(b.Phenotype)
+      return metadata['Phenotype'][a.Phenotype].localeCompare(metadata['Phenotype'][b.Phenotype])
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Phenotype'),
     editable: true,
@@ -299,7 +285,7 @@ const defaultColumns = [
       if (b.Handedness == null) {
         return -1;
       }
-      return a.Handedness.localeCompare(b.Handedness)
+      return metadata['Handedness'][a.Handedness].localeCompare(metadata['Handedness'][b.Handedness])
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Handedness'),
     editable: true,
@@ -317,7 +303,7 @@ const defaultColumns = [
       if (b.Laterality == null) {
         return -1;
       }
-      return a.Laterality.localeCompare(b.Laterality)
+      return metadata['Laterality'][a.Laterality].localeCompare(metadata['Laterality'][b.Laterality])
     }, sortDirections: ['descend', 'ascend', 'descend'],
     width: width_calc('Laterality'),
     editable: true,
@@ -329,13 +315,13 @@ const defaultColumns = [
     dataIndex: 'Origin',
     key: 'Origin',
     sorter: (a, b) => {
-      if (a.Origin == null) {
+      if (a.Subject == null) {
         return 1;
       }
-      if (b.Origin == null) {
+      if (b.Subject == null) {
         return -1;
       }
-      return a.Origin.localeCompare(b.Origin)
+      return a.Subject.localeCompare(b.Subject)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
@@ -348,13 +334,13 @@ const defaultColumns = [
     dataIndex: 'Sampletype',
     key: 'Sampletype',
     sorter: (a, b) => {
-      if (a.Sampletype == null) {
+      if (a.Subject == null) {
         return 1;
       }
-      if (b.Sampletype == null) {
+      if (b.Subject == null) {
         return -1;
       }
-      return a.Sampletype.localeCompare(b.Sampletype)
+      return a.Subject.localeCompare(b.Subject)
 
     },
     sortDirections: ['descend', 'ascend', 'descend'],
@@ -363,8 +349,6 @@ const defaultColumns = [
 
   }
 ]
-var called_api = false;
-// a function to get the data from the api and set the state of statefulmetadata
 
 var max_len = {
   Subject: 0,
@@ -382,66 +366,33 @@ var max_len = {
   Sampletype: 0
 
 }
-var history = []
+
 var sel_rows = []
-// var prev_row = null
-// var prev_index = null
+
 function App() {
-  var count = 0;
   var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
 
-  var [statefulmetadata, setstatefulmetadata] = useState(metadata)
-  var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
-  var [loading, setLoading] = useState(false)
+  // datasource = {}
+  var [DataSource, SetDataSource] = useState([{
+    key: '1',
+    Subject: null,
+    BiologicalSex: null,
+    AgeCategory: null,
+    Species: null,
+    Age: null,
+    Weight: null,
+    Strain: null,
+    Pathology: null,
+    Phenotype: null,
+    Handedness: null,
+    Laterality: null,
+    Origin: null,
+    Sampletype: null
 
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    count += 1;
-    // fetch will go here
-    var new_data = metadata.slice(count * 10, (count + 1) * 10)
-    SetDataSource(new_data)
-    setLoading(false);
-  }
-  // function get_metadata() {
-  //   if (called_api == false) {
+  }])
 
-
-  //     called_api = true;
-  //     fetch('/get_metadata')
-  //       .then(response => response.json())
-  //       .then(data => {
-  //         statefulmetadata = data[0];
-  //         statefulmetadataDefinitions = data[1];
-  //         setstatefulmetadata(statefulmetadata);
-  //         setstatefulmetadataDefinitions(statefulmetadataDefinitions);
-  //       });
-  //   }
-  // }
-  // get_metadata();
-
-  var datasource_template = datasource
-  var [DataSource, { set: SetDataSource, reset: resetDataSource, undo: undoDataSource, redo: redoDataSource, canUndoDS, canRedoDS },] = useUndo(datasource_template, { useCheckpoints: true });
-  const { present: presentDS } = DataSource;
-
-  var count = presentDS.length
-  function handleUndoDS(e) {
-    // console.log(prev_row)
-    e.preventDefault()
-
-    undoDataSource()
-    // limit size of history
-    DataSource.past = DataSource.past.slice(-15)
-
-  }
-  function handleRedoDS(e) {
-    e.preventDefault()
-    redoDataSource()
-    // console.log('postredo')
-    // console.log(presentDS)
-  }
+  // console.log('NOW')
+  var count = DataSource.length
   // add a new row
   const handleAdd = () => {
     count += 1;
@@ -464,132 +415,55 @@ function App() {
     };
     // DataSource.push(newData)
 
-    SetDataSource([...presentDS, newData], true);
-    // console.log(DataSource)
+    SetDataSource([...DataSource, newData]);
   };
-
   const handleDuplicate = () => {
     count += 1;
     // duplicate selected rows
-    var newDS = [...presentDS]
-
     for (var i = 0; i < sel_rows.length; i++) {
-      var new_row = JSON.parse(JSON.stringify(newDS[sel_rows[i] - 1]));
+
+      var new_row = JSON.parse(JSON.stringify(DataSource[sel_rows[i] - 1]));
+
 
       new_row['key'] = count.toString()
 
       // new_row.key = count.toString()
-      var newDS = [...newDS, new_row]
+      DataSource = [...DataSource, new_row]
       count += 1
     }
-    SetDataSource(newDS, true);
+    SetDataSource(DataSource);
   };
-  const DownloadCSV = () => {
-    console.log('here')
-    console.log(presentDS)
-    var csv = 'Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n'
-    for (var i = 0; i < presentDS.length; i++) {
-      var row = presentDS[i]
-      csv += row.Subject + ';' + row.BiologicalSex + ';' + row.AgeCategory + ';' + row.Species + ';' + row.Age + ';' + row.Weight + ';' + row.Strain + ';' + row.Pathology + ';' + row.Phenotype + ';' + row.Handedness + ';' + row.Laterality + ';' + row.Origin + ';' + row.Sampletype + '\n'
-    }
-    var blob = new Blob([csv], { type: 'text/csv' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'metadata.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
+  //   const newData = {
+  //     key: count.toString(),
+  //     Subject: null,
+  //     BiologicalSex: null,
+  //     AgeCategory: null,
+  //     Species: null,
+  //     Age: null,
+  //     Weight: null,
+  //     Strain: null,
+  //     Pathology: null,
+  //     Phenotype: null,
+  //     Handedness: null,
+  //     Laterality: null,
+  //     Origin: null,
+  //     Sampletype: null
+  //   };
+  //   // DataSource.push(newData)
 
-  const UploadCSVButton = () => {
-    var input = document.createElement('input');
-    input.type = 'file';
-
-    input.onchange = e => {
-      // getting a hold of the file reference
-      var file = e.target.files[0];
-
-      // setting up the reader
-      var reader = new FileReader();
-      reader.readAsText(file, 'UTF-8');
-
-      // here we tell the reader what to do when it's done reading...
-      reader.onload = readerEvent => {
-        var content = readerEvent.target.result; // this is the content!
-        var lines = content.split('\n')
-        // console.log(lines)
-        var new_data = []
-        for (var i = 0; i < lines.length; i++) {
-          // skip the header
-          if (i == 0) {
-            continue
-          }
-          var line = lines[i]
-          var line_data = line.split(';')
-          // console.log(line_data)
-          // console.log(line_data.length)
-          if (line_data.length == 13) {
-            // handle null values
-            for (var j = 0; j < line_data.length; j++) {
-              if (line_data[j] == 'null') {
-                line_data[j] = null
-              }
-              if (line_data[j] == "undefined") {
-                line_data[j] = null
-              }
-            }
-
-            var row = {
-              key: i.toString(),
-              Subject: line_data[0],
-              // handle if the value is not in the metadata
-              // BiologicalSex: metadata['BiologicalSex'].indexOf(line_data[1]) == -1 ? null : metadata['BiologicalSex'].indexOf(line_data[1]),
-              // AgeCategory: metadata['AgeCategory'].indexOf(line_data[2]) == -1 ? null : metadata['AgeCategory'].indexOf(line_data[2]),
-              // Species: metadata['Species'].indexOf(line_data[3]) == -1 ? null : metadata['Species'].indexOf(line_data[3]),
-              BiologicalSex: line_data[1],
-              AgeCategory: line_data[2],
-              Species: line_data[3],
-              Age: line_data[4],
-              Weight: line_data[5],
-              Strain: line_data[6],
-              // Strain: metadata['Strain'].indexOf(line_data[6]) == -1 ? null : metadata['Strain'].indexOf(line_data[6]),
-              Pathology: line_data[7],
-              Phenotype: line_data[8],
-              Handedness: line_data[9],
-              Laterality: line_data[10],
-              // Phenotype: metadata['Phenotype'].indexOf(line_data[8]) == -1 ? null : metadata['Phenotype'].indexOf(line_data[8]),
-              // Handedness: metadata['Handedness'].indexOf(line_data[9]) == -1 ? null : metadata['Handedness'].indexOf(line_data[9]),
-              // Laterality: metadata['Laterality'].indexOf(line_data[10]) == -1 ? null : metadata['Laterality'].indexOf(line_data[10]),
-              Origin: line_data[11],
-              Sampletype: line_data[12]
-            }
-
-            new_data.push(row)
-          }
-        }
-        SetDataSource(new_data)
-      }
-    }
-
-    input.click();
-  }
-
-
+  //   SetDataSource([...DataSource, newData]);
+  // };
   const handleDelete = () => {
+
     // console.log(sel_rows)
-    var temp_ = presentDS
     for (var i = 0; i < sel_rows.length; i++) {
       // console.log(i)
       // delete selected rows
-      temp_ = temp_.filter(item => item.key !== sel_rows[i])
+      DataSource = DataSource.filter(item => item.key !== sel_rows[i])
     }
-
     // reset keys 
-    for (var i = 0; i < temp_.length; i++) {
-
-      temp_[i].key = (i + 1).toString()
+    for (var i = 0; i < DataSource.length; i++) {
+      DataSource[i].key = (i + 1).toString()
     }
     // reset selected rows
     sel_rows = []
@@ -604,7 +478,7 @@ function App() {
 
     }
     // console.log(checkboxes)
-    SetDataSource(temp_)
+    SetDataSource(DataSource)
     setSelected([])
     // DataSource.push(newData)
 
@@ -615,13 +489,7 @@ function App() {
       <div style={{ padding: '0 ', textAlign: 'left' }} className='OptionsBar'>
 
         <Button onClick={handleAdd}>Add</Button>
-        <Button onClick={handleUndoDS} >Undo</Button>
-        <Button onClick={handleRedoDS} >Redo</Button>
-
         <Button onClick={handleDuplicate}>Duplicate Selected</Button>
-        <Button onClick={DownloadCSV}>Download CSV</Button>
-        <Button onClick={UploadCSVButton}>Upload CSV</Button>
-
 
         <Button onClick={handleDelete} type='default' danger>
           Delete
@@ -670,11 +538,10 @@ function App() {
   }
   const handleSave = (row, event, dataIndex) => {
 
-    const OldData = [...presentDS];
+    const OldData = [...DataSource];
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
-    // create a copy of the row
-    var original_data = { ...row }
+
 
 
 
@@ -690,7 +557,6 @@ function App() {
         // console.log('item_key', item[id])
         var match_col = id
         var match_value = row[id]
-        original_data[match_col] = item[id]
         OldData.splice(index, 1, { ...item, ...row });
 
       }
@@ -701,14 +567,12 @@ function App() {
       match_value = event
       var temp_row = OldData[index]
       temp_row[match_col] = match_value
-      // original_data[match_col] = match_value
       OldData.splice(index, 1, { ...temp_row });
       // console.log('temp_row1', temp_row)
       // console.log('olddata-debug', OldData)
 
 
     }
-
 
 
     // console.log('OldData1', OldData)
@@ -753,85 +617,14 @@ function App() {
     // console.log('match_value_length', match_value.length)
     // console.log('match_col_max_len', match_col)
     // console.log('max_len', max_len)
-    setStatefulColumns([...statefulColumns])
+    setStatefulColumns(statefulColumns)
     // console.log(OldData)
     // OldData has now become newdata
-    SetDataSource([...OldData], false);
-    // remove statefulness from the row
-
-    DataSource['present'] = { ...OldData }
-    var temp_data = [...OldData]
-    temp_data[index] = { ...original_data }
-
-
-    // unpack and get values
-    // console.log([...Object.values(temp_data[0])], 'temp_data')
-    // for each object in temp_data get the values
-
-    var temp_data_values = []
-    var temp_data_keys = []
-    for (var i in temp_data) {
-      temp_data_values.push([...Object.values(temp_data[i])])
-      temp_data_keys.push([...Object.keys(temp_data[i])])
-    }
-
-    // recreate object from keys and values
-    var temp_data_obj = []
-    for (var i in temp_data_values) {
-      var temp_obj = {}
-      for (var j in temp_data_values[i]) {
-        temp_obj[temp_data_keys[i][j]] = temp_data_values[i][j]
-      }
-      temp_data_obj.push(temp_obj)
-    }
-
-    history = [...history, temp_data_obj]
-
-    DataSource['past'] = [...DataSource['past'], [...temp_data_obj]]
-
-    // console.log([...DataSource['past'], temp_data])
-    // DataSource['present'] = [...OldData]
-
-    // create copy of OldData
-
-    // if (DataSource['past'].length > 0) {
-
-    //   console.log('check')
-    //   var temp_ = [...DataSource['past'][DataSource['past'].length - 1]]
-    //   console.log('temp_', temp_)
-    //   temp_[index] = original_data
-    //   console.log('temp', temp_)
-    //   DataSource['past'] = [...DataSource['past'], temp_]
-    // }
-    // else {
-    //   var temp_data = [...OldData]
-    //   temp_data[index] = original_data
-    //   DataSource['past'] = [...DataSource['past'], temp_data]
-
-    // }
-
-    // prev_row = row
-
-    // DataSource['past'][DataSource['past'].length - 1][prev_index] = prev_row
-    // console.log('DataSourcePost')
-    // console.log(DataSource)
-    // console.log('datasource', DataSource)
-
+    SetDataSource(OldData);
   };
 
 
-  // title,
-  //   editable,
-  //   children,
-  //   dataIndex,
-  //   record,
-  //   select,
-  //   handleSave,
-  //   statefulmetadata,
-  //   statefulmetadataDefinitions,
-  //   setstatefulmetadata,
-  //   setstatefulmetadataDefinitions,
-  // ...restProps
+
 
 
 
@@ -855,10 +648,6 @@ function App() {
         dataIndex: col.dataIndex,
         title: col.title,
         handleSave,
-        statefulmetadata,
-        statefulmetadataDefinitions,
-        setstatefulmetadata,
-        setstatefulmetadataDefinitions
       }),
     };
   });
@@ -880,40 +669,41 @@ function App() {
         components={components}
         columns={columns}
         // rowClassName={() => 'editable-row'}
-        dataSource={presentDS}
+        dataSource={DataSource}
         scroll={{ x: '30vh', y: '76vh' }}
         pagination={false}
-
       />
     </div >
   )
 }
 
-function fetch_api() {
-  var return_data
-  const data = fetch('/print_statement', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({}),
-  })
-    .then(response => response.json())
-    .then(data => {
-      return_data = data
+// function fetch_api() {
+//   var return_data
+//   const data = fetch('http://localhost:8080/print_statement', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({}),
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       return_data = data
+//       console.log('1:', return_data)
 
-      // for (let i = 0; i < data["data"].length; i++) {
-      //   console.log('data_test', data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-      //   var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-      //   options_antd.push(<Option value={option} >{option}</Option>);
+//       // for (let i = 0; i < data["data"].length; i++) {
+//       //   console.log('data_test', data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+//       //   var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+//       //   options_antd.push(<Option value={option} >{option}</Option>);
 
-    })
+//     })
 
-    // 
-    .catch(error => {
-      console.error('Error:', error)
-    })
-}
+//     // 
+//     .catch(error => {
+//       console.error('Error:', error)
+//     })
+//   console.log('2:', return_data)
+// }
 
 
 const EditableRow = ({ index, ...props }) => {
@@ -936,10 +726,6 @@ const EditableCell = ({
   record,
   select,
   handleSave,
-  statefulmetadata,
-  statefulmetadataDefinitions,
-  setstatefulmetadata,
-  setstatefulmetadataDefinitions,
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
@@ -984,8 +770,7 @@ const EditableCell = ({
     // console.log('selected_value', form);
     // console.log('event', event);
 
-    // setEditing(!editing);
-    toggleEdit();
+    setEditing(!editing);
 
     try {
       // event.preventDefault()
@@ -1008,41 +793,7 @@ const EditableCell = ({
 
 
   };
-  var options_antd = []
 
-
-  const [name, setName] = useState('');
-
-
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-
-
-  const addItem = (e) => {
-    e.preventDefault();
-    var items = statefulmetadata[dataIndex]
-
-    var definitions = statefulmetadataDefinitions[dataIndex]
-
-    items = ([name, ...items]);
-    statefulmetadata[dataIndex] = items
-    var newdefinition = 'A custom option added by the user'
-    definitions = ([newdefinition, ...definitions]);
-    statefulmetadataDefinitions[dataIndex] = definitions
-    setstatefulmetadataDefinitions(statefulmetadataDefinitions)
-    setstatefulmetadata(statefulmetadata)
-    setName('');
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
-  // if (called_api == false) {
-  //   fetch_data()
-  //   called_api = true
-  // }
-
-  // fetch_data()
   let childNode = children;
   if (editable) {
     childNode = editing ? (
@@ -1080,29 +831,19 @@ const EditableCell = ({
   // fetch_data()
 
   if (select) {
+    let options_antd = []
+    let options_ = metadata[dataIndex]
+
+    const Add = options_.map(Add => Add
+    )
+    for (let i = 0; i < options_.length; i++) {
+      // var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
+      var option = (options_[i])
+      option = <Option value={option} >{option}</Option>
 
 
-    // const Add = options_.map(Add => Add
-    // )
-    // const definitionsMap = definitions.map(definitions => definitions
-    // )
-
-    // for (let i = 0; i < options_.length; i++) {
-    //   // var option = (data['data'][i]["https://openminds.ebrains.eu/vocab/name"])
-    //   var option = (options_[i])
-    //   option = <Option value={option} > {option}</Option >
-
-
-    //   options_antd.push(option);
-    // }
-
-
-    for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
-
-      var option = <Option value={statefulmetadata[dataIndex][i]} title={statefulmetadataDefinitions[dataIndex][i]}>{statefulmetadata[dataIndex][i]}</Option>
       options_antd.push(option);
     }
-
     childNode = editing ? (
       <Form.Item
         style={{
@@ -1116,72 +857,32 @@ const EditableCell = ({
           },
         ]}
       >
-        {/* allow the user to add new options to a select  if missing*/}
-
         <Select
           showSearch
           optionFilterProp="children"
           placeholder='Select a option...'
           id='selectmain'
-          style={{
-            width: '100%',
-            cursor: 'pointer'
-          }}
-          // options={options_antd}
           // style={{
           //   width: '100%'
 
           // }}
-          // allow us to add a new option
-
           ref={inputRef} onChange={saveDropDown} value={children[1]} size={'large'}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
           // set select min width based on the longest option
           dropdownMatchSelectWidth={false}
-          dropdownRender={(menu) => (
-            <>
-              {menu}
-              <Divider
-                style={{
-                  margin: '8px 0',
-                }}
-              />
-              <Space
-                width='10px'
-
-                style={{
-                  padding: '0 8px 4px',
-
-                }}
-              >
-                <Input
-                  placeholder="Please enter item"
-                  ref={inputRef}
-                  value={name}
-                  onChange={onNameChange}
-                />
-                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                  Add item
-                </Button>
-              </Space>
-            </>
-          )}
 
 
         >
-          {options_antd}
-
-
+          {
+            Add.map((address, key) => <option value={key}>{address}</option>)
+          }
 
         </Select>
         {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
       </Form.Item >)
       : (
 
-
-
         <Select showSearch
-
           optionFilterProp="children"
           placeholder='Select a option...'
 
@@ -1190,40 +891,15 @@ const EditableCell = ({
           dropdownMatchSelectWidth={false}
           // set box width 
           style={{
-            width: '100%',
-            cursor: 'pointer'
+            width: '100%'
           }}
-          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-          // options={options_antd}
-          dropdownRender={(menu) => (
-            <>
-              {menu}
-              <Divider
-                style={{
-                  margin: '8px 0',
-                }}
-              />
-              <Space
-                style={{
-                  padding: '0 8px 4px',
-                }}
-              >
-                <Input
-                  placeholder="Please enter item"
-                  ref={inputRef}
-                  value={name}
-                  onChange={onNameChange}
-                  style={{ 'fontSize': '1em' }}
-                />
-                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                  Add item
-                </Button>
-              </Space>
-            </>
-          )}
         >
+          {
+            Add.map((address, key) => <option value={key}>{address}</option>)
+          }
 
-          {options_antd}
+          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+
         </Select >
 
 
@@ -1237,11 +913,10 @@ const EditableCell = ({
 };
 
 // a function that gets api data from a node function
-// connect to node backend to get data
 
 
 // function fetch_data() {
-//   fetch('/print_statement', {
+//   fetch('/get_data', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -1259,6 +934,8 @@ const EditableCell = ({
 //       console.error('Error:', error)
 //     })
 
+
+
 // }
 
 
@@ -1270,14 +947,10 @@ const EditableCell = ({
 const Register = () => (
 
   <div className='Register'>
-
     <div style={{ display: 'flex', height: '92.55vh' }}>
-      <SidePanelLeft></SidePanelLeft>
       <div
         className='MainPanel'
         style={{
-          //'background-color': '#f8fafb', // required
-          //'border-radius': '0 0 0 0', // required
           // 'border-radius': '1.5625rem 0   0 1.5625rem',
 
           // padding: '2% 1% 1% 1%',
@@ -1296,7 +969,7 @@ const Register = () => (
             'border-radius': '0.9375rem',
             'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
             height: '90.5vh',
-            width: '98vw'
+            width: '78.5vw'
           }}
         >
           {/* <OptionsBar /> */}

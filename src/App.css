@@ -20,6 +20,48 @@
   /* height: 3vh; */
 }
 
+
+#rc-tabs-1-tab-2 {
+  color: #18213e;
+}
+
+/* make sinewave position absolute */
+
+.card-container>svg:nth-child(1) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* set line color */
+  stroke: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(255, 0, 0, 1));
+  /* set color */
+  /* fill: #b3bcc0;
+  color: #b3bcc0; */
+
+}
+
+.card-container>svg:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.card-container>svg:nth-child(3) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  /* background-color: #1890ff; */
+  /* linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1)); */
+}
+
 .App-header {
   background-color: #d8e2dc;
   display: flex;
@@ -35,7 +77,7 @@
 }
 
 .ant-layout-header>span:nth-child(1)>svg:nth-child(1) {
-  width: 8vw;
+  width: 10rem;
 }
 
 @keyframes App-logo-spin {
@@ -66,12 +108,12 @@ i {
 
 /* make ant design webpage red */
 .ant-layout {
-  background: #d8e2dc;
+  background: #18213e;
 }
 
 
 .ant-tabs-nav {
-  background-color: #d8e2dc;
+  background-color: transparent;
   z-index: 0;
   /* height: 4.5vh; */
 }
@@ -81,9 +123,11 @@ i {
 } */
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active {
-  border-bottom-color: #f1f4fa;
+  border-bottom-color: #000000;
+  /* change font color */
+  color: red;
 
-  color: #1890ff;
+  /* color: #1890ff; */
   background: #f1f4fa;
   z-index: 999;
   position: relative;
@@ -98,7 +142,8 @@ i {
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab {
   border-bottom-color: #f1f4fa;
-  color: #1890ff;
+  color: red;
+
   background: #f1f4fa;
   position: relative;
   border-radius: 0.9375rem 0.9375rem 0 0;
