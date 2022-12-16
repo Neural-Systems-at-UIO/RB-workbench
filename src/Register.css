@@ -2,15 +2,16 @@
 
 .table-striped-rows tr:nth-child(2n) td {
     background-color: #fcf5f5;
-    font-size: 1.6em;
+    font-size: 1.3em;
 }
+
 
 /* .table-striped-rows :hover {
     background-color: #1a1515;
 
 } */
 .table-striped-rows td {
-    font-size: 1.6em;
+    font-size: 1.3em;
 
 }
 

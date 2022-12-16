@@ -89,12 +89,13 @@ function print_statement(req, res) {
 // This is the route that the frontend will use to get the data from the api
 
 // console.log that your server is up and running
-// app.listen(port, () => console.log(`Listening on port ${port}`));
-https.createServer({
-	key:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/privkey.pem'),
-	cert:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/cert.pem'),
-	ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
-	app).listen(port)
+app.listen(port, () => console.log(`Listening on port ${port}`));
+// https.createServer(
+//     {
+// 	key:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/privkey.pem'),
+// 	cert:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/cert.pem'),
+// 	ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
+// 	app).listen(port)
 // Serve the react app for the default (/) route
 app.get('/', function (req, res) {
     res.render('index.html')
