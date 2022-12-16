@@ -1,4 +1,4 @@
-import { Table, Button, Form, Input, Select, Divider } from "antd";
+import { Table, Button, Form, Input, Select, Divider, Layout } from "antd";
 import datasource from "../metadata/datasource.js";
 import "../styles/Register.css";
 import useUndo from "use-undo";
@@ -10,10 +10,16 @@ import { Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { width_calc, width_calc_dropdown } from "./table/width_calc";
 import { defaultColumns, max_len } from "./table/defaultColumns";
+
+import SidePanelLeft from "./sidebar/SidePanelLeft"
+
+const { Header, Content, Footer, Sider } = Layout;
 const EditableContext = React.createContext(null);
 const { Option } = Select;
 let history = [];
 let sel_rows = [];
+
+
 function App() {
   var count = 0;
   const [statefulColumns, setStatefulColumns] = useState(defaultColumns);
@@ -369,6 +375,7 @@ function App() {
     </div>
   );
 }
+
 function fetch_api() {
   let return_data;
   const data = fetch("/print_statement", {
@@ -387,6 +394,7 @@ function fetch_api() {
       console.error("Error:", error);
     });
 }
+
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
   return (
@@ -397,6 +405,7 @@ const EditableRow = ({ index, ...props }) => {
     </Form>
   );
 };
+
 const EditableCell = ({
   title,
   editable,
@@ -624,37 +633,58 @@ const EditableCell = ({
   }
   return <td {...restProps}>{childNode}</td>;
 };
-const Register = () => (
-  <div className="Register">
-    <div style={{ display: "flex", height: "92.55vh" }}>
-      <div
-        className="MainPanel"
-        style={{
-          margin: "-0.7% 0 0 0",
 
-          "clip-path": "inset(-15.625rem -15.625rem -15.625rem -15.625rem)",
-        }}
-      >
-        <div
-          style={{
-            padding: "2% 0% 2% 0%",
-            margin: "1% 1% 2% 1%",
-            "border-radius": "0.9375rem",
-            "box-shadow":
-              "0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)",
-            height: "90.5vh",
-            width: "98vw",
-          }}
-        >
-          {/* <OptionsBar /> */}
-          <Form>
-            <App></App>
-            {/* <Buildtable></Buildtable> */}
-          </Form>
-        </div>
-      </div>
-      {/* <SidePanel></SidePanel> */}
-    </div>
-  </div>
-);
+const Register = () => {
+  
+  return(
+    <Layout className = "metadata-page-container" style={{ minHeight: '92.55vh'}}>
+      <SidePanelLeft></SidePanelLeft>
+      <Layout className="table-container">
+        <Content
+            style={{
+              margin: '0 16px',
+            }}
+          >
+          <div
+            className='MainPanel'
+            style={{
+              //'background-color': '#f8fafb', // required
+              //'border-radius': '0 0 0 0', // required
+              // 'border-radius': '1.5625rem 0   0 1.5625rem',
+
+              // padding: '2% 1% 1% 1%',
+              // margin: '1% 1% 2% 1%'
+              margin: '-0.7% 0 0 0',
+              // 'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
+
+              'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+            }}
+          >
+            <div
+              style={{
+                // outline: '0.3125rem solid black',
+                padding: '2% 0% 2% 0%',
+                margin: '1% 1% 2% 1%',
+                'border-radius': '0.9375rem',
+                'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+                height: '90.5vh',
+                width: '98vw'
+              }}
+            >
+              {/* <OptionsBar /> */}
+              <Form>
+                <App></App>
+                {/* <Buildtable></Buildtable> */}
+              </Form>
+            </div>
+          </div>
+          {/* <SidePanel></SidePanel> */}
+          </Content>
+      </Layout>
+
+  {/* </div> */}
+  </Layout>
+)
+}
+
 export default Register;
