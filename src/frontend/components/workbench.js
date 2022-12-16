@@ -19,8 +19,8 @@ const items = [
 ]
 const workbench  = () => {
   return (
-    <div className='App' style={{ 'backgroundColor': 'red', overflow: 'hidden', height: '100%' }} >
-      <Layout style={{ height: '100vh' }}>
+    <div className='App' style={{overflow: 'hidden', height: '100%' }} >
+      <Layout style={{ height: '100vh'}}>
         <Header style={{ height: '0vh' }}>
           <Icon
             component={EbrainsLogo}
@@ -52,7 +52,7 @@ const workbench  = () => {
         <SineWave frequency='4.6' amplitude='0.15' offset='0' /> */}
         {/* <div style={{ position: 'absolute', background: 'red', color: 'blue', width: '100vw', height: '100%', zIndex: 0 }}></div> */}
 
-        <Tabs type='card' className='TabWrapper' size='large'>
+        <Tabs  type='card' className='TabWrapper' size='large'>
 
           {/* <TabPane tab='Projects' key='1'>
             <ProjectPage />

@@ -21,7 +21,7 @@ const items = [
 ]
 const fieldSelector = () => {
     return (
-        <div className='App' style={{ 'backgroundColor': 'red', overflow: 'hidden', height: '100%' }} >
+        <div className='App' style={{  overflow: 'hidden', height: '100%' }} >
         <Layout style={{ height: '100vh' }}>
           <Header style={{ height: '0vh' }}>
             <Icon

@@ -123,7 +123,7 @@ i {
 } */
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab-active {
-  border-bottom-color: #000000;
+  border-bottom-color: #e10000;
   /* change font color */
   color: red;
 
@@ -137,12 +137,11 @@ i {
 .ant-tabs-bottom>.ant-tabs-nav,
 .ant-tabs-top>div>.ant-tabs-nav,
 .ant-tabs-bottom>div>.ant-tabs-nav {
-  margin: 0 0 0.5% 3%;
+  margin: 0 0 0 3%;
 }
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab {
   border-bottom-color: #f1f4fa;
-  color: red;
 
   background: #f1f4fa;
   position: relative;

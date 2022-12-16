@@ -45,11 +45,12 @@ function SidePanelLeft () {
   
   return (
     // <div className='SidePanelLeft'>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <Sider style={{  'background-color': '#f8fafb'}} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
 
-        <Menu
+        <Menu 
           style={{
-            width: '90%',
+            'background-color': '#f8fafb',
+            width: '256',
             height: '100%',
             marginTop: '20px',
             marginLeft: '5%',
@@ -58,7 +59,7 @@ function SidePanelLeft () {
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
           multiple={false}
-          mode={'inline'}
+          mode={'vertical'}
           items={items}
         />
       </Sider>

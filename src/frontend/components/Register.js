@@ -637,18 +637,21 @@ const EditableCell = ({
 const Register = () => {
   
   return(
-    <Layout className = "metadata-page-container" style={{ minHeight: '92.55vh'}}>
+    <Layout className = "metadata-page-container" style={{  'background-color': '#f8fafb', minHeight: '92.55vh'}}>
+
       <SidePanelLeft></SidePanelLeft>
-      <Layout className="table-container">
-        <Content
-            style={{
-              margin: '0 16px',
-            }}
+      <Layout className="table-container" style={{  'background-color': '#f8fafb'}}>
+        
+        {/* Container holding table */}
+        <Content style={{ }}
+            // style={{
+            //   margin: '0 16px',
+            // }}
           >
           <div
             className='MainPanel'
             style={{
-              //'background-color': '#f8fafb', // required
+              // required
               //'border-radius': '0 0 0 0', // required
               // 'border-radius': '1.5625rem 0   0 1.5625rem',
 
