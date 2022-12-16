@@ -1,22 +1,15 @@
-import { Table, Button, Form, Input, Select, } from 'antd'
-// import styled from 'styled-components'
-import datasource from './datasource.js'
-import './Register.css'
-import useUndo from 'use-undo';
-import SidePanel from './SidePanel.js'
-// import OptionsBar from './options-bar.js'
-import metadata from './metadata'
-import metadataDefinitions from './metadata-definitions'
-import reformattedMetadata from './formatMetadata.js';
-// import { render } from '@umijs/deps/compiled/mustache'
 import React, { useContext, useEffect, useRef, useState } from 'react';
-// const { Title } = Typography
-import { Menu, Dropdown, message, Space } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
-import './options-bar.css'
+import { Table, Button, Form, Input, Select, Space, Divider } from 'antd'
+// import styled from 'styled-components'
+import '../frontend/styles/Register.css'
+// import OptionsBar from './options-bar.js'
+import metadata from '../frontend/metadata/metadata'
+import metadataDefinitions from '../frontend/metadata/metadata-definitions'
+import reformattedMetadata from '../frontend/metadata/formatMetadata.js';
+
 import { PlusOutlined } from '@ant-design/icons';
 
-import { Divider } from 'antd';
+import {  } from 'antd';
 const EditableContext = React.createContext(null);
 const { Option } = Select;
 let index = 0;

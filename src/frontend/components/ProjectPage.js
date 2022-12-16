@@ -1,7 +1,10 @@
 import { Table, Button, Form, message, Typography } from 'antd'
 import styled from 'styled-components'
+import React from 'react'
+
 import datasource from './datasource'
 import './Register.css'
+import SidePanel from '../../SidePanel'
 import OptionsBar from './options-bar'
 import { render } from '@umijs/deps/compiled/mustache'
 import { useState } from 'react'
@@ -9,14 +12,14 @@ import { useState } from 'react'
 const { Title } = Typography
 const columns = [
   {
-    key: 'id',
+    title: 'id',
     dataIndex: 'id',
-    title: 'name'
+    key: 'id'
   },
   {
-    key: 'id',
+    title: 'name',
     dataIndex: 'name',
-    title: 'name'
+    key: 'id'
   }
 ]
 
@@ -94,7 +97,7 @@ const StyledTable = styled(props => <Table {...props} />)`
   }
 `
 
-function handleButtonClick (e) {
+function handleButtonClick(e) {
   fetch('http://localhost:3000/list_projects.php').then(res => {
     res.json().then(data => {
       console.log(data)
@@ -102,7 +105,8 @@ function handleButtonClick (e) {
     })
   })
 }
-function fetchData (url) {
+
+function fetchData(url) {
   const data = fetch(url).then(response => {
     if (response.ok) {
       return response.json()
@@ -110,7 +114,42 @@ function fetchData (url) {
   })
 }
 
-function handleAdd (DataSource) {
+// class NameForm extends React.Component {
+//   constructor (props) {
+//     super(props)
+//     this.state = { value: '' }
+//     this.handleChange = this.handleChange.bind(this)
+//     this.handleSubmit = this.handleSubmit.bind(this)
+//   }
+
+//   handleChange (event) {
+//     this.setState({ value: event.target.value })
+//   }
+//   handleSubmit (event) {
+//     event.preventDefault()
+
+//     console.log('A name was submitted: ' + this.state.value)
+//     console.log('csdfssdfsdfsdfsdfdf')
+//   }
+
+//   render () {
+//     return (
+//       <form onSubmit={this.handleSubmit}>
+//         {' '}
+//         <label>
+//           Name:
+//           <input
+//             type='text'
+//             value={this.state.value}
+//             onChange={this.handleChange}
+//           />{' '}
+//         </label>
+//         <input type='submit' value='Submit' />
+//       </form>
+//     )
+//   }
+// }
+function handleAdd(DataSource) {
   // const { count, datasource } = this.state
   // const newData = fetchData('http://localhost:80/server.php')
   // this.setState({ dataSource: [...datasource, newData] })
@@ -124,18 +163,71 @@ function handleAdd (DataSource) {
 
 // console.log('yay')
 
-function Buildtable () {
-  const [DataSource, SetDataSource] = useState('')
-  console.log("HELLO 0");
-  const updateTable = async () => {
-    const response = await fetch('http://www.quint-tools.com:3000/list_projects.php')
-    const data = await response.json()
-    console.log("HELLO 1");
-    console.log(data);
-    SetDataSource(data);
-
+class FormSubmitNewProject extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.state = { value: '' }
+    this.handleChange = this.handleChange.bind(this)
   }
 
+  handleChange(event) {
+    this.setState({ value: event.target.value })
+  }
+  handleSubmit(e) {
+    e.preventDefault()
+    const data = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: this.state.value
+      })
+    }
+    fetch('http://www.quint-tools.com:3000/new_project.php', data)
+      .then(response => {
+        // In this case, we check the content-type of the response
+        if (response.headers.get('content-type').match(/application\/json/)) {
+          return response.json()
+        }
+        return response
+        // You can also try "return response.text();"
+      })
+      .then(data => console.log(data))
+  }
+  // alert('A name was submitted: ' + this.state.value)
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          type='text'
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <button>Create</button>
+      </form>
+    )
+  }
+}
+
+function Buildtable() {
+  const [DataSource, SetDataSource] = useState('')
+  const updateTable = async () => {
+    const response = await fetch(
+      'http://www.quint-tools.com:3000/list_projects.php'
+    )
+    const data = await response.json()
+    SetDataSource(data)
+    // SetDataSource(DataSource => ({ arrayvar: [DataSource, data] }))
+  }
+  const onSubmit = e => {
+    e.preventDefault()
+    console.log('refresh prevented')
+  }
   return (
     <div>
       <StyledTable
@@ -146,79 +238,50 @@ function Buildtable () {
         }}
         columns={columns}
         dataSource={DataSource}
-        scroll={{ y: '47pc', x: 'max-content' }}
+        scroll={{ y: '320px', x: 'max-content' }}
         pagination={false}
-        style={{ height: '53pc' }}
       />
       <Button onClick={updateTable}>Add</Button>
+
+      <FormSubmitNewProject />
     </div>
   )
 }
-const ListProjects = () => (
-  <div className='ListProjects'>
-    <div style={{ display: 'flex' }}>
+
+const ProjectPage = () => (
+  <div className='Register'>
+    <div style={{ display: 'flex', height: '75vh' }}>
       <div
         className='MainPanel'
         style={{
           'background-color': '#f8fafb',
-          'border-radius': '25px 0   0 25px',
+          'border-radius': '1.5625rem 0   0 1.5625rem',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          'box-shadow': '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
+          'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
 
-          'clip-path': 'inset(-250px -250px -250px -250px)'
+          'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
         }}
       >
         <div
           style={{
-            // outline: '5px solid black',
+            // outline: '0.3125rem solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'border-radius': '25px',
-            'box-shadow': '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
+            'border-radius': '0.9375rem',
+            'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+            height: '73.5vh'
           }}
         >
           <OptionsBar />
-          <Form>
-            <Buildtable></Buildtable>
-          </Form>
+          {/* <Form> */}
+          <Buildtable></Buildtable>
+          {/* </Form> */}
         </div>
       </div>
-
-      <div className='SidePanel'>
-        <div className='button-container' style={{ zIndex: 2 }}>
-          <Button danger size='large' onClick={handleButtonClick}>
-            WebAlign
-          </Button>
-          <Button danger size='large'>
-            WebIlastik
-          </Button>
-          <Button danger size='large'>
-            Nutil
-          </Button>
-        </div>
-        <div className='info-card'>
-          {/* set bold font */}
-          <Title level={1} style={{ color: '#f8fafb' }}>
-            <strong>Brain ID</strong>
-          </Title>
-          <hr style={{ 'background-color': '#f8fafb', color: '#f8fafb' }}></hr>
-          <div
-            style={{
-              'overflow-y': 'scroll',
-              height: '300px',
-              fontSize: '1.4em'
-            }}
-          >
-            <p>
-              Card content <br></br>Card
-            </p>
-            <p>Card content</p>
-          </div>
-        </div>
-      </div>
+      <SidePanel></SidePanel>
     </div>
   </div>
 )
-export default ListProjects
+export default ProjectPage

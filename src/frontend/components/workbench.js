@@ -3,13 +3,12 @@ import { Button, Menu, Layout } from 'antd'
 import Icon from '@ant-design/icons'
 import { HomeOutlined } from '@ant-design/icons'
 import { Tabs } from 'antd'
-import './App.css'
+import '../styles/App.css'
 import Register from './Register.js'
-import { ReactComponent as EbrainsLogo } from './ebrains-ai-cropped.svg'
-import { ReactComponent as HomeButton } from './home.svg'
+import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
 // var perf = require('./sine-wave.html');
-import SineWave from "./SineWave";
+import SineWave from "../components/decorations/SineWave";
 
 const { Content } = Layout
 const { TabPane } = Tabs
@@ -48,9 +47,9 @@ const workbench  = () => {
           'margin-top': '0%'
         }}
       >
-        <SineWave frequency='0.6' amplitude='0.10' offset='0' />
+        {/* <SineWave frequency='0.6' amplitude='0.10' offset='0' />
         <SineWave frequency='2.6' amplitude='0.13' offset='0.5' />
-        <SineWave frequency='4.6' amplitude='0.15' offset='0' />
+        <SineWave frequency='4.6' amplitude='0.15' offset='0' /> */}
         {/* <div style={{ position: 'absolute', background: 'red', color: 'blue', width: '100vw', height: '100%', zIndex: 0 }}></div> */}
 
         <Tabs type='card' className='TabWrapper' size='large'>
