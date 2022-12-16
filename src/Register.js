@@ -1,4 +1,4 @@
-import { Table, Button, Form, Input, Select, } from 'antd'
+import { Table, Button, Form, Input, Select, Layout} from 'antd'
 // import styled from 'styled-components'
 import datasource from './datasource.js'
 import './Register.css'
@@ -20,6 +20,10 @@ import './options-bar.css'
 import { PlusOutlined } from '@ant-design/icons';
 
 import { Divider } from 'antd';
+
+
+const { Header, Content, Footer, Sider } = Layout;
+
 const EditableContext = React.createContext(null);
 const { Option } = Select;
 let index = 0;
@@ -1267,47 +1271,63 @@ const EditableCell = ({
 // get fetch data
 // console.log('hello', fetched_data)
 
-const Register = () => (
+const Register = () => {
+  
+  return(
+    <Layout className = "metadata-page-container" style={{ minHeight: '92.55vh'}}>
 
-  <div className='Register'>
-
+  {/* <div className='Register'> */}
     <div style={{ display: 'flex', height: '92.55vh' }}>
       <SidePanelLeft></SidePanelLeft>
-      <div
-        className='MainPanel'
-        style={{
-          //'background-color': '#f8fafb', // required
-          //'border-radius': '0 0 0 0', // required
-          // 'border-radius': '1.5625rem 0   0 1.5625rem',
+      
+      <Layout className="table-container">
+        <Content
+            style={{
+              margin: '0 16px',
+            }}
+          >
+          <div
+            className='MainPanel'
+            style={{
+              //'background-color': '#f8fafb', // required
+              //'border-radius': '0 0 0 0', // required
+              // 'border-radius': '1.5625rem 0   0 1.5625rem',
 
-          // padding: '2% 1% 1% 1%',
-          // margin: '1% 1% 2% 1%'
-          margin: '-0.7% 0 0 0',
-          // 'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
+              // padding: '2% 1% 1% 1%',
+              // margin: '1% 1% 2% 1%'
+              margin: '-0.7% 0 0 0',
+              // 'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
 
-          'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
-        }}
-      >
-        <div
-          style={{
-            // outline: '0.3125rem solid black',
-            padding: '2% 0% 2% 0%',
-            margin: '1% 1% 2% 1%',
-            'border-radius': '0.9375rem',
-            'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
-            height: '90.5vh',
-            width: '98vw'
-          }}
-        >
-          {/* <OptionsBar /> */}
-          <Form>
-            <App></App>
-            {/* <Buildtable></Buildtable> */}
-          </Form>
-        </div>
-      </div>
-      {/* <SidePanel></SidePanel> */}
+              'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+            }}
+          >
+            <div
+              style={{
+                // outline: '0.3125rem solid black',
+                padding: '2% 0% 2% 0%',
+                margin: '1% 1% 2% 1%',
+                'border-radius': '0.9375rem',
+                'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+                height: '90.5vh',
+                width: '98vw'
+              }}
+            >
+              {/* <OptionsBar /> */}
+              <Form>
+                <App></App>
+                {/* <Buildtable></Buildtable> */}
+              </Form>
+            </div>
+          </div>
+          {/* <SidePanel></SidePanel> */}
+          </Content>
+      </Layout>
+
     </div>
-  </div>
+
+  {/* </div> */}
+  </Layout>
 )
+}
+
 export default Register

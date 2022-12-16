@@ -51,9 +51,9 @@ const App = () => (
               'margin-top': '0%'
             }}
           >
-            <SineWave frequency='0.6' amplitude='0.10' offset='0' />
+            {/* <SineWave frequency='0.6' amplitude='0.10' offset='0' />
             <SineWave frequency='2.6' amplitude='0.13' offset='0.5' />
-            <SineWave frequency='4.6' amplitude='0.15' offset='0' />
+            <SineWave frequency='4.6' amplitude='0.15' offset='0' /> */}
             {/* <div style={{ position: 'absolute', background: 'red', color: 'blue', width: '100vw', height: '100%', zIndex: 0 }}></div> */}
 
             <Tabs type='card' className='TabWrapper' size='large'>

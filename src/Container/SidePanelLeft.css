@@ -1,21 +1,23 @@
 .SidePanelLeft {
-    background-color: #18213e;
+    background-color: #a3aac4;
     margin-top: -0.7%;
-    padding-top: 1.75%;
     /* margin-right: -2.1%; */
-    padding-right: 10%;
     /* margin-bottom: -1.09%; */
+    
+    padding-top: 1.75%;
+    padding-left :0%;
     padding-bottom: 2.09%;
-    padding-left:0%;
-    padding-right:0%;
-    min-width: 20%;
+    padding-right: 0%;
+    
+    min-width: 12%;
     min-height: 100%;
 
     box-shadow: 7px 25px 28px 6px rgba(1, 1, 2, 0.6);
     clip-path: inset(-250px -250px -250px -0px);
     border-radius: 15px 0px 0px 15px;
-
 }
+
+/* Border  */
 
 
 .button-left {
