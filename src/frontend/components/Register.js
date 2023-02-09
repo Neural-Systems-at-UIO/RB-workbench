@@ -1,34 +1,79 @@
-import { Table, Button, Form, Input, Select, Divider, Layout } from "antd";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Table, Button, Form, Input, Select, Divider, Layout, Space } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+
+import useUndo from "use-undo";
+
+// Import custom components
+
+import SidePanelLeft from "./sidebar/SidePanelLeft" 
+import ConfigProvider from './ConfigProvider';
+//import EditableRow from "./table/EditableRow";    // Todo move to separate file??
+//import EditableCell from "./table/EditableCell";  // Todo move to separate file??
+
 import datasource from "../metadata/datasource.js";
 import "../styles/Register.css";
-import useUndo from "use-undo";
 import "../styles/options-bar.css";
 import metadata from "../metadata/metadata";
 import metadataDefinitions from "../metadata/metadata-definitions";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Space } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { width_calc, width_calc_dropdown } from "./table/width_calc";
-import { defaultColumns, max_len } from "./table/defaultColumns";
 
-import SidePanelLeft from "./sidebar/SidePanelLeft"
+import { width_calc, width_calc_dropdown } from "../helpers/width_calc";
+import { convertTableToCSV, convertCSVToTable } from "../helpers/csvAdapter";
+
+import subjectTableColumns, { max_len_sub } from "../metadata/defaultTableColumns/subjectColumns";
+import tissueTableColumns, { max_len_ts } from "../metadata/defaultTableColumns/tissueSampleColumns";
+
+
+// Create a table context to pass to the table components
+var tables = {
+  Subject: {
+    columnProps: subjectTableColumns,
+    variableNames: subjectTableColumns.map( (column) => column.key ),  // key or dataIndex?
+    maxColumnLength: max_len_sub,
+    data: null
+  },
+  TissueSample: {
+    columnProps: tissueTableColumns,
+    variableNames: tissueTableColumns.map( (column) => column.key ),  // key or dataIndex?
+    maxColumnLength: max_len_ts,
+    data: null
+  }
+}; // Use context???
+
 
 const { Header, Content, Footer, Sider } = Layout;
-const EditableContext = React.createContext(null);
+// const EditableContext = React.createContext(null);
 const { Option } = Select;
+
+var max_len = null;
 let history = [];
 let sel_rows = [];
 
 
-function App() {
-  var count = 0;
-  const [statefulColumns, setStatefulColumns] = useState(defaultColumns);
+// Todo: move to separate file for managing tables.
+function MetadataTable( {nextTableName} ) {
+
+  // this is weird,how should it be done?
+  const [currentTableName, setCurrentTableName] = useState( nextTableName );
+  var currentTable = tables[nextTableName];
+  
+  const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
-  const [
-    statefulmetadataDefinitions,
-    setstatefulmetadataDefinitions,
-  ] = useState(metadataDefinitions);
-  const datasource_template = datasource;
+  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
+
+  function createBlankRow(rowNumber) {
+    if (rowNumber === undefined) {
+      rowNumber = 1;
+    }
+    let newRow = { key: rowNumber.toString() };
+    currentTable.variableNames.forEach( (name) => newRow[name] = null );
+    return newRow;
+  }
+
+  if ( currentTable.data === null ) {
+    currentTable.data = [createBlankRow()];
+  }
+
   var [
     DataSource,
     {
@@ -37,41 +82,59 @@ function App() {
       undo: undoDataSource,
       redo: redoDataSource,
     },
-  ] = useUndo(datasource_template, { useCheckpoints: true });
+  ] = useUndo(currentTable.data, { useCheckpoints: true });
+
+  if (currentTableName !== nextTableName) {
+
+    // save current (will be previous) state
+    tables[currentTableName].columnProps = statefulColumns;
+    tables[currentTableName].maxColumnLength = max_len;
+
+    resetDataSource(currentTable.data);
+    
+    // save current state??
+    setCurrentTableName(nextTableName);
+    setStatefulColumns([...currentTable.columnProps]);
+  }
+
   const { present: presentDS } = DataSource;
   var count = presentDS.length;
+  max_len = currentTable.maxColumnLength;
+
+
+  // Following are callback functions for the options bar
+
   function handleUndoDS(e) {
     e.preventDefault();
     undoDataSource();
 
     DataSource.past = DataSource.past.slice(-15);
   }
+
   function handleRedoDS(e) {
     e.preventDefault();
     redoDataSource();
   }
-
+  
+  /**
+   * Callback for adding a new row to the table.
+   */
   const handleAdd = () => {
+    
+    // Increment the row counter
     count += 1;
-    const newData = {
-      key: count.toString(),
-      Subject: null,
-      BiologicalSex: null,
-      AgeCategory: null,
-      Species: null,
-      Age: null,
-      Weight: null,
-      Strain: null,
-      Pathology: null,
-      Phenotype: null,
-      Handedness: null,
-      Laterality: null,
-      Origin: null,
-      Sampletype: null,
-    };
-    SetDataSource([...presentDS, newData], true);
+
+    // Generate a new row with unique key
+    let newRow = createBlankRow(count);
+    SetDataSource([...presentDS, newRow], true);
   };
+
+  /**
+   * Callback for duplicating a row in the table.
+   */
   const handleDuplicate = () => {
+
+    // Increment the row counter
     count += 1;
 
     var newDS = [...presentDS];
@@ -84,108 +147,61 @@ function App() {
     }
     SetDataSource(newDS, true);
   };
+
+  /**
+   * Callback for downloading the table as a CSV file.
+   */
   const DownloadCSV = () => {
-    console.log("here");
-    console.log(presentDS);
-    let csv =
-      "Subject;BiologicalSex;AgeCategory;Species;Age;Weight;Strain;Pathology;Phenotype;Handedness;Laterality;Origin;Sampletype\n";
-    for (let i = 0; i < presentDS.length; i++) {
-      const row = presentDS[i];
-      csv +=
-        row.Subject +
-        ";" +
-        row.BiologicalSex +
-        ";" +
-        row.AgeCategory +
-        ";" +
-        row.Species +
-        ";" +
-        row.Age +
-        ";" +
-        row.Weight +
-        ";" +
-        row.Strain +
-        ";" +
-        row.Pathology +
-        ";" +
-        row.Phenotype +
-        ";" +
-        row.Handedness +
-        ";" +
-        row.Laterality +
-        ";" +
-        row.Origin +
-        ";" +
-        row.Sampletype +
-        "\n";
-    }
-    const blob = new Blob([csv], { type: "text/csv" });
+
+    // todo: should infer the variable names from the table
+    let csvString = convertTableToCSV(presentDS, subjectVariableNames);
+
+    const blob = new Blob([csvString], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
+    
     const a = document.createElement("a");
     a.setAttribute("hidden", "");
     a.setAttribute("href", url);
-    a.setAttribute("download", "metadata.csv");
+    a.setAttribute("download", `metadata_${currentTableName.toLowerCase()}_table.csv`);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   };
-  const UploadCSVButton = () => {
+    
+  /**
+   * Callback for uploading a table from a CSV file.
+   */
+  const UploadCSV = () => {
+    
     const input = document.createElement("input");
     input.type = "file";
+    
+    input.onclick = function () {
+      this.value = null;
+    };
+
     input.onchange = (e) => {
-      const file = e.target.files[0];
+      
+      console.log('e', e)
+
+      const file = input.files[0];
+      console.log('file', file)
 
       const reader = new FileReader();
       reader.readAsText(file, "UTF-8");
 
       reader.onload = (readerEvent) => {
+        console.log('ev', readerEvent)
         const content = readerEvent.target.result;
-        const lines = content.split("\n");
+        console.log('content', content)
 
-        const new_data = [];
-        for (let i = 0; i < lines.length; i++) {
-          if (i == 0) {
-            continue;
-          }
-          const line = lines[i];
-          const line_data = line.split(";");
-
-          if (line_data.length == 13) {
-            for (let j = 0; j < line_data.length; j++) {
-              if (line_data[j] == "null") {
-                line_data[j] = null;
-              }
-              if (line_data[j] == "undefined") {
-                line_data[j] = null;
-              }
-            }
-            const row = {
-              key: i.toString(),
-              Subject: line_data[0],
-
-              BiologicalSex: line_data[1],
-              AgeCategory: line_data[2],
-              Species: line_data[3],
-              Age: line_data[4],
-              Weight: line_data[5],
-              Strain: line_data[6],
-
-              Pathology: line_data[7],
-              Phenotype: line_data[8],
-              Handedness: line_data[9],
-              Laterality: line_data[10],
-
-              Origin: line_data[11],
-              Sampletype: line_data[12],
-            };
-            new_data.push(row);
-          }
-        }
+        let new_data = convertCSVToTable(content);
         SetDataSource(new_data);
       };
     };
     input.click();
   };
+
   const handleDelete = () => {
     let temp_ = presentDS;
     for (var i = 0; i < sel_rows.length; i++) {
@@ -207,6 +223,7 @@ function App() {
     SetDataSource(temp_);
     setSelected([]);
   };
+  
   const OptionsBar = () => (
     <div>
       <div style={{ padding: "0 ", textAlign: "left" }} className="OptionsBar">
@@ -215,10 +232,8 @@ function App() {
         <Button onClick={handleRedoDS}>Redo</Button>
         <Button onClick={handleDuplicate}>Duplicate Selected</Button>
         <Button onClick={DownloadCSV}>Download CSV</Button>
-        <Button onClick={UploadCSVButton}>Upload CSV</Button>
-        <Button onClick={handleDelete} type="default" danger>
-          Delete
-        </Button>
+        <Button onClick={UploadCSV}>Upload CSV</Button>
+        <Button onClick={handleDelete} type="default" danger>Delete</Button>
         {/* {{ add_button }} */}
       </div>
       <hr
@@ -230,7 +245,8 @@ function App() {
       ></hr>
     </div>
   );
-  const [selected, setSelected] = useState([]);
+
+  const [selected, setSelected] = useState([]); // selected rows
   const rowSelection = {
     selectedRowKeys: selected,
     onChange: (selectedRowKeys, selectedRows) => {
@@ -242,10 +258,21 @@ function App() {
       return {};
     },
   };
+
+
+  /**
+   * Callback for saving the changes made in the table to memory.
+   * @param {Object} row - The data for the row that was changed.
+   * @param {Object} event - The new value which is being set. Should be renamed to newValue. This is only relevant for dropdowns.
+   * @param {String} dataIndex - The name of the column that was changed.
+   * 
+   */
   const handleSave = (row, event, dataIndex) => {
     const OldData = [...presentDS];
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
+
+    console.log('handlesave: ', row, event, dataIndex)
 
     const original_data = { ...row };
     const columns = Object.keys(row);
@@ -294,6 +321,8 @@ function App() {
         );
       }
     } else {
+      console.log(max_len)
+      console.log(match_col)
       if (match_value.length > max_len[match_col]) {
         max_len[match_col] = match_value.length;
         statefulColumns[match_col_index].width = width_calc(
@@ -328,6 +357,8 @@ function App() {
     }
     history = [...history, temp_data_obj];
     DataSource.past = [...DataSource.past, [...temp_data_obj]];
+
+    tables[currentTableName].data = [...OldData];    
   };
 
   const components = {
@@ -356,26 +387,31 @@ function App() {
       }),
     };
   });
+
   return (
     <div>
-      <OptionsBar />
-      <Table
-        className="table-striped-rows"
-        name="table"
-        rowSelection={{
-          type: "checkbox",
-          ...rowSelection,
-        }}
-        components={components}
-        columns={columns}
-        dataSource={presentDS}
-        scroll={{ x: "30vh", y: "76vh" }}
-        pagination={false}
-      />
+      <ConfigProvider>
+
+        <OptionsBar />
+        <Table
+          className="table-striped-rows"
+          name="table"
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
+          components={components}
+          columns={columns}
+          dataSource={presentDS}
+          scroll={{ x: "30vh", y: "76vh" }}
+          pagination={false}
+        />
+      </ConfigProvider>
     </div>
   );
 }
 
+// Todo: Remove?
 function fetch_api() {
   let return_data;
   const data = fetch("/print_statement", {
@@ -394,16 +430,17 @@ function fetch_api() {
       console.error("Error:", error);
     });
 }
+const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
-  const [form] = Form.useForm();
-  return (
-    <Form form={form} component={false}>
-      <EditableContext.Provider value={form}>
-        <tr {...props} />
-      </EditableContext.Provider>
-    </Form>
-  );
+    const [form] = Form.useForm();
+    return (
+      <Form form={form} component={false}>
+        <EditableContext.Provider value={form}>
+          <tr {...props} />
+        </EditableContext.Provider>
+      </Form>
+    );
 };
 
 const EditableCell = ({
@@ -420,6 +457,7 @@ const EditableCell = ({
   setstatefulmetadataDefinitions,
   ...restProps
 }) => {
+
   const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
   const form = useContext(EditableContext);
@@ -428,6 +466,7 @@ const EditableCell = ({
       inputRef.current.focus();
     }
   }, [editing]);
+
   const toggleEdit = () => {
     setEditing(!editing);
 
@@ -435,6 +474,7 @@ const EditableCell = ({
       [dataIndex]: record[dataIndex],
     });
   };
+
   const save = async (event) => {
     try {
       const values = await form.validateFields();
@@ -444,6 +484,7 @@ const EditableCell = ({
       console.log("Save failed:", errInfo);
     }
   };
+
   const saveDropDown = async (event) => {
     toggleEdit();
     try {
@@ -453,15 +494,16 @@ const EditableCell = ({
     } catch (errInfo) {
       console.log("Save failed:", errInfo);
     }
-
-
     setEditing(false);
   };
+
   const options_antd = [];
   const [name, setName] = useState("");
+
   const onNameChange = (event) => {
     setName(event.target.value);
   };
+
   const addItem = (e) => {
     e.preventDefault();
     let items = statefulmetadata[dataIndex];
@@ -480,6 +522,7 @@ const EditableCell = ({
   };
 
   let childNode = children;
+  
   if (editable) {
     childNode = editing ? (
       <Form.Item
@@ -634,13 +677,19 @@ const EditableCell = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-const Register = () => {
+const MetadataPage = () => {
   
-  return(
-    <Layout className = "metadata-page-container" style={{  'background-color': '#f8fafb', minHeight: '92.55vh'}}>
+  const [currentTableName, setCurrentTableName] = useState("Subject");
 
-      <SidePanelLeft></SidePanelLeft>
-      <Layout className="table-container" style={{  'background-color': '#f8fafb'}}>
+  const handleSelectTable = (selectedTableName) => {
+    setCurrentTableName(selectedTableName)
+  };
+
+  return(
+    <Layout className = "metadata-page-container" style={{  'backgroundColor': '#f8fafb', minHeight: '92.55vh'}}>
+
+      <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft>
+      <Layout className="table-container" style={{  'backgroundColor': '#f8fafb'}}>
         
         {/* Container holding table */}
         <Content style={{ }}
@@ -652,15 +701,15 @@ const Register = () => {
             className='MainPanel'
             style={{
               // required
-              //'border-radius': '0 0 0 0', // required
-              // 'border-radius': '1.5625rem 0   0 1.5625rem',
+              // borderRadius: '0 0 0 0', // required
+              // borderRadius: '1.5625rem 0   0 1.5625rem',
 
               // padding: '2% 1% 1% 1%',
               // margin: '1% 1% 2% 1%'
               margin: '-0.7% 0 0 0',
-              // 'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
+              // boxShadow: '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
 
-              'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+              clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
             }}
           >
             <div
@@ -668,15 +717,15 @@ const Register = () => {
                 // outline: '0.3125rem solid black',
                 padding: '2% 0% 2% 0%',
                 margin: '1% 1% 2% 1%',
-                'border-radius': '0.9375rem',
-                'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+                borderRadius: '0.9375rem',
+                boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
                 height: '90.5vh',
                 width: '98vw'
               }}
             >
               {/* <OptionsBar /> */}
               <Form>
-                <App></App>
+                <MetadataTable nextTableName={currentTableName}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>
@@ -690,4 +739,4 @@ const Register = () => {
 )
 }
 
-export default Register;
+export default MetadataPage;
