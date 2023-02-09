@@ -22,7 +22,8 @@ import { convertTableToCSV, convertCSVToTable } from "../helpers/csvAdapter";
 
 import subjectTableColumns, { max_len_sub } from "../metadata/defaultTableColumns/subjectColumns";
 import tissueTableColumns, { max_len_ts } from "../metadata/defaultTableColumns/tissueSampleColumns";
-
+import subjectGroupTableColumns, { max_len_sg } from "../metadata/defaultTableColumns/subjectGroupColumns";
+import tscTableColumns, { max_len_tsc } from "../metadata/defaultTableColumns/TissueSampleGroupColumns";
 
 // Create a table context to pass to the table components
 var tables = {
@@ -32,12 +33,25 @@ var tables = {
     maxColumnLength: max_len_sub,
     data: null
   },
+  SubjectGroup : {
+    columnProps: subjectGroupTableColumns,
+    variableNames: subjectGroupTableColumns.map( (column) => column.key ),  // key or dataIndex?
+    maxColumnLength: max_len_sg,
+    data: null
+  },
   TissueSample: {
     columnProps: tissueTableColumns,
     variableNames: tissueTableColumns.map( (column) => column.key ),  // key or dataIndex?
     maxColumnLength: max_len_ts,
     data: null
-  }
+  }, 
+  TissueSampleGroup: {
+    columnProps: tscTableColumns,
+    variableNames: tissueTableColumns.map( (column) => column.key ),  // key or dataIndex?
+    maxColumnLength: max_len_tsc,
+    data: null
+  }, 
+
 }; // Use context???
 
 
@@ -497,8 +511,14 @@ const EditableCell = ({
 
   const addItem = (e) => {
     e.preventDefault();
-    let items = statefulmetadata[dataIndex];
-    let definitions = statefulmetadataDefinitions[dataIndex];
+    let items = [];
+    if (statefulmetadata[dataIndex]) {
+      items = statefulmetadata[dataIndex];
+    }
+    let definitions = [];
+    if (statefulmetadataDefinitions[dataIndex]) {
+      definitions = statefulmetadataDefinitions[dataIndex];
+    }
     items = [name, ...items];
     statefulmetadata[dataIndex] = items;
     const newdefinition = "A custom option added by the user";
@@ -544,6 +564,15 @@ const EditableCell = ({
   }
 
   if (select) {
+
+    // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
+    if (statefulmetadata[dataIndex] === undefined) {
+      statefulmetadata[dataIndex] = [];
+    }
+    if (statefulmetadataDefinitions[dataIndex] === undefined) {
+      statefulmetadataDefinitions[dataIndex] = [];
+    }
+
     for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
       const option = (
         <Option
