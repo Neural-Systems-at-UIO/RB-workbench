@@ -182,18 +182,13 @@ function MetadataTable( {nextTableName} ) {
 
     input.onchange = (e) => {
       
-      console.log('e', e)
-
       const file = input.files[0];
-      console.log('file', file)
 
       const reader = new FileReader();
       reader.readAsText(file, "UTF-8");
 
       reader.onload = (readerEvent) => {
-        console.log('ev', readerEvent)
         const content = readerEvent.target.result;
-        console.log('content', content)
 
         let new_data = convertCSVToTable(content);
         SetDataSource(new_data);
@@ -272,8 +267,6 @@ function MetadataTable( {nextTableName} ) {
     const index = OldData.findIndex((item) => row.key === item.key);
     const item = OldData[index];
 
-    console.log('handlesave: ', row, event, dataIndex)
-
     const original_data = { ...row };
     const columns = Object.keys(row);
     //regex for newline,  any number of spaces, newline
@@ -321,8 +314,6 @@ function MetadataTable( {nextTableName} ) {
         );
       }
     } else {
-      console.log(max_len)
-      console.log(match_col)
       if (match_value.length > max_len[match_col]) {
         max_len[match_col] = match_value.length;
         statefulColumns[match_col_index].width = width_calc(
