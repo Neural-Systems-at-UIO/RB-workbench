@@ -1,16 +1,3 @@
-// function fetchData (url) {
-//   const data = fetch(url).then(response => {
-//     if (response.ok) {
-//       return response.json()
-//     }
-//   })
-// }
-
-// const datasource = fetchData('http://localhost:80/server.php')
-// console.log('success')
-// console.log(datasource)
-
-
 const datasource = [
   {
     key: '1',
@@ -99,4 +86,5 @@ const datasource = [
   }
 
 ]
+
 export default datasource

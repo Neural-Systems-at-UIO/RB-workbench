@@ -32,7 +32,7 @@ const fieldSelector = () => {
                 right: '8vw',
                 top: '-4rem',
                 // margin: '-2.5% 0 0 0px',
-                'font-size': '14em',
+                'fontSize': '14em',
                 border: 0,
                 zIndex: 1
               }}
@@ -46,7 +46,7 @@ const fieldSelector = () => {
           className='card-container'
           style={{
             backgroundColor: 'transparent',
-            'margin-top': '0%'
+            marginTop: '0%'
           }}
         >
           <SineWave frequency='0.6' amplitude='0.10' offset='0' />

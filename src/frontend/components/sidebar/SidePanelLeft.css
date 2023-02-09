@@ -1,5 +1,5 @@
 .SidePanelLeft {
-    background-color: #a3aac4;
+    /* background-color: #a3aac4; */
     margin-top: -0.7%;
     /* margin-right: -2.1%; */
     /* margin-bottom: -1.09%; */
@@ -21,7 +21,7 @@
 
 
 .button-left {
-    background-color: transparent;
+    /* background-color: transparent; */
     border-color: Red;
     margin-left: 0%;
     padding-left: 0%;

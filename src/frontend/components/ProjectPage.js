@@ -254,14 +254,13 @@ const ProjectPage = () => (
       <div
         className='MainPanel'
         style={{
-          'background-color': '#f8fafb',
-          'border-radius': '1.5625rem 0   0 1.5625rem',
+          'backgroundColor': '#f8fafb',
+          'borderRadius': '1.5625rem 0   0 1.5625rem',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          'box-shadow': '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
-
-          'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+          boxShadow: '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
+          clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
         }}
       >
         <div
@@ -269,8 +268,8 @@ const ProjectPage = () => (
             // outline: '0.3125rem solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'border-radius': '0.9375rem',
-            'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+            borderRadius: '0.9375rem',
+            boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
             height: '73.5vh'
           }}
         >

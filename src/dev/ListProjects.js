@@ -102,14 +102,14 @@ const ListProjects = () => (
       <div
         className='MainPanel'
         style={{
-          'background-color': '#f8fafb',
-          'border-radius': '25px 0   0 25px',
+          'backgroundColor': '#f8fafb',
+          'borderRadius': '25px 0   0 25px',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          'box-shadow': '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
+          'boxShadow': '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
 
-          'clip-path': 'inset(-250px -250px -250px -250px)'
+          'clipPath': 'inset(-250px -250px -250px -250px)'
         }}
       >
         <div
@@ -117,8 +117,8 @@ const ListProjects = () => (
             // outline: '5px solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'border-radius': '25px',
-            'box-shadow': '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
+            'borderRadius': '25px',
+            'boxShadow': '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
           }}
         >
           <OptionsBar />
@@ -145,7 +145,7 @@ const ListProjects = () => (
           <Title level={1} style={{ color: '#f8fafb' }}>
             <strong>Brain ID</strong>
           </Title>
-          <hr style={{ 'background-color': '#f8fafb', color: '#f8fafb' }}></hr>
+          <hr style={{ 'backgroundColor': '#f8fafb', color: '#f8fafb' }}></hr>
           <div
             style={{
               'overflow-y': 'scroll',

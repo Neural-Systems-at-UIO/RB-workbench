@@ -1,23 +1,24 @@
-import { width_calc } from './width_calc';
+import { width_calc } from '../../helpers/width_calc';
 
-export const defaultColumns = [
+// Define the table columns for the Subject table
+const tissueSampleColumns = [
   {
-    title: 'Subject',
-    dataIndex: 'Subject',
-    key: 'Subject',
+    title: 'Tissue Sample',
+    dataIndex: 'TissueSample',
+    key: 'TissueSample',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.TissueSample == null) {
         return 1;
       }
-      if (b.Subject == null) {
+      if (b.TissueSample == null) {
         return -1;
       }
-      return a.Subject.localeCompare(b.Subject);
+      return a.TissueSample.localeCompare(b.TissueSample);
     },
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
     // set the width of the column based on the title
-    width: width_calc('Subject'),
+    width: width_calc('TissueSample'),
     // fixed: 'left',
     editable: true,
     filters: [
@@ -29,22 +30,22 @@ export const defaultColumns = [
   },
 
   {
-    title: 'Age Category',
-    dataIndex: 'AgeCategory',
-    key: 'AgeCategory',
+    title: 'Anatomical Location',
+    dataIndex: 'AnatomicalLocation',
+    key: 'AnatomicalLocation',
 
     sorter: (a, b) => {
-      if (a.AgeCategory == null) {
+      if (a.AnatomicalLocation == null) {
         return 1;
       }
-      if (b.AgeCategory == null) {
+      if (b.AnatomicalLocation == null) {
         return -1;
       }
-      return a.AgeCategory.localeCompare(b.AgeCategory);
+      return a.AnatomicalLocation.localeCompare(b.AnatomicalLocation);
     },
 
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('AgeCategory'),
+    width: width_calc('AnatomicalLocation'),
     select: true
   },
   {
@@ -62,7 +63,7 @@ export const defaultColumns = [
       return a.BiologicalSex.localeCompare(b.BiologicalSex);
     },
 
-    sortDirections: ['descend', 'ascend', 'descend'],
+    sortDirections: ['descend'],
     width: width_calc('Sex'),
     select: true
   },
@@ -239,24 +240,33 @@ export const defaultColumns = [
       }
       return a.Sampletype.localeCompare(b.Sampletype);
     },
-    sortDirections: ['descend', 'ascend', 'descend'],
+    sortDirections: ['descend', 'ascend', 'none', 'descend'],
     width: width_calc('Sampletype'),
     editable: true
   }
 ];
-// a function to get the data from the api and set the state of statefulmetadata
-export const max_len = {
-  Subject: 0,
-  BiologicalSex: 0,
-  AgeCategory: 0,
-  Species: 0,
-  Age: 0,
-  Weight: 0,
-  Strain: 0,
-  Pathology: 0,
-  Phenotype: 0,
-  Handedness: 0,
-  Laterality: 0,
-  Origin: 0,
-  Sampletype: 0
-};
+
+// Create a dictionary of the maximum length of each column
+var max_column_widths = {};
+const tsPropertyNames = tissueSampleColumns.map( (column) => column.key );
+tsPropertyNames.forEach( name => {max_column_widths[name] = 0} )
+  
+export default tissueSampleColumns
+export const max_len_ts = max_column_widths;
+
+
+// const max_len_old = {
+//   Subject: 0,
+//   BiologicalSex: 0,
+//   AgeCategory: 0,
+//   Species: 0,
+//   Age: 0,
+//   Weight: 0,
+//   Strain: 0,
+//   Pathology: 0,
+//   Phenotype: 0,
+//   Handedness: 0,
+//   Laterality: 0,
+//   Origin: 0,
+//   Sampletype: 0
+// };

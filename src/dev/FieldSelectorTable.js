@@ -13,7 +13,8 @@ import {  } from 'antd';
 const EditableContext = React.createContext(null);
 const { Option } = Select;
 let index = 0;
-console.log('reformattedMetadata', reformattedMetadata)
+//console.log('reformattedMetadata', reformattedMetadata)
+
 function width_calc(column_name, font) {
   var width = column_name.length
 
@@ -579,15 +580,15 @@ const FieldSelectorTable = () => (
         className='MainPanel'
         style={{
           margin: '-0.7% 0 0 0',
-          'clip-path': 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+          clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
         }}
       >
         <div
           style={{
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'border-radius': '0.9375rem',
-            'box-shadow': '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+            borderRadius: '0.9375rem',
+            boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
             height: '90.5vh',
             width: '98vw'
           }}

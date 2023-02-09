@@ -35,6 +35,10 @@
         "Mus musculus",
         "Mustela putorius"
     ],
+    "AnatomicalLocation": [
+        "brain", 
+        "non brain"
+    ],
     "Age": [],
     "Weight": [],
     "Strain": [
