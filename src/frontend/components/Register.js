@@ -23,7 +23,7 @@ import { convertTableToCSV, convertCSVToTable } from "../helpers/csvAdapter";
 import subjectTableColumns, { max_len_sub } from "../metadata/defaultTableColumns/subjectColumns";
 import tissueTableColumns, { max_len_ts } from "../metadata/defaultTableColumns/tissueSampleColumns";
 import subjectGroupTableColumns, { max_len_sg } from "../metadata/defaultTableColumns/subjectGroupColumns";
-import tscTableColumns, { max_len_tsc } from "../metadata/defaultTableColumns/TissueSampleGroupColumns";
+import tscTableColumns, { max_len_tsc } from "../metadata/defaultTableColumns/tissueSampleCollectionColumns";
 
 // Create a table context to pass to the table components
 var tables = {
@@ -45,7 +45,7 @@ var tables = {
     maxColumnLength: max_len_ts,
     data: null
   }, 
-  TissueSampleGroup: {
+  TissueSampleCollection: {
     columnProps: tscTableColumns,
     variableNames: tissueTableColumns.map( (column) => column.key ),  // key or dataIndex?
     maxColumnLength: max_len_tsc,
@@ -166,9 +166,9 @@ function MetadataTable( {nextTableName} ) {
    * Callback for downloading the table as a CSV file.
    */
   const DownloadCSV = () => {
-
+    console.log('csv')
     // todo: should infer the variable names from the table
-    let csvString = convertTableToCSV(presentDS, subjectVariableNames);
+    let csvString = convertTableToCSV(presentDS);
 
     const blob = new Blob([csvString], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -181,6 +181,27 @@ function MetadataTable( {nextTableName} ) {
     a.click();
     document.body.removeChild(a);
   };
+
+  const DownloadJSon = () => {
+    console.log('json')
+
+    const blob = new Blob([JSON.stringify(presentDS)], {type: "data:text/json;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    
+    const b = document.createElement("b");
+    b.setAttribute("hidden", "");
+    b.setAttribute("href", url);
+    b.setAttribute("download", `metadata_${currentTableName.toLowerCase()}_table.json`);
+    document.body.appendChild(b);
+    b.click();
+    document.body.removeChild(b);
+  };
+
+  const download = () => {
+    DownloadJSon()
+    DownloadCSV()
+  }
+
     
   /**
    * Callback for uploading a table from a CSV file.
@@ -194,6 +215,8 @@ function MetadataTable( {nextTableName} ) {
       this.value = null;
     };
 
+    console.log('input', input)
+
     input.onchange = (e) => {
       
       const file = input.files[0];
@@ -203,8 +226,10 @@ function MetadataTable( {nextTableName} ) {
 
       reader.onload = (readerEvent) => {
         const content = readerEvent.target.result;
-
-        let new_data = convertCSVToTable(content);
+        console.log('content', content)
+        // let new_data = convertCSVToTable(content);
+        // convert to JSON
+        let new_data = JSON.parse(content);
         SetDataSource(new_data);
       };
     };
@@ -241,6 +266,7 @@ function MetadataTable( {nextTableName} ) {
         <Button onClick={handleRedoDS}>Redo</Button>
         <Button onClick={handleDuplicate}>Duplicate Selected</Button>
         <Button onClick={DownloadCSV}>Download CSV</Button>
+        {/* <Button onClick={DownloadJSon}>Download CSV</Button> */}
         <Button onClick={UploadCSV}>Upload CSV</Button>
         <Button onClick={handleDelete} type="default" danger>Delete</Button>
         {/* {{ add_button }} */}
@@ -312,8 +338,10 @@ function MetadataTable( {nextTableName} ) {
       }
     }
 
+
+    // Adjust width of column if necessary
     let match_col_index = columns.indexOf(match_col);
-    match_col_index = match_col_index - 1;
+    match_col_index = match_col_index - 1; // subtract 1 for the key column
 
     const match_value_type = typeof match_value;
 

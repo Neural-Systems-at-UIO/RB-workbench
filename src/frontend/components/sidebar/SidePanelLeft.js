@@ -16,7 +16,7 @@ const items = [
  getItem('Subject', '1', <UserOutlined /> ),
  getItem('SubjectGroup', '2', <TeamOutlined /> ),
  getItem('TissueSample', '3',  <HeartOutlined/>  ),
- getItem('TissueSampleGroup', '4', <HeartOutlined/> ) ];
+ getItem('TissueSampleCollection', '4', <HeartOutlined/> ) ];
 
 
 function getItem(label, key, icon, children) {
