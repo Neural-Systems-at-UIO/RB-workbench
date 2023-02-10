@@ -16,6 +16,7 @@ export default function createColumnProperties (columnNames, columnType) {
       key: columnNames[iCol],
       fixed: isColumnFixed,
       width: widthCalc(columnTitles[iCol]), // set the width of the column based on the title
+      maxWidth: 0, 
       editable: isColumnEditable,
       select: isColumnSelectable
     }

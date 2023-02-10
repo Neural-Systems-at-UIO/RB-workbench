@@ -8,12 +8,3 @@ const columnType = ['input', 'input', 'input', 'input', 'input', 'input', 'dropd
 const columnProps = createColumnProperties(columnNames, columnType)
 
 export default columnProps
-
-// Create a dictionary of the maximum length of each column
-const maxColumnWidths = {}
-columnNames.forEach(name => { maxColumnWidths[name] = 0 })
-
-// export default subjectColumns
-
-// Todo: should to this in place where tables are imported instead of here
-export const maxLenTsc = maxColumnWidths

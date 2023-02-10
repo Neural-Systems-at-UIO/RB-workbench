@@ -19,35 +19,34 @@ import metadataDefinitions from '../metadata/metadata-definitions'
 import { widthCalc, widthCalcDropdown } from '../helpers/widthCalc'
 import { convertTableToCSV } from '../helpers/csvAdapter'
 
-import subjectTableColumns, { maxLenSub } from '../metadata/defaultTableColumns/subjectColumns'
-import tissueTableColumns, { maxLenTs } from '../metadata/defaultTableColumns/tissueSampleColumns'
-import subjectGroupTableColumns, { maxLenSg } from '../metadata/defaultTableColumns/subjectGroupColumns'
-import tscTableColumns, { maxLenTsc } from '../metadata/defaultTableColumns/tissueSampleCollectionColumns'
+import subjectTableColumns from '../metadata/defaultTableColumns/subjectColumns'
+import tissueTableColumns from '../metadata/defaultTableColumns/tissueSampleColumns'
+import subjectGroupTableColumns from '../metadata/defaultTableColumns/subjectGroupColumns'
+import tscTableColumns from '../metadata/defaultTableColumns/tissueSampleCollectionColumns'
 
 // Create a table context to pass to the table components
+// Todo: move to separate file for managing tables.
+// Todo: Add special properties to keep track of ids/column variables 
+//       that are used across tables.
 const tables = {
   Subject: {
     columnProps: subjectTableColumns,
     variableNames: subjectTableColumns.map((column) => column.key), // key or dataIndex?
-    maxColumnLength: maxLenSub,
     data: null
   },
   SubjectGroup: {
     columnProps: subjectGroupTableColumns,
     variableNames: subjectGroupTableColumns.map((column) => column.key), // key or dataIndex?
-    maxColumnLength: maxLenSg,
     data: null
   },
   TissueSample: {
     columnProps: tissueTableColumns,
     variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
-    maxColumnLength: maxLenTs,
     data: null
   },
   TissueSampleCollection: {
     columnProps: tscTableColumns,
     variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
-    maxColumnLength: maxLenTsc,
     data: null
   }
 
@@ -57,16 +56,16 @@ const { Content } = Layout
 // const EditableContext = React.createContext(null);
 const { Option } = Select
 
-let maxLen = null
 let history = []
 let selRows = []
 
 // Todo: move to separate file for managing tables.
 function MetadataTable (props) {
   var nextTableName = props.nextTableName
-  // this is weird,how should it be done?
+
+  // this is weird, how should it be done?
   const [currentTableName, setCurrentTableName] = useState(nextTableName)
-  console.log('nextTableName: ', nextTableName)
+
   const currentTable = tables[nextTableName]
 
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps)
@@ -99,7 +98,6 @@ function MetadataTable (props) {
   if (currentTableName !== nextTableName) {
     // save current (will be previous) state
     tables[currentTableName].columnProps = statefulColumns
-    tables[currentTableName].maxColumnLength = maxLen
 
     resetDataSource(currentTable.data)
 
@@ -110,7 +108,6 @@ function MetadataTable (props) {
 
   const { present: presentDS } = DataSource
   let count = presentDS.length
-  maxLen = currentTable.maxColumnLength
 
   // Following are callback functions for the options bar
 
@@ -176,6 +173,28 @@ function MetadataTable (props) {
     document.body.removeChild(a)
   }
 
+  const downLoadAllTablesToJson = () => {
+
+    let filename = 'labbook_metadata_table.json';
+
+    // Loop through all keys in the tables object and create an array of the data from each table
+    const allTables = Object.keys(tables).map((key) => {
+      return tables[key].data
+    })
+
+    const blob = new Blob([JSON.stringify(allTables)], {type: "data:text/json; charset=utf-8"})
+    
+    const url = URL.createObjectURL(blob)
+
+    const anchorElement = document.createElement('a')
+    anchorElement.setAttribute('hidden', '')
+    anchorElement.setAttribute('href', url)
+    anchorElement.setAttribute('download', filename)
+    document.body.appendChild(anchorElement)
+    anchorElement.click()
+    document.body.removeChild(anchorElement)
+  }
+
   /**
    * Callback for uploading a table from a CSV file.
    */
@@ -236,7 +255,7 @@ function MetadataTable (props) {
         <Button onClick={handleUndoDS}>Undo</Button>
         <Button onClick={handleRedoDS}>Redo</Button>
         <Button onClick={handleDuplicate}>Duplicate Selected</Button>
-        <Button onClick={DownloadCSV}>Download CSV</Button>
+        <Button onClick={downLoadAllTablesToJson}>Download CSV</Button>
         {/* <Button onClick={DownloadJSon}>Download CSV</Button> */}
         <Button onClick={UploadCSV}>Upload CSV</Button>
         <Button onClick={handleDelete} type="default" danger>Delete</Button>
@@ -314,25 +333,30 @@ function MetadataTable (props) {
 
     const matchValueType = typeof matchValue
 
+    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
+
+    console.log('matchValueType',matchValueType)
     if (matchValueType === 'number') {
       matchValue = metadata[matchCol][matchValue]
 
-      if (matchValue.length > maxLen[matchCol]) {
-        maxLen[matchCol] = matchValue.length
+      if (matchValue.length > maxColumnWidth) {
+        maxColumnWidth = matchValue.length
         statefulColumns[matchColIndex].width = widthCalcDropdown(
           matchValue,
           '0.82'
         )
       }
+
     } else {
-      if (matchValue.length > maxLen[matchCol]) {
-        maxLen[matchCol] = matchValue.length
+      if (matchValue.length > maxColumnWidth) {
+        maxColumnWidth = matchValue.length
         statefulColumns[matchColIndex].width = widthCalc(
           matchValue,
           '1.25'
         )
       }
     }
+    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
 
     setStatefulColumns([...statefulColumns])
 
