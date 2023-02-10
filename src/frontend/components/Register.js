@@ -417,8 +417,10 @@ function MetadataTable (props) {
 
 const EditableContext = React.createContext(null)
 
-const EditableRow = (index, ...props) => {
+const EditableRow = ({index, ...props}) => {
   const [form] = Form.useForm()
+  console.log(props)
+
   return (
       <Form form={form} component={false}>
         <EditableContext.Provider value={form}>
@@ -428,7 +430,7 @@ const EditableRow = (index, ...props) => {
   )
 }
 
-const EditableCell = (
+const EditableCell = ({
   title,
   editable,
   children,
@@ -441,7 +443,7 @@ const EditableCell = (
   setstatefulmetadata,
   setstatefulmetadataDefinitions,
   ...restProps
-) => {
+}) => {
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
   const form = useContext(EditableContext)
