@@ -1,51 +1,48 @@
 import { Menu, Layout } from 'antd'
-import React, { useState } from 'react';
-import ConfigProvider from '../ConfigProvider';
+import React, { useState } from 'react'
+import ConfigProvider from '../ConfigProvider'
 
 import './SidePanelLeft.css'
 import {
   UserOutlined,
   TeamOutlined,
-  BugOutlined,
-  HeartOutlined,
-} from '@ant-design/icons';
+  HeartOutlined
+} from '@ant-design/icons'
 
-const { Sider } = Layout;
+const { Sider } = Layout
 
 const items = [
- getItem('Subject', '1', <UserOutlined /> ),
- getItem('SubjectGroup', '2', <TeamOutlined /> ),
- getItem('TissueSample', '3',  <HeartOutlined/>  ),
- getItem('TissueSampleCollection', '4', <HeartOutlined/> ) ];
+  getItem('Subject', '1', <UserOutlined />),
+  getItem('SubjectGroup', '2', <TeamOutlined />),
+  getItem('TissueSample', '3', <HeartOutlined/>),
+  getItem('TissueSampleCollection', '4', <HeartOutlined/>)]
 
-
-function getItem(label, key, icon, children) {
+function getItem (label, key, icon, children) {
   return {
     key,
     icon,
     children,
-    label,
-  };
+    label
+  }
 }
 
-function SidePanelLeft ( {onButtonClick} ) {
-  
-  const [collapsed, setCollapsed] = useState(false);
-  
-  let handleButtonClick = (item) => { onButtonClick( items[item.key-1].label ) }
+function SidePanelLeft ({ onButtonClick }) {
+  const [collapsed, setCollapsed] = useState(false)
+
+  const handleButtonClick = (item) => { onButtonClick(items[item.key - 1].label) }
 
   return (
-    // <div className='SidePanelLeft'>
-      <Sider style={{  backgroundColor: '#f8fafb'}} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+  // <div className='SidePanelLeft'>
+      <Sider style={{ backgroundColor: '#f8fafb' }} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <ConfigProvider>
-          <Menu 
+          <Menu
             style={{
               backgroundColor: '#f8fafb',
               width: '256',
               height: '100%',
               marginTop: '20px',
               marginLeft: '5%',
-              marginBottom: '200%',
+              marginBottom: '200%'
             }}
             defaultSelectedKeys={['1']}
             defaultOpenKeys={['sub1']}
@@ -57,7 +54,7 @@ function SidePanelLeft ( {onButtonClick} ) {
         </ConfigProvider>
       </Sider>
 
-    // </div>
+  // </div>
   )
 }
-export default SidePanelLeft;
+export default SidePanelLeft

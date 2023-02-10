@@ -1,5 +1,5 @@
-import { width_calc } from '../../helpers/width_calc';
-import {columnStringSorter, columnNumberSorter} from '../../helpers/table/tableColumnSorter';
+import { widthCalc } from '../../helpers/widthCalc'
+import { columnStringSorter, columnNumberSorter } from '../../helpers/table/tableColumnSorter'
 
 // Define the table columns for the Subject table
 const subjectColumns = [
@@ -10,7 +10,7 @@ const subjectColumns = [
     sorter: (a, b) => columnStringSorter(a, b, 'Subject'),
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
-    width: width_calc('Subject'), // set the width of the column based on the title
+    width: widthCalc('Subject'), // set the width of the column based on the title
     editable: true,
     filters: [
       {
@@ -24,8 +24,8 @@ const subjectColumns = [
     dataIndex: 'AgeCategory',
     key: 'AgeCategory',
     sorter: (a, b) => columnStringSorter(a, b, 'AgeCategory'),
-    //sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('AgeCategory'),
+    // sortDirections: ['descend', 'ascend', 'descend'],
+    width: widthCalc('AgeCategory'),
     select: true
   },
   {
@@ -33,8 +33,8 @@ const subjectColumns = [
     dataIndex: 'BiologicalSex',
     key: 'BiologicalSex',
     sorter: (a, b) => columnStringSorter(a, b, 'BiologicalSex'),
-    //sortDirections: ['descend', 'ascend'],
-    width: width_calc('Sex'),
+    // sortDirections: ['descend', 'ascend'],
+    width: widthCalc('Sex'),
     select: true
   },
 
@@ -44,8 +44,8 @@ const subjectColumns = [
     key: 'Species',
     sorter: (a, b) => columnStringSorter(a, b, 'Species'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Species'),
-    select: true,
+    width: widthCalc('Species'),
+    select: true
   },
   {
     title: 'Age',
@@ -53,7 +53,7 @@ const subjectColumns = [
     key: 'Age',
     sorter: (a, b) => columnNumberSorter(a, b, 'Age'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Age'),
+    width: widthCalc('Age'),
     editable: true
   },
   {
@@ -62,7 +62,7 @@ const subjectColumns = [
     key: 'Weight',
     sorter: (a, b) => columnNumberSorter(a, b, 'Weight'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Weight'),
+    width: widthCalc('Weight'),
     editable: true
   },
   {
@@ -71,7 +71,7 @@ const subjectColumns = [
     key: 'Strain',
     sorter: (a, b) => columnStringSorter(a, b, 'Strain'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Strain'),
+    width: widthCalc('Strain'),
     editable: true,
     select: true
   },
@@ -81,7 +81,7 @@ const subjectColumns = [
     key: 'Pathology',
     sorter: (a, b) => columnStringSorter(a, b, 'Pathology'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Pathology'),
+    width: widthCalc('Pathology'),
     editable: true
   },
   {
@@ -90,7 +90,7 @@ const subjectColumns = [
     key: 'Phenotype',
     sorter: (a, b) => columnStringSorter(a, b, 'Phenotype'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Phenotype'),
+    width: widthCalc('Phenotype'),
     editable: true,
     select: true
   },
@@ -100,7 +100,7 @@ const subjectColumns = [
     key: 'Handedness',
     sorter: (a, b) => columnStringSorter(a, b, 'Handedness'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Handedness'),
+    width: widthCalc('Handedness'),
     editable: true,
     select: true
   },
@@ -110,7 +110,7 @@ const subjectColumns = [
     key: 'Laterality',
     sorter: (a, b) => columnStringSorter(a, b, 'Laterality'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Laterality'),
+    width: widthCalc('Laterality'),
     editable: true,
     select: true
   },
@@ -120,7 +120,7 @@ const subjectColumns = [
     key: 'Origin',
     sorter: (a, b) => columnStringSorter(a, b, 'Origin'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Origin'),
+    width: widthCalc('Origin'),
     editable: true
   },
   {
@@ -129,21 +129,20 @@ const subjectColumns = [
     key: 'Sampletype',
     sorter: (a, b) => columnStringSorter(a, b, 'Sampletype'),
     sortDirections: ['descend', 'ascend', 'descend'],
-    width: width_calc('Sampletype'),
+    width: widthCalc('Sampletype'),
     editable: true
   }
-];
+]
 
 // Create a dictionary of the maximum length of each column
-var max_column_widths = {};
-const subjectPropertyNames = subjectColumns.map( (column) => column.key );
-subjectPropertyNames.forEach( name => {max_column_widths[name] = 0} )
-  
+const maxColumnWidths = {}
+const subjectPropertyNames = subjectColumns.map((column) => column.key)
+subjectPropertyNames.forEach(name => { maxColumnWidths[name] = 0 })
+
 export default subjectColumns
-export const max_len_sub = max_column_widths;
+export const maxLenSub = maxColumnWidths
 
-
-// const max_len_old = {
+// const maxLen_old = {
 //   Subject: 0,
 //   BiologicalSex: 0,
 //   AgeCategory: 0,

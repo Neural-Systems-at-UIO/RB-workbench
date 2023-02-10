@@ -1,64 +1,39 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Table, Button, Form, Input, Select, Space, Divider } from 'antd'
 // import styled from 'styled-components'
 import '../frontend/styles/Register.css'
 // import OptionsBar from './options-bar.js'
 import metadata from '../frontend/metadata/metadata'
 import metadataDefinitions from '../frontend/metadata/metadata-definitions'
-import reformattedMetadata from '../frontend/metadata/formatMetadata.js';
+import reformattedMetadata from '../frontend/metadata/formatMetadata.js'
 
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons'
 
-import {  } from 'antd';
-const EditableContext = React.createContext(null);
-const { Option } = Select;
-let index = 0;
-//console.log('reformattedMetadata', reformattedMetadata)
+const EditableContext = React.createContext(null)
+const { Option } = Select
 
-function width_calc(column_name, font) {
-  var width = column_name.length
+function widthCalc (columnName, font) {
+  let width = columnName.length
 
   if (typeof font === 'undefined') {
     font = '1.25'
     if (width < 11) {
       width = 11
       font = '1.25'
-
     }
-  }
-  else {
+  } else {
     if (width < 11) {
       width = 11
       font = '1.35'
-
     }
     if (width > 11) {
       font = '1.35'
-
     }
   }
 
-  var css_value = "calc(" + font + "em * " + width + ")"
-  // console.log('css_value', css_value)
-  return css_value
-}
-function width_calc_dropdown(input, font) {
-
-  // console.log('input', input)
-  // console.log('font', font)
-  var width = input.length
-  // console.log('width', width)
-
-  var css_value = "calc(" + font + "em * " + width + ")"
-  // console.log('bool', ((parseFloat(font))))
-  if ((parseFloat(width) * parseFloat(font)) < 1.25 * 11) {
-    // convert string to int
-    var width = 11
-    var font = '1.25'
-  }
-  var css_value = "calc(" + font + "em * " + width + ")"
-
-  return css_value
+  const cssValue = 'calc(' + font + 'em * ' + width + ')'
+  // console.log('cssValue', cssValue)
+  return cssValue
 }
 
 const defaultColumns = [
@@ -68,51 +43,49 @@ const defaultColumns = [
     key: 'OpenMindsField',
     sorter: (a, b) => {
       if (a.Subject == null) {
-        return 1;
+        return 1
       }
       if (b.Subject == null) {
-        return -1;
+        return -1
       }
       return a.Subject.localeCompare(b.Subject)
-
     },
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
     // set the width of the column based on the title
-    width: width_calc('OpenMindsField'),
+    width: widthCalc('OpenMindsField'),
     // fixed: 'left',
     editable: false,
     filters: [
       {
         text: '71717640',
-        value: '71717640',
+        value: '71717640'
       }]
   },
-  
+
   {
     title: 'Definition',
     dataIndex: 'definition',
     key: 'definition',
     sorter: (a, b) => {
       if (a.Subject == null) {
-        return 1;
+        return 1
       }
       if (b.Subject == null) {
-        return -1;
+        return -1
       }
       return a.Subject.localeCompare(b.Subject)
-
     },
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
     // set the width of the column based on the title
-    width: width_calc('definition'),
+    width: widthCalc('definition'),
     // fixed: 'left',
     editable: false,
     filters: [
       {
         text: '71717640',
-        value: '71717640',
+        value: '71717640'
       }]
   },
   {
@@ -121,126 +94,60 @@ const defaultColumns = [
     key: 'Subject',
     sorter: (a, b) => {
       if (a.Subject == null) {
-        return 1;
+        return 1
       }
       if (b.Subject == null) {
-        return -1;
+        return -1
       }
       return a.Subject.localeCompare(b.Subject)
-
     },
     sortDirections: ['descend', 'ascend', 'descend'],
     fixed: true,
     // set the width of the column based on the title
-    width: width_calc('Subject'),
+    width: widthCalc('Subject'),
     // fixed: 'left',
     editable: false,
     filters: [
       {
         text: '71717640',
-        value: '71717640',
+        value: '71717640'
       }]
   }
 
-
-
 ]
 
-var called_api = false;
 // a function to get the data from the api and set the state of statefulmetadata
 
-var max_len = {
-  Subject: 0,
-  BiologicalSex: 0,
-  AgeCategory: 0,
-  Species: 0,
-  Age: 0,
-  Weight: 0,
-  Strain: 0,
-  Pathology: 0,
-  Phenotype: 0,
-  Handedness: 0,
-  Laterality: 0,
-  Origin: 0,
-  Sampletype: 0
-
-}
-var history = []
-var sel_rows = []
 // var prev_row = null
 // var prev_index = null
-function App() {
-  var count = 0;
-  var [statefulColumns, setStatefulColumns] = useState(defaultColumns)
+function App () {
+  const statefulColumns = defaultColumns
 
-  var [statefulmetadata, setstatefulmetadata] = useState(metadata)
-  var [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
+  const [statefulmetadata, setstatefulmetadata] = useState(metadata)
+  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
 
-
-
-  function handleUndoDS(e) {
-    // console.log(prev_row)
-    e.preventDefault()
-
-    // undoDataSource()
-    // limit size of history
-    // DataSource.past = DataSource.past.slice(-15)
-
-  }
-  function handleRedoDS(e) {
-    e.preventDefault()
-    // redoDataSource()
-
-  }
-
-
-  
-  const OptionsBar = () => (
-    <div>
-      <div style={{ padding: '0 ', textAlign: 'left' }} className='OptionsBar'>
-
-
-      </div>
-      <hr
-        style={{
-          backgroundColor: '#bfbfbf',
-          border: 'none',
-          height: '0.15rem'
-        }}
-      ></hr>
-    </div >
-  )
-
-
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState([])
 
   const rowSelection = {
     // uncheck all checkboxes when the table is re-rendered
     selectedRowKeys: selected,
 
-
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-      setSelected(selectedRows.map((row) => row.key));
-      sel_rows = selectedRowKeys
-
+    onChange: (selectedRowKeys, selectedRows) => {
+      setSelected(selectedRows.map((row) => row.key))
+      selRows = selectedRowKeys
     },
     getCheckboxProps: (record) => {
       // set all checkboxes to true
       return {
         // checked: true
       }
-
     }
 
   }
- 
-
-
-
 
   const columns = statefulColumns.map((col) => {
     if (!col.editable & !col.select) {
-      return col;
+      return col
     }
 
     return {
@@ -255,12 +162,9 @@ function App() {
         statefulmetadataDefinitions,
         setstatefulmetadata,
         setstatefulmetadataDefinitions
-      }),
-    };
-  });
-
-
-
+      })
+    }
+  })
 
   return (
     <div>
@@ -270,7 +174,7 @@ function App() {
         rowSelection={{
           type: 'checkbox',
 
-          ...rowSelection,
+          ...rowSelection
         }}
         // components={components}
         columns={columns}
@@ -284,19 +188,16 @@ function App() {
   )
 }
 
-
-
 const EditableRow = ({ index, ...props }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
   return (
     <Form form={form} component={false}>
       <EditableContext.Provider value={form}>
         <tr {...props} />
       </EditableContext.Provider>
     </Form>
-  );
-};
-
+  )
+}
 
 const EditableCell = ({
   title,
@@ -312,150 +213,132 @@ const EditableCell = ({
   setstatefulmetadataDefinitions,
   ...restProps
 }) => {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(false)
 
-
-  const inputRef = useRef(null);
-  const form = useContext(EditableContext);
+  const inputRef = useRef(null)
+  const form = useContext(EditableContext)
   useEffect(() => {
     if (editing) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [editing]);
+  }, [editing])
 
   const toggleEdit = () => {
-    setEditing(!editing);
+    setEditing(!editing)
     // console.log('dataIndex', dataIndex)
     // console.log('RecorddataIndex', record[dataIndex])
     form.setFieldsValue({
-      [dataIndex]: record[dataIndex],
-    });
-  };
+      [dataIndex]: record[dataIndex]
+    })
+  }
 
   const save = async (event) => {
-
     try {
-
-      const values = await form.validateFields();
-      toggleEdit();
-      handleSave({ ...record, ...values });
-
+      const values = await form.validateFields()
+      toggleEdit()
+      handleSave({ ...record, ...values })
     } catch (errInfo) {
-      console.log('Save failed:', errInfo);
+      console.log('Save failed:', errInfo)
     }
-  };
-
-
+  }
 
   const saveDropDown = async (event) => {
-
-    toggleEdit();
+    toggleEdit()
 
     try {
-      const values = await form.validateFields();
+      const values = await form.validateFields()
 
-      handleSave({ ...record, ...values }, event, dataIndex);
-
+      handleSave({ ...record, ...values }, event, dataIndex)
     } catch (errInfo) {
-      console.log('Save failed:', errInfo);
+      console.log('Save failed:', errInfo)
     }
 
-    const values = await form.validateFields();
+    const values = await form.validateFields()
 
-    setEditing(false);
+    setEditing(false)
     // change column width to match content
+  }
+  const optionsAntd = []
 
-
-  };
-  var options_antd = []
-
-
-  const [name, setName] = useState('');
-
+  const [name, setName] = useState('')
 
   const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-
+    setName(event.target.value)
+  }
 
   const addItem = (e) => {
-    e.preventDefault();
-    var items = statefulmetadata[dataIndex]
+    e.preventDefault()
+    let items = statefulmetadata[dataIndex]
 
-    var definitions = statefulmetadataDefinitions[dataIndex]
+    let definitions = statefulmetadataDefinitions[dataIndex]
 
-    items = ([name, ...items]);
+    items = ([name, ...items])
     statefulmetadata[dataIndex] = items
-    var newdefinition = 'A custom option added by the user'
-    definitions = ([newdefinition, ...definitions]);
+    const newdefinition = 'A custom option added by the user'
+    definitions = ([newdefinition, ...definitions])
     statefulmetadataDefinitions[dataIndex] = definitions
     setstatefulmetadataDefinitions(statefulmetadataDefinitions)
     setstatefulmetadata(statefulmetadata)
-    setName('');
+    setName('')
     setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
+      inputRef.current?.focus()
+    }, 0)
+  }
 
-
-  let childNode = children;
+  let childNode = children
   if (editable) {
-    childNode = editing ? (
+    childNode = editing
+      ? (
       <Form.Item
         style={{
-          margin: 0,
+          margin: 0
         }}
         name={dataIndex}
         rules={[
           {
             required: false,
-            message: `${title} is required.`,
-          },
+            message: `${title} is required.`
+          }
         ]}
       >
 
         <Input ref={inputRef} onBlur={save} onPressEnter={save} />
       </Form.Item>
-    ) : (
+        )
+      : (
       <div
         className="editable-cell-value-wrap"
         style={{
-          paddingRight: 24,
+          paddingRight: 24
         }}
         onClick={toggleEdit}
       >
         {children}
       </div>
 
-    );
-
+        )
   }
 
-
-
   if (select) {
-
-
     for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
-
-      var option = <Option value={statefulmetadata[dataIndex][i]} title={statefulmetadataDefinitions[dataIndex][i]}>{statefulmetadata[dataIndex][i]}</Option>
-      options_antd.push(option);
+      const option = <Option value={statefulmetadata[dataIndex][i]} title={statefulmetadataDefinitions[dataIndex][i]}>{statefulmetadata[dataIndex][i]}</Option>
+      optionsAntd.push(option)
     }
 
     childNode = editing ? (
       <Form.Item
         style={{
-          margin: 0,
+          margin: 0
         }}
         name={dataIndex}
         rules={[
           {
             required: false,
-            message: `${title} is required.`,
-          },
+            message: `${title} is required.`
+          }
         ]}
       >
-        {/* allow the user to add new options to a select  if missing*/}
+        {/* allow the user to add new options to a select  if missing */}
 
         <Select
           showSearch
@@ -466,7 +349,6 @@ const EditableCell = ({
             width: '100%',
             cursor: 'pointer'
           }}
-   
 
           ref={inputRef} onChange={saveDropDown} value={children[1]} size={'large'}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
@@ -477,14 +359,14 @@ const EditableCell = ({
               {menu}
               <Divider
                 style={{
-                  margin: '8px 0',
+                  margin: '8px 0'
                 }}
               />
               <Space
                 width='10px'
 
                 style={{
-                  padding: '0 8px 4px',
+                  padding: '0 8px 4px'
 
                 }}
               >
@@ -501,18 +383,13 @@ const EditableCell = ({
             </>
           )}
 
-
         >
-          {options_antd}
-
-
+          {optionsAntd}
 
         </Select>
         {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
       </Form.Item >)
       : (
-
-
 
         <Select showSearch
 
@@ -522,24 +399,24 @@ const EditableCell = ({
           id='select' onChange={saveDropDown} value={children[1]} size={'large'}
           // set select min width based on the longest option
           dropdownMatchSelectWidth={false}
-          // set box width 
+          // set box width
           style={{
             width: '100%',
             cursor: 'pointer'
           }}
           filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-          // options={options_antd}
+          // options={optionsAntd}
           dropdownRender={(menu) => (
             <>
               {menu}
               <Divider
                 style={{
-                  margin: '8px 0',
+                  margin: '8px 0'
                 }}
               />
               <Space
                 style={{
-                  padding: '0 8px 4px',
+                  padding: '0 8px 4px'
                 }}
               >
                 <Input
@@ -547,7 +424,7 @@ const EditableCell = ({
                   ref={inputRef}
                   value={name}
                   onChange={onNameChange}
-                  style={{ 'fontSize': '1em' }}
+                  style={{ fontSize: '1em' }}
                 />
                 <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
                   Add item
@@ -557,22 +434,16 @@ const EditableCell = ({
           )}
         >
 
-          {options_antd}
+          {optionsAntd}
         </Select >
 
-
-      );
-
-
-
+        )
   }
 
-  return <td {...restProps}>{childNode}</td>;
-};
+  return <td {...restProps}>{childNode}</td>
+}
 
-
-
-const FieldSelectorTable = () => (
+const fieldSelectorTable = () => (
 
   <div className='Register'>
     <div style={{ display: 'flex', height: '92.55vh' }}>
@@ -604,4 +475,4 @@ const FieldSelectorTable = () => (
     </div>
   </div>
 )
-export default FieldSelectorTable
+export default fieldSelectorTable
