@@ -32,24 +32,28 @@ const tables = {
   Subject: {
     columnProps: subjectTableColumns,
     variableNames: subjectTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null
+    data: null,
+    dependentVariables: {IsPartOf: {SubjectGroup: 'SubjectGroupID'}}
   },
   SubjectGroup: {
     columnProps: subjectGroupTableColumns,
     variableNames: subjectGroupTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null
+    data: null,
+    dependentVariables: {}
   },
   TissueSample: {
     columnProps: tissueTableColumns,
     variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null
+    data: null,
+    dependentVariables: {IsPartOf: {TissueSampleCollection: 'TissueSampleCollectionID'}, DescendedFromSubjectID: {Subject: 'SubjectID'}}
   },
   TissueSampleCollection: {
     columnProps: tscTableColumns,
-    variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null
-  }
-
+    variableNames: tscTableColumns.map((column) => column.key), // key or dataIndex?
+    data: null,
+    dependentVariables: {DescendedFromSubjectID: {Subject: 'SubjectID'}}
+  },
+  ActiveTableName: 'Subject'
 } // Use context???
 
 const { Content } = Layout
@@ -78,11 +82,25 @@ function MetadataTable (props) {
     }
     const newRow = { key: rowNumber.toString() }
     currentTable.variableNames.forEach((name) => { newRow[name] = null })
+
     return newRow
   }
 
   if (currentTable.data === null) {
     currentTable.data = [createBlankRow()]
+  }
+
+  function updateTableData (newData, useCheckpoint) {
+
+    // Ask Harry: What are checkpoints for?
+    if (useCheckpoint === undefined) {
+      useCheckpoint = false
+    }
+
+    tables[currentTableName].data = newData
+    SetDataSource(newData, useCheckpoint)
+
+    currentTable.data = newData
   }
 
   const [
@@ -98,12 +116,14 @@ function MetadataTable (props) {
   if (currentTableName !== nextTableName) {
     // save current (will be previous) state
     tables[currentTableName].columnProps = statefulColumns
+    tables.ActiveTableName = nextTableName
 
     resetDataSource(currentTable.data)
 
     // save current state??
     setCurrentTableName(nextTableName)
     setStatefulColumns([...currentTable.columnProps])
+
   }
 
   const { present: presentDS } = DataSource
@@ -132,7 +152,9 @@ function MetadataTable (props) {
 
     // Generate a new row with unique key
     const newRow = createBlankRow(count)
-    SetDataSource([...presentDS, newRow], true)
+    const newDS = [...presentDS, newRow]
+    const useCheckpoint = true
+    updateTableData(newDS, useCheckpoint)
   }
 
   /**
@@ -150,14 +172,15 @@ function MetadataTable (props) {
       newDS = [...newDS, newRow]
       count += 1
     }
-    SetDataSource(newDS, true)
+
+    let useCheckpoint = true
+    updateTableData(newDS, useCheckpoint)
   }
 
   /**
    * Callback for downloading the table as a CSV file.
    */
   const DownloadCSV = () => {
-    console.log('csv')
     // todo: should infer the variable names from the table
     const csvString = convertTableToCSV(presentDS)
 
@@ -206,8 +229,6 @@ function MetadataTable (props) {
       this.value = null
     }
 
-    console.log('input', input)
-
     input.onchange = (e) => {
       const file = input.files[0]
 
@@ -216,11 +237,12 @@ function MetadataTable (props) {
 
       reader.onload = (readerEvent) => {
         const content = readerEvent.target.result
-        console.log('content', content)
+
         // let new_data = convertCSVToTable(content);
         // convert to JSON
         const newData = JSON.parse(content)
-        SetDataSource(newData)
+        
+        updateTableData(newData)
       }
     }
     input.click()
@@ -244,7 +266,7 @@ function MetadataTable (props) {
       checkboxes[i].dispatchEvent(new Event('change', { bubbles: true }))
     }
 
-    SetDataSource(temp_)
+    updateTableData(temp_)
     setSelected([])
   }
 
@@ -297,6 +319,7 @@ function MetadataTable (props) {
     const item = OldData[index]
 
     const originalData = { ...row }
+
     const columns = Object.keys(row)
     // regex for newline,  any number of spaces, newline
 
@@ -326,7 +349,7 @@ function MetadataTable (props) {
         OldData.splice(selRows[i] - 1, 1, { ...tempRow })
       }
     }
-
+  
     // Adjust width of column if necessary
     let matchColIndex = columns.indexOf(matchCol)
     matchColIndex = matchColIndex - 1 // subtract 1 for the key column
@@ -335,7 +358,6 @@ function MetadataTable (props) {
 
     let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
 
-    console.log('matchValueType',matchValueType)
     if (matchValueType === 'number') {
       matchValue = metadata[matchCol][matchValue]
 
@@ -356,12 +378,14 @@ function MetadataTable (props) {
         )
       }
     }
+
     statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
 
     setStatefulColumns([...statefulColumns])
 
-    SetDataSource([...OldData], false)
+    SetDataSource([...OldData], false) // Todo: Rename oldData to newData?
 
+    // Ask Harry: What happens here? Related to updating many rows at once?
     DataSource.present = { ...OldData }
     const tempData = [...OldData]
     tempData[index] = { ...originalData }
@@ -570,11 +594,26 @@ const EditableCell = ({
         )
   }
 
+
   if (select) {
+
+    // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
+    const currentTableName = tables.ActiveTableName
+
+    if ( tables[currentTableName].dependentVariables[dataIndex] ) {
+      const dependentTableName = Object.keys( tables[currentTableName].dependentVariables[dataIndex] )[0]
+      const dependentVariableName = tables[currentTableName].dependentVariables[dataIndex][dependentTableName];
+      if (tables[dependentTableName].data !== null ) {
+        let value = tables[dependentTableName].data.map( (row) => row[dependentVariableName] )
+        statefulmetadata[dataIndex] = value
+      }
+    }
+
     // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
     if (statefulmetadata[dataIndex] === undefined) {
-      statefulmetadata[dataIndex] = []
+        statefulmetadata[dataIndex] = []
     }
+
     if (statefulmetadataDefinitions[dataIndex] === undefined) {
       statefulmetadataDefinitions[dataIndex] = []
     }
@@ -715,6 +754,7 @@ const MetadataPage = (props) => {
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
 
       <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft>
+      
       <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
 
         {/* Container holding table */}
@@ -741,12 +781,12 @@ const MetadataPage = (props) => {
             <div
               style={{
                 // outline: '0.3125rem solid black',
-                padding: '2% 0% 2% 0%',
+                padding: '2% 1% 2% 1%',
                 margin: '1% 1% 2% 1%',
                 borderRadius: '0.9375rem',
                 boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
                 height: '90.5vh',
-                width: '98vw'
+                width: '88vw'
               }}
             >
               {/* <OptionsBar /> */}

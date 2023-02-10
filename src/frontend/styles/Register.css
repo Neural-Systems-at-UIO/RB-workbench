@@ -83,7 +83,7 @@
 
 }
 
-rgb(248, 250, 251)
+/* rgb(248, 250, 251) */
 /* .ant-table-placeholder{
     min-height: 37pc
 }
@@ -100,15 +100,10 @@ rgb(248, 250, 251)
 .ant-checkbox-wrapper {
     margin-bottom: 1.1.6em;
     margin-top: 1.1.6em;
-
-
 }
 
 .ant-checkbox-inner {
     scale: 1.3;
-
-
-
 }
 
 .ant-checkbox-checked .ant-checkbox-inner {
@@ -125,8 +120,6 @@ rgb(248, 250, 251)
     background-color: #3350ac !important;
     border-color: #3350ac !important;
     color: #3350ac !important;
-
-
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
@@ -138,14 +131,11 @@ rgb(248, 250, 251)
 .MainPanel {
     background-color: #F0F5FD;
     width: 100vw;
-
 }
 
 .MainPanel>div:nth-child(1) {
     width: 10vw;
     background-color: #f8fafb;
-
-
 }
 
 .ant-form {
@@ -154,7 +144,6 @@ rgb(248, 250, 251)
 
 .editable-cell {
     position: relative;
-
 }
 
 .editable-cell-value-wrap {
@@ -167,7 +156,6 @@ rgb(248, 250, 251)
     padding: 0.25rem 0.6875rem;
     border: 0.0625rem solid #8b8181;
     border-radius: 0.125rem;
-
 }
 
 [data-theme='dark'] .editable-row:hover .editable-cell-value-wrap {
