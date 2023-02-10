@@ -34,7 +34,9 @@ function SidePanelLeft ({ onButtonClick }) {
   return (
   // <div className='SidePanelLeft'>
       <Sider style={{ backgroundColor: '#f8fafb' }} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <ConfigProvider>
+        <ConfigProvider
+        children = {<div></div>}
+        >
           <Menu
             style={{
               backgroundColor: '#f8fafb',

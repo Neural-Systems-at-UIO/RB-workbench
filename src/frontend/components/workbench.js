@@ -9,11 +9,11 @@ import { Header } from 'antd/lib/layout/layout'
 
 const { Content } = Layout
 const { TabPane } = Tabs
-const items = [
-  { label: 'Registration' },
-  { label: 'Analysis' },
-  { label: 'Projects' }
-]
+// const items = [
+//   { label: 'Registration' },
+//   { label: 'Analysis' },
+//   { label: 'Projects' }
+// ]
 const workbench = () => {
   return (
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >

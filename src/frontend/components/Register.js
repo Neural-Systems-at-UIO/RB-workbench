@@ -53,7 +53,7 @@ const tables = {
 
 } // Use context???
 
-const { Header, Content, Footer, Sider } = Layout
+const { Content } = Layout
 // const EditableContext = React.createContext(null);
 const { Option } = Select
 
@@ -62,9 +62,11 @@ let history = []
 let selRows = []
 
 // Todo: move to separate file for managing tables.
-function MetadataTable ({ nextTableName }) {
+function MetadataTable (props) {
+  var nextTableName = props.nextTableName
   // this is weird,how should it be done?
   const [currentTableName, setCurrentTableName] = useState(nextTableName)
+  console.log('nextTableName: ', nextTableName)
   const currentTable = tables[nextTableName]
 
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps)
@@ -76,7 +78,7 @@ function MetadataTable ({ nextTableName }) {
       rowNumber = 1
     }
     const newRow = { key: rowNumber.toString() }
-    currentTable.variableNames.forEach((name) => newRow[name] = null)
+    currentTable.variableNames.forEach((name) => { newRow[name] = null })
     return newRow
   }
 
@@ -143,12 +145,12 @@ function MetadataTable ({ nextTableName }) {
     // Increment the row counter
     count += 1
 
-    var newDS = [...presentDS]
+    let newDS = [...presentDS]
     for (let i = 0; i < selRows.length; i++) {
       const newRow = JSON.parse(JSON.stringify(newDS[selRows[i] - 1]))
       newRow.key = count.toString()
 
-      var newDS = [...newDS, newRow]
+      newDS = [...newDS, newRow]
       count += 1
     }
     SetDataSource(newDS, true)
@@ -172,26 +174,6 @@ function MetadataTable ({ nextTableName }) {
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
-  }
-
-  const DownloadJSon = () => {
-    console.log('json')
-
-    const blob = new Blob([JSON.stringify(presentDS)], { type: 'data:text/json;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-
-    const b = document.createElement('b')
-    b.setAttribute('hidden', '')
-    b.setAttribute('href', url)
-    b.setAttribute('download', `metadata_${currentTableName.toLowerCase()}_table.json`)
-    document.body.appendChild(b)
-    b.click()
-    document.body.removeChild(b)
-  }
-
-  const download = () => {
-    DownloadJSon()
-    DownloadCSV()
   }
 
   /**
@@ -218,8 +200,8 @@ function MetadataTable ({ nextTableName }) {
         console.log('content', content)
         // let new_data = convertCSVToTable(content);
         // convert to JSON
-        const new_data = JSON.parse(content)
-        SetDataSource(new_data)
+        const newData = JSON.parse(content)
+        SetDataSource(newData)
       }
     }
     input.click()
@@ -227,18 +209,18 @@ function MetadataTable ({ nextTableName }) {
 
   const handleDelete = () => {
     let temp_ = presentDS
-    for (var i = 0; i < selRows.length; i++) {
+    for (let i = 0; i < selRows.length; i++) {
       temp_ = temp_.filter((item) => item.key !== selRows[i])
     }
 
-    for (var i = 0; i < temp_.length; i++) {
+    for (let i = 0; i < temp_.length; i++) {
       temp_[i].key = (i + 1).toString()
     }
 
     selRows = []
 
     const checkboxes = document.getElementsByClassName('ant-checkbox-input')
-    for (var i = 0; i < checkboxes.length; i++) {
+    for (let i = 0; i < checkboxes.length; i++) {
       checkboxes[i].checked = false
       checkboxes[i].dispatchEvent(new Event('change', { bubbles: true }))
     }
@@ -318,7 +300,7 @@ function MetadataTable ({ nextTableName }) {
     }
 
     if (selRows.includes(row.key)) {
-      for (var i in selRows) {
+      for (const i in selRows) {
         tempRow = OldData[selRows[i] - 1]
         tempRow[matchCol] = matchValue
 
@@ -332,7 +314,7 @@ function MetadataTable ({ nextTableName }) {
 
     const matchValueType = typeof matchValue
 
-    if (matchValueType == 'number') {
+    if (matchValueType === 'number') {
       matchValue = metadata[matchCol][matchValue]
 
       if (matchValue.length > maxLen[matchCol]) {
@@ -362,13 +344,13 @@ function MetadataTable ({ nextTableName }) {
 
     const tempDataValues = []
     const tempDataKeys = []
-    for (var i in tempData) {
+    for (const i in tempData) {
       tempDataValues.push([...Object.values(tempData[i])])
       tempDataKeys.push([...Object.keys(tempData[i])])
     }
 
     const tempDataObj = []
-    for (var i in tempDataValues) {
+    for (const i in tempDataValues) {
       const tempObj = {}
       for (const j in tempDataValues[i]) {
         tempObj[tempDataKeys[i][j]] = tempDataValues[i][j]
@@ -410,7 +392,9 @@ function MetadataTable ({ nextTableName }) {
 
   return (
     <div>
-      <ConfigProvider>
+      <ConfigProvider 
+      children={props.children}
+      >
 
         <OptionsBar />
         <Table
@@ -431,28 +415,9 @@ function MetadataTable ({ nextTableName }) {
   )
 }
 
-// Todo: Remove?
-function fetchAPI () {
-  let returnData
-  const data = fetch('/print_statement', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({})
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      returnData = data
-    })
-
-    .catch((error) => {
-      console.error('Error:', error)
-    })
-}
 const EditableContext = React.createContext(null)
 
-const EditableRow = ({ index, ...props }) => {
+const EditableRow = (index, ...props) => {
   const [form] = Form.useForm()
   return (
       <Form form={form} component={false}>
@@ -463,7 +428,7 @@ const EditableRow = ({ index, ...props }) => {
   )
 }
 
-const EditableCell = ({
+const EditableCell = (
   title,
   editable,
   children,
@@ -476,7 +441,7 @@ const EditableCell = ({
   setstatefulmetadata,
   setstatefulmetadataDefinitions,
   ...restProps
-}) => {
+) => {
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
   const form = useContext(EditableContext)
@@ -599,7 +564,9 @@ const EditableCell = ({
       )
       optionsAntd.push(option)
     }
-    childNode = editing ? (
+    childNode = editing
+      ? (
+
       <Form.Item
         style={{
           margin: 0
@@ -661,7 +628,7 @@ const EditableCell = ({
         </Select>
         {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
       </Form.Item>
-    ) : (
+        ) : (
       <Select
         showSearch
         optionFilterProp="children"
@@ -707,18 +674,17 @@ const EditableCell = ({
       >
         {optionsAntd}
       </Select>
-    )
+        )
   }
   return <td {...restProps}>{childNode}</td>
 }
 
-const MetadataPage = () => {
+const MetadataPage = (props) => {
   const [currentTableName, setCurrentTableName] = useState('Subject')
 
   const handleSelectTable = (selectedTableName) => {
     setCurrentTableName(selectedTableName)
   }
-
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
 
@@ -759,7 +725,7 @@ const MetadataPage = () => {
             >
               {/* <OptionsBar /> */}
               <Form>
-                <MetadataTable nextTableName={currentTableName}></MetadataTable>
+                <MetadataTable nextTableName={currentTableName} children={''}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>

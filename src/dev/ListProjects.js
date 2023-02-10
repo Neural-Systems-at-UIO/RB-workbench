@@ -1,10 +1,8 @@
 import { Table, Button, Form, message, Typography } from 'antd'
 import styled from 'styled-components'
-import datasource from './datasource'
 import './Register.css'
 import OptionsBar from './options-bar'
-import { render } from '@umijs/deps/compiled/mustache'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 const { Title } = Typography
 const columns = [
@@ -20,9 +18,8 @@ const columns = [
   }
 ]
 
-
 const rowSelection = {
-  onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+  onChange: (selectedRowKeys, selectedRows) => {
     console.log(
       `selectedRowKeys: ${selectedRowKeys}`,
       'selectedRows: ',
@@ -44,38 +41,16 @@ function handleButtonClick (e) {
     })
   })
 }
-function fetchData (url) {
-  const data = fetch(url).then(response => {
-    if (response.ok) {
-      return response.json()
-    }
-  })
-}
-
-function handleAdd (DataSource) {
-  // const { count, datasource } = this.state
-  // const newData = fetchData('http://localhost:80/server.php')
-  // this.setState({ dataSource: [...datasource, newData] })
-  // const dataSource = fetchData('http://localhost:80/server.php'
-  // SetDataSource(fetchData('http://localhost:80/server.php'))
-  // console.log(fetchData('http://localhost:80/server.php'))
-  // var retrievedData = fetchData('http://localhost:80/server.php')
-  // var retrievedData_json = retrievedData.json()
-  // DataSource.push(retrievedData_json)
-}
-
-// console.log('yay')
 
 function Buildtable () {
   const [DataSource, SetDataSource] = useState('')
-  console.log("HELLO 0");
+  console.log('HELLO 0')
   const updateTable = async () => {
     const response = await fetch('http://www.quint-tools.com:3000/list_projects.php')
     const data = await response.json()
-    console.log("HELLO 1");
-    console.log(data);
-    SetDataSource(data);
-
+    console.log('HELLO 1')
+    console.log(data)
+    SetDataSource(data)
   }
 
   return (
@@ -102,14 +77,14 @@ const ListProjects = () => (
       <div
         className='MainPanel'
         style={{
-          'backgroundColor': '#f8fafb',
-          'borderRadius': '25px 0   0 25px',
+          backgroundColor: '#f8fafb',
+          borderRadius: '25px 0   0 25px',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          'boxShadow': '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
+          boxShadow: '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
 
-          'clipPath': 'inset(-250px -250px -250px -250px)'
+          clipPath: 'inset(-250px -250px -250px -250px)'
         }}
       >
         <div
@@ -117,8 +92,8 @@ const ListProjects = () => (
             // outline: '5px solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            'borderRadius': '25px',
-            'boxShadow': '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
+            borderRadius: '25px',
+            boxShadow: '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
           }}
         >
           <OptionsBar />
@@ -145,7 +120,7 @@ const ListProjects = () => (
           <Title level={1} style={{ color: '#f8fafb' }}>
             <strong>Brain ID</strong>
           </Title>
-          <hr style={{ 'backgroundColor': '#f8fafb', color: '#f8fafb' }}></hr>
+          <hr style={{ backgroundColor: '#f8fafb', color: '#f8fafb' }}></hr>
           <div
             style={{
               'overflow-y': 'scroll',

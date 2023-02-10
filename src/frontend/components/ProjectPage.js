@@ -1,13 +1,12 @@
 import { Table, Button, Form, message, Typography } from 'antd'
 import styled from 'styled-components'
-import React from 'react'
+import React, { useState } from 'react'
 
 import datasource from './datasource'
 import './Register.css'
 import SidePanel from '../../SidePanel'
 import OptionsBar from './options-bar'
 import { render } from '@umijs/deps/compiled/mustache'
-import { useState } from 'react'
 
 const { Title } = Typography
 const columns = [
@@ -83,7 +82,7 @@ const columns = [
 // rowSelection object indicates the need for row selection
 
 const rowSelection = {
-  onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+  onChange: (selectedRowKeys, selectedRows) => {
     console.log(
       `selectedRowKeys: ${selectedRowKeys}`,
       'selectedRows: ',
@@ -97,7 +96,7 @@ const StyledTable = styled(props => <Table {...props} />)`
   }
 `
 
-function handleButtonClick(e) {
+function handleButtonClick (e) {
   fetch('http://localhost:3000/list_projects.php').then(res => {
     res.json().then(data => {
       console.log(data)
@@ -106,7 +105,7 @@ function handleButtonClick(e) {
   })
 }
 
-function fetchData(url) {
+function fetchData (url) {
   const data = fetch(url).then(response => {
     if (response.ok) {
       return response.json()
@@ -149,7 +148,7 @@ function fetchData(url) {
 //     )
 //   }
 // }
-function handleAdd(DataSource) {
+function handleAdd (DataSource) {
   // const { count, datasource } = this.state
   // const newData = fetchData('http://localhost:80/server.php')
   // this.setState({ dataSource: [...datasource, newData] })
@@ -164,17 +163,18 @@ function handleAdd(DataSource) {
 // console.log('yay')
 
 class FormSubmitNewProject extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.state = { value: '' }
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     this.setState({ value: event.target.value })
   }
-  handleSubmit(e) {
+
+  handleSubmit (e) {
     e.preventDefault()
     const data = {
       method: 'POST',
@@ -200,7 +200,7 @@ class FormSubmitNewProject extends React.Component {
   }
   // alert('A name was submitted: ' + this.state.value)
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.handleSubmit}>
         <input
@@ -214,7 +214,7 @@ class FormSubmitNewProject extends React.Component {
   }
 }
 
-function Buildtable() {
+function Buildtable () {
   const [DataSource, SetDataSource] = useState('')
   const updateTable = async () => {
     const response = await fetch(
@@ -254,8 +254,8 @@ const ProjectPage = () => (
       <div
         className='MainPanel'
         style={{
-          'backgroundColor': '#f8fafb',
-          'borderRadius': '1.5625rem 0   0 1.5625rem',
+          backgroundColor: '#f8fafb',
+          borderRadius: '1.5625rem 0   0 1.5625rem',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',

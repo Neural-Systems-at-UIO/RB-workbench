@@ -42,10 +42,10 @@ const defaultColumns = [
     dataIndex: 'OpenMindsField',
     key: 'OpenMindsField',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Subject === null) {
         return 1
       }
-      if (b.Subject == null) {
+      if (b.Subject === null) {
         return -1
       }
       return a.Subject.localeCompare(b.Subject)
@@ -68,10 +68,10 @@ const defaultColumns = [
     dataIndex: 'definition',
     key: 'definition',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Subject === null) {
         return 1
       }
-      if (b.Subject == null) {
+      if (b.Subject === null) {
         return -1
       }
       return a.Subject.localeCompare(b.Subject)
@@ -93,10 +93,10 @@ const defaultColumns = [
     dataIndex: 'Subject',
     key: 'Subject',
     sorter: (a, b) => {
-      if (a.Subject == null) {
+      if (a.Subject === null) {
         return 1
       }
-      if (b.Subject == null) {
+      if (b.Subject === null) {
         return -1
       }
       return a.Subject.localeCompare(b.Subject)
@@ -127,6 +127,7 @@ function App () {
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
 
   const [selected, setSelected] = useState([])
+  let selRows = []
 
   const rowSelection = {
     // uncheck all checkboxes when the table is re-rendered

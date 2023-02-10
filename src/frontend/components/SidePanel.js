@@ -1,8 +1,6 @@
-import { message, Typography } from 'antd'
+import { message } from 'antd'
 import './SidePanel.css'
-
-const { Title } = Typography
-
+import React from 'react'
 export function handleButtonClick (e) {
   fetch('http://localhost:80/server.php').then(res => {
     res.json().then(data => {

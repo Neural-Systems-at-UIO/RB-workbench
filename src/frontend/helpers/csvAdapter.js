@@ -3,7 +3,7 @@ export function convertTableToCSV (dataTable) {
   let columnNames = Object.keys(dataTable[0])
 
   // Remove key column
-  columnNames = columnNames.filter((name) => name != 'key')
+  columnNames = columnNames.filter((name) => name !== 'key')
 
   // Join columnNames as semicolon separated string and add to csv
   let csvString = columnNames.join(';') + '\n' // create header row
@@ -42,7 +42,7 @@ export function convertCSVToTable (csvString) {
 
     const row = { key: iRow.toString() }
     for (let jCol = 0; jCol < columnNames.length; jCol++) {
-      if (lineData[jCol] == 'null' || lineData[jCol] == 'undefined') {
+      if (lineData[jCol] === 'null' || lineData[jCol] === 'undefined') {
         lineData[jCol] = null
       }
       row[columnNames[jCol]] = lineData[jCol]

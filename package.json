@@ -31,10 +31,10 @@
   },
   "scripts": {
     "start": "node src/backend/server.js --experimental-fetch",
-    "build": "react-scripts build",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "react-scripts start"
+    "dev": "DISABLE_ESLINT_PLUGIN=true react-scripts start"
   },
   "eslintConfig": {
     "extends": [
