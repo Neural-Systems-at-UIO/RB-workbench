@@ -2,18 +2,18 @@ export function widthCalc (columnName, font) {
   let width = columnName.length
 
   if (typeof font === 'undefined') {
-    font = '1.25'
+    font = '1.0'
     if (width < 11) {
       width = 11
-      font = '1.25'
+      font = '1.0'
     }
   } else {
     if (width < 11) {
       width = 11
-      font = '1.35'
+      font = '1.15'
     }
     if (width > 11) {
-      font = '1.35'
+      font = '1.15'
     }
     // if (width > 16) {
     //   // width = 11
@@ -40,10 +40,10 @@ export function widthCalcDropdown (input, font) {
   // console.log('width', width)
   let cssValue = 'calc(' + font + 'em * ' + width + ')'
   // console.log('bool', ((parseFloat(font))))
-  if ((parseFloat(width) * parseFloat(font)) < 1.25 * 11) {
+  if ((parseFloat(width) * parseFloat(font)) < 1.0 * 11) {
     // convert string to int
     width = 11
-    font = '1.25'
+    font = '1.0'
   }
   cssValue = 'calc(' + font + 'em * ' + width + ')'
 
