@@ -18,6 +18,9 @@ app.use(fileUpload({
   createParentPath: true
 }))
 
+// console log the current directory
+
+// change dir to be back two directories
 // console.log that your server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`))
 // https.createServer(
@@ -27,6 +30,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`))
 // ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
 // app).listen(port)
 // Serve the react app for the default (/) route
+app.use(express.static(path.join(__dirname, '../../build')));
 app.get('/', function (req, res) {
   // res.render('index.html')
   // render index_dev.html from src/frontend/authentication
