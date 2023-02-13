@@ -2,6 +2,7 @@
 // Get modules that are needed for the server
 const express = require('express') // Express is a framework for creating web apps
 const path = require('path') // Path is used for creating file paths
+
 // const https = require('node:https');
 // const fs = require('fs');             // Needed for deleting files that are uploaded to server
 const fileUpload = require('express-fileupload')
@@ -22,7 +23,6 @@ app.use(fileUpload({
 
 // change dir to be back two directories
 // console.log that your server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`))
 // https.createServer(
 // {
 // key:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/privkey.pem'),
@@ -30,21 +30,38 @@ app.listen(port, () => console.log(`Listening on port ${port}`))
 // ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
 // app).listen(port)
 // Serve the react app for the default (/) route
-app.use(express.static(path.join(__dirname, '../../build')));
+// console.log(path.resolve(__dirname, '../build/static/'))
+// app.use(express.static(path.resolve(__dirname, '../build/static/')));
+
+
 app.get('/', function (req, res) {
   // res.render('index.html')
+  console.log('runs')
   // render index_dev.html from src/frontend/authentication
-  res.sendFile(path.join(__dirname, '../frontend/authentication', 'index_dev.html'))
+
+  res.sendFile(path.join(__dirname, '../', 'src/', 'authentication', 'index_dev.html'))
 })
+// app cannot get the static files
 
 app.get('/app', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'))
+  console.log('here')
+
+  res.sendFile(path.resolve(__dirname, '../build/', 'index.html'), (err) => { console.log(err) }) 
+
 })
+
+
 
 // api endpoint for getting the data from the api
 app.get('/get_metadata', function (req, res) {
+  console.log('metadata')
   // get the metadata from get_data and send it to the frontend
   // get_data().then(function (result) {
   //     res.send(result)
   // })
 })
+
+app.use(express.static(path.resolve(__dirname, '../build/')));
+
+
+app.listen(port, () => console.log(`Listening on port ${port}`))

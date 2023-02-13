@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import React, { useState } from 'react'
 
 import datasource from './datasource'
-import './Register.css'
 import SidePanel from '../../SidePanel'
 import OptionsBar from './options-bar'
 import { render } from '@umijs/deps/compiled/mustache'

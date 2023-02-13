@@ -1,8 +1,7 @@
-@import '~antd/dist/antd.css';
 
 .table-striped-rows tr:nth-child(2n) td {
     background-color: #fcf5f5;
-    font-size: 1.3em;
+    /* font-size: 1.3em; */
 }
 
 
@@ -10,10 +9,9 @@
     background-color: #1a1515;
 
 } */
-.table-striped-rows td {
-    font-size: 1.3em;
+/* .table-striped-rows td {
 
-}
+} */
 
 .ant-table-tbody>tr.ant-table-row-selected>td {
     background-color: #e6f7ff;
@@ -35,9 +33,9 @@
 }
 
 .table-striped-rows thead {
-    font-size: 1.6em;
     background-color: #f1f1f1;
     color: rgb(238, 245, 248);
+    font-size: 1.3em;
 }
 
 .button-container {
@@ -74,7 +72,7 @@
 .button-container>.ant-btn-lg {
     height: 90%;
     width: 100%;
-    font-size: 1.6em;
+    /* font-size: 1.6em; */
     font-weight: bold;
     margin-bottom: -5%;
     margin-left: 5%;
@@ -162,17 +160,12 @@
     border: 0.0625rem solid #434343;
 }
 
-.ant-input {
-    font-size: 1.6em;
-}
 
 .ant-table-cell {
     padding-left: 3.125rem;
 }
 
-.ant-select {
-    font-size: 0.7em;
-}
+
 
 /* tr.ant-table-row {
     padding-left: ;

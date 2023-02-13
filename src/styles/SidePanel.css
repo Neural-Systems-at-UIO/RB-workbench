@@ -22,7 +22,7 @@
 .info-card {
     background-color: #18213e;
     color: #f8fafb;
-    font-size: 1.5em;
+    /* font-size: 1.5em; */
     /* border: solid #f8fafb 0.0625rem; */
 
     /* box-shadow: 0rem 0rem 0.875rem 0.125rem rgba(255, 120, 117, 0.6); */
@@ -33,7 +33,7 @@
 button {
     background-color: transparent;
     border-color: Red;
-    font-size: 1.5em;
+    /* font-size: 1.5em; */
     font-weight: bold;
     color: Red;
     border-radius: 0.4rem;
@@ -41,6 +41,6 @@ button {
 }
 
 button:hover {
-    background-color: Red;
+    /* background-color: Red; */
     color: black
 }

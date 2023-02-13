@@ -1,5 +1,5 @@
 import { createColumnTitles } from './stringUtility'
-import { widthCalc } from '../../helpers/widthCalc'
+import { widthCalc } from '../widthCalc'
 
 export default function createColumnProperties (columnNames, columnType) {
   const columnTitles = createColumnTitles(columnNames)

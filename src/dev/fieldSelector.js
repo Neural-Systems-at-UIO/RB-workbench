@@ -2,11 +2,11 @@
 import React from 'react'
 import { Layout, Tabs } from 'antd'
 import Icon from '@ant-design/icons'
-import '../frontend/styles/App.css'
-import { ReactComponent as EbrainsLogo } from '../frontend/resources/ebrains-ai-cropped.svg'
+// import '../styles/App.css'
+import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
 // var perf = require('./sine-wave.html');
-import SineWave from '../frontend/components/decorations/SineWave'
+import SineWave from '../components/decorations/SineWave'
 // import fieldSelector from "./fieldSelector.js";
 const { Content } = Layout
 const { TabPane } = Tabs
@@ -28,7 +28,7 @@ const fieldSelector = () => {
                 right: '8vw',
                 top: '-4rem',
                 // margin: '-2.5% 0 0 0px',
-                fontSize: '14em',
+                // fontSize: '14em',
                 border: 0,
                 zIndex: 1
               }}

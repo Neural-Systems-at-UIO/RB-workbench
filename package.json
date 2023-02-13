@@ -3,31 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.3",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.1.1",
-    "@testing-library/user-event": "^13.5.0",
-    "antd": "^4.20.1",
+    "@ant-design/icons": "^5.0.1",
+    "ant-design": "^1.0.0",
+    "antd": "^5.2.0",
+    "cjs": "^0.0.11",
     "cors": "^2.8.5",
-    "craco": "^0.0.3",
-    "craco-less": "^2.0.0",
-    "download": "^8.0.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
-    "http-proxy-middleware": "^2.0.6",
-    "node-fetch": "^3.2.10",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.1",
-    "redux-undo": "^1.0.1",
-    "source-map-loader": "^3.0.1",
-    "styled-components": "^5.3.5",
-    "umi": "^3.5.23",
-    "unzipper": "^0.10.11",
-    "use-undo": "^1.1.0",
-    "web-vitals": "^2.1.4",
-    "yarn": "^1.22.19"
+    "styled-components": "^5.3.6",
+    "use-undo": "^1.1.1"
   },
   "scripts": {
     "start": "node src/backend/server.js --experimental-fetch",
@@ -36,6 +22,7 @@
     "eject": "react-scripts eject",
     "dev": "DISABLE_ESLINT_PLUGIN=true react-scripts start"
   },
+  "homepage": ".",
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -1,6 +1,5 @@
 import { Table, Button, Form, message, Typography } from 'antd'
 import styled from 'styled-components'
-import './Register.css'
 import OptionsBar from './options-bar'
 import React, { useState } from 'react'
 
@@ -125,7 +124,7 @@ const ListProjects = () => (
             style={{
               'overflow-y': 'scroll',
               height: '300px',
-              fontSize: '1.4em'
+              // fontSize: '1.4em'
             }}
           >
             <p>

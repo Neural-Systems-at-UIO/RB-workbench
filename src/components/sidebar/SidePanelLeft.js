@@ -2,7 +2,7 @@ import { Menu, Layout } from 'antd'
 import React, { useState } from 'react'
 import ConfigProvider from '../ConfigProvider'
 
-import './SidePanelLeft.css'
+// import './SidePanelLeft.css'
 import {
   UserOutlined,
   TeamOutlined,

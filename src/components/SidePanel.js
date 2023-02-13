@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import './SidePanel.css'
+import '../styles/SidePanel.css'
 import React from 'react'
 export function handleButtonClick (e) {
   fetch('http://localhost:80/server.php').then(res => {
@@ -44,7 +44,7 @@ function SidePanel () {
         style={{
           marginBottom: '0px',
           marginTop: '40%',
-          fontSize: '1.5rem',
+          // fontSize: '1.5rem',
           border: '0.0625rem solid #f8fafb'
         }}
       >
@@ -68,7 +68,7 @@ function SidePanel () {
           overflowY: 'scroll',
           marginTop: '0',
           color: '#f8fafb',
-          fontSize: '1rem',
+          // fontSize: '1rem',
           border: '0.0625rem solid #f8fafb'
         }}
       >

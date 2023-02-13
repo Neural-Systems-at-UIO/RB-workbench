@@ -11,7 +11,6 @@ import ConfigProvider from './ConfigProvider'
 // import EditableRow from "./table/EditableRow";    // Todo move to separate file??
 // import EditableCell from "./table/EditableCell";  // Todo move to separate file??
 
-import '../styles/Register.css'
 import '../styles/options-bar.css'
 import metadata from '../metadata/metadata'
 import metadataDefinitions from '../metadata/metadata-definitions'
@@ -23,6 +22,12 @@ import subjectTableColumns from '../metadata/defaultTableColumns/subjectColumns'
 import tissueTableColumns from '../metadata/defaultTableColumns/tissueSampleColumns'
 import subjectGroupTableColumns from '../metadata/defaultTableColumns/subjectGroupColumns'
 import tscTableColumns from '../metadata/defaultTableColumns/tissueSampleCollectionColumns'
+
+
+
+import '../styles/Register.css'
+
+
 
 // Create a table context to pass to the table components
 // Todo: move to separate file for managing tables.
@@ -697,7 +702,7 @@ const EditableCell = ({
       <Select
         showSearch
         optionFilterProp="children"
-        placeholder="Select a option..."
+        placeholder="Select an option..."
         id="select"
         onChange={saveDropDown}
         value={children[1]}
@@ -705,7 +710,7 @@ const EditableCell = ({
         dropdownMatchSelectWidth={false}
         style={{
           width: '100%',
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
         filterOption={(input, option) =>
           option.children.toLowerCase().includes(input.toLowerCase())
@@ -728,7 +733,7 @@ const EditableCell = ({
                 ref={inputRef}
                 value={name}
                 onChange={onNameChange}
-                style={{ fontSize: '1em' }}
+                // style={{ fontSize: '2em' }}
               />
               <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
                 Add item

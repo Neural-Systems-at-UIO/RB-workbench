@@ -26,14 +26,14 @@
     margin-left: 0%;
     padding-left: 0%;
 
-    font-size: 1.2rem;
+    /* font-size: 1.2rem; */
     font-weight: bold;
     color: Red;
     border-radius: 0.3rem;
     cursor:pointer;
 }
-button:hover{
+/* button:hover{
     background-color:Red;
     color:black
     
-}
+} */

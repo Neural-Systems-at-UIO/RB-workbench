@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Table, Button, Form, Input, Select, Space, Divider } from 'antd'
 // import styled from 'styled-components'
-import '../frontend/styles/Register.css'
 // import OptionsBar from './options-bar.js'
 import metadata from '../frontend/metadata/metadata'
 import metadataDefinitions from '../frontend/metadata/metadata-definitions'
@@ -425,7 +424,7 @@ const EditableCell = ({
                   ref={inputRef}
                   value={name}
                   onChange={onNameChange}
-                  style={{ fontSize: '1em' }}
+                  // style={{ fontSize: '1em' }}
                 />
                 <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
                   Add item

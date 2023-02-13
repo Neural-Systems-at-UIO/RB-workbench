@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Tabs } from 'antd'
 import Icon from '@ant-design/icons'
-import '../styles/App.css'
+// import '../styles/App.css'
 import Register from './Register.js'
 import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
@@ -13,8 +13,11 @@ const { TabPane } = Tabs
 //   { label: 'Registration' },
 //   { label: 'Analysis' },
 //   { label: 'Projects' }
+
 // ]
-const workbench = () => {
+const Workbench = () => {
+  console.log('workbench')
+
   return (
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >
       <Layout style={{ height: '100vh' }}>
@@ -27,7 +30,7 @@ const workbench = () => {
               right: '8vw',
               top: '-4rem',
               // margin: '-2.5% 0 0 0px',
-              fontSize: '14em',
+              // fontSize: '14em',
               border: 0,
               zIndex: 1
             }}
@@ -66,4 +69,4 @@ const workbench = () => {
   )
 }
 
-export default workbench
+export default Workbench
