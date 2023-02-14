@@ -1,27 +1,37 @@
 import React from 'react'
-import { Layout, Tabs } from 'antd'
+import { Layout, Tabs, Avatar, Button, Popover, Card} from 'antd'
+import UserProfileCard from './UserProfileCard.js';
+import { UserOutlined } from '@ant-design/icons';
 import Icon from '@ant-design/icons'
 // import '../styles/App.css'
 import Register from './Register.js'
 import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
 // var perf = require('./sine-wave.html');
-
+import logUserOut from '../authentication/logOut.js';
+import getToken from '../authentication/authenticationUtilities'
 const { Content } = Layout
 const { TabPane } = Tabs
+
 // const items = [
 //   { label: 'Registration' },
 //   { label: 'Analysis' },
 //   { label: 'Projects' }
 
 // ]
-const Workbench = () => {
-  console.log('workbench')
 
+// import { AppDataContext } from '../authentication/AuthenticationContext.js'
+
+const Workbench = (props) => {
+  const token = props.token
+  console.log(token)
   return (
+
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >
       <Layout style={{ height: '100vh' }}>
+ 
         <Header style={{ height: '0vh' }}>
+     
           <Icon
             component={EbrainsLogo}
             style={{
@@ -35,8 +45,19 @@ const Workbench = () => {
               zIndex: 1
             }}
           />
-
+          <Popover placement="bottom" trigger="click" content={<UserProfileCard user={props.user}></UserProfileCard>}>
+            <div zIndex={9} onClick={() => {console.log('clicked')}} style={{
+              position: 'absolute',
+              zIndex:1,
+              float: 'left',
+              right: '8vw',
+            }}>
+            {/* <h1>test</h1> */}
+        <Avatar size={60} icon={<UserOutlined />}  />
+        </div>
+        </Popover>
   </Header>
+
   <Layout>
     <Content style={{ padding: '0 0', marginTop: '1vh' }}>
       <div

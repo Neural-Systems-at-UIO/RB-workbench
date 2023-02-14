@@ -6,26 +6,48 @@ import './styles/App.css'
 import './styles/index.css'
 
 
-
 import Workbench from './components/workbench.js'
 import fieldSelector from './dev/fieldSelector.js'
 // import ant css
 // import 'antd/dist/reset.css'
+import getUser from './authentication/GetUserInfo'
 // test if workbench is properly imported
+import getToken from './authentication/authenticationUtilities'
+// getToken().then(function (token) {
+  // 
+console.log(getToken)
 
+const App = () => {
+  // var APP_DATA  = React.useContext(AppDataContext)
+  // console.log('APP_DATA', APP_DATA)
+  const [loading, setLoading] = React.useState(true)
+  const [token, setToken] = React.useState(null)
+  const [user, setUser] = React.useState(null)
+  React.useEffect(() => {
+    console.log('useEffect')
+    getToken().then(function (token) {
+      setToken(token)
+      console.log('token')
+      console.log(token)
+      return token
+    })
+    .then(function (token)
+    {
+      getUser(token).then(function (user) {
+        console.log(user)
+        setUser(user.data)
+        setLoading(false)
 
-
-const App = () => (
-  <Router>
-  <Routes>
-  {/* replace the above component with element */}
-  <Route path="/app" element={<Workbench/>}/>
-
-  <Route path="/fieldSelector" component={fieldSelector} />
-  {/* for all unmatched routes send the user to the */}
-  </Routes>
-  </Router>
-
-)
-
+      })
+  })
+  }
+  , [])
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  return (
+    // <div/>
+    <Workbench token={token} user={user} />
+  )
+}
 export default App
