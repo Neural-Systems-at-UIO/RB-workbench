@@ -10,9 +10,13 @@ import { Header } from 'antd/lib/layout/layout'
 // var perf = require('./sine-wave.html');
 import logUserOut from '../authentication/logOut.js';
 import getToken from '../authentication/authenticationUtilities'
+import ProjectList from './ProjectListPage';
 const { Content } = Layout
 const { TabPane } = Tabs
 
+console.log('PL', ProjectList)
+
+// import ProjectPage from './ProjectPage.js';
 // const items = [
 //   { label: 'Registration' },
 //   { label: 'Analysis' },
@@ -74,9 +78,9 @@ const Workbench = (props) => {
 
         <Tabs type='card' className='TabWrapper' size='large'>
 
-          {/* <TabPane tab='Projects' key='1'>
-            <ProjectPage />
-          </TabPane> */}
+          <TabPane tab='Projects' key='1'>
+            <ProjectList />
+          </TabPane>
           <TabPane tab='Metadata' key='2'>
             <Register />
           </TabPane>

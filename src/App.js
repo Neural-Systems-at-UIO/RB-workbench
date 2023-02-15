@@ -4,7 +4,7 @@ import './styles/App.css'
 // import './styles/SidePanel.css'
 // import './styles/options-bar.css'
 import './styles/index.css'
-
+import { Layout, Spin } from 'antd'
 
 import Workbench from './components/workbench.js'
 import fieldSelector from './dev/fieldSelector.js'
@@ -23,8 +23,9 @@ const App = () => {
   const [loading, setLoading] = React.useState(true)
   const [token, setToken] = React.useState(null)
   const [user, setUser] = React.useState(null)
+  // console.log('App rerender')
   React.useEffect(() => {
-    console.log('useEffect')
+    // console.log('useEffect')
     getToken().then(function (token) {
       setToken(token)
       console.log('token')
@@ -42,8 +43,20 @@ const App = () => {
   })
   }
   , [])
+  // console.log('App prerender')
+
   if (loading) {
-    return <div>Loading...</div>
+    return    ( 
+    // <Layout style={{ height: '100vh' }}>
+    // center loading icon
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Spin size='large' style={{marginBottom:'6rem'}}>
+
+    <h1  style={{marginTop:'6rem'}}>Logging In</h1>
+    <div className="content" />
+  </Spin>
+   </div>
+    )
   }
   return (
     // <div/>
