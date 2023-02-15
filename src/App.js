@@ -1,6 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Route , Routes} from 'react-router-dom'
 import './styles/App.css'
+import ProjectList from './components/ProjectListPage.js';
+
 // import './styles/SidePanel.css'
 // import './styles/options-bar.css'
 import './styles/index.css'
@@ -23,10 +25,13 @@ const App = () => {
   const [loading, setLoading] = React.useState(true)
   const [token, setToken] = React.useState(null)
   const [user, setUser] = React.useState(null)
+  const [page, setPage] = React.useState('projectList')
   // console.log('App rerender')
   React.useEffect(() => {
     // console.log('useEffect')
     getToken().then(function (token) {
+      // clear url 
+      window.history.replaceState({}, document.title, "/app")
       setToken(token)
       console.log('token')
       console.log(token)
@@ -38,6 +43,7 @@ const App = () => {
         console.log(user)
         setUser(user.data)
         setLoading(false)
+        
 
       })
   })
@@ -58,9 +64,13 @@ const App = () => {
    </div>
     )
   }
-  return (
-    // <div/>
-    <Workbench token={token} user={user} />
-  )
+  if (page==='workbench') {return (
+
+    <Workbench token={token} user={user} setPage={setPage}  />
+
+  )}
+  if (page==='projectList') {return (
+    <ProjectList token={token} user={user} setPage={setPage} />
+  )}
 }
 export default App

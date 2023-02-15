@@ -1,28 +1,18 @@
 
 
-import {List, Avatar, Layout, Form, Button, Input} from 'antd';
-import Popup from './Popup';
+import {List, Modal, Avatar, Layout, Form, Button, Input, Popover} from 'antd';
+import  {ListElement} from './Popup';
+import { useState, useEffect } from 'react';
+import { Header } from 'antd/lib/layout/layout'
+import Icon from '@ant-design/icons'
+import UserProfileCard from './UserProfileCard.js';
+import { UserOutlined } from '@ant-design/icons';
+import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
+
 const { Content } = Layout
+
 const data = [
-    {
-      title: 'Ant Design Title 1',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-    },
-    {
-      title: 'Ant Design Title 2',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-
-    },
-    {
-      title: 'Ant Design Title 3',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-
-    },
-    {
-      title: 'Ant Design Title 4',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-
-    },
+ 
   ];
 // const ProjectList = (props) => {
 
@@ -42,7 +32,25 @@ const data = [
     //   />
     // )
 // }
+// const OptionsBar = (props) => (
+//     <div>
+//       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
+//         <Button onClick={() => { addData( {
+//       title: 'Ant Design Title 5',
+//       description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
 
+//     }, projectData, setProjectData)}}>Add new Project</Button>
+
+//       </div>
+//       <hr
+//         style={{
+//           backgroundColor: '#bfbfbf',
+//           border: 'none',
+//           height: '0.15rem'
+//         }}
+//       ></hr>
+//     </div>
+//   )
 const ModalContent = (props) => {
     return (
 
@@ -59,13 +67,96 @@ const ModalContent = (props) => {
 </Form>
     )
 }
+function getData() {
+    return data
+}
 
 const ProjectList = (props) => {
+    var [projectData, setProjectData] = useState([])
 
+
+    useEffect(() => {
+        setProjectData(getData())
+    }, [])
+
+
+    const addData = (projectData, setProjectData) => {
+     
+        var  tempTitle= ''
+        var tempDescription = ''
+
+        // launch a modal to get the new data
+        console.log(projectData)
+        const modal = Modal.confirm({
+            title: 'Add new Project',
+            content: <Form>
+            <Form.Item label="Title">
+                <Input placeholder="Title" onChange={(event) =>tempTitle = event.target.value} />
+            </Form.Item>
+            <Form.Item label="Description" onChange={(event) => tempDescription = event.target.value} >
+                <Input placeholder="Description" />
+            </Form.Item>
+            <Form.Item>
+            
+            </Form.Item>
+            </Form>,
+            icon: null,
+
+            onOk(title) {
+                let newData = {'title': tempTitle, 'description': tempDescription}
+            
+                setProjectData([...projectData, newData])
+                title()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+            });
+        // launch the modal
+        modal.update({
+            okText: 'Add',
+            cancelText: 'Cancel',
+
+            });
+
+        // get the new data from the modal
+       
+        
+        // add the new data to the projectData
+
+
+    }
 
     return (
+        
         <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
-
+        <Header style={{ height: '7vh' }}>
+     
+     <Icon
+       component={EbrainsLogo}
+       style={{
+         position: 'absolute',
+         float: 'left',
+         right: '8vw',
+         top: '-4rem',
+         // margin: '-2.5% 0 0 0px',
+         // fontSize: '14em',
+         border: 0,
+         zIndex: 1
+       }}
+     />
+     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={props.user}></UserProfileCard>}>
+       <div zIndex={9} onClick={() => {console.log('clicked')}} style={{
+         position: 'absolute',
+         zIndex:1,
+         float: 'left',
+         right: '8vw',
+       }}>
+       {/* <h1>test</h1> */}
+   <Avatar size={60} icon={<UserOutlined />}  />
+   </div>
+   </Popover>
+</Header>
         {/* <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft> */}
         
         <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
@@ -105,17 +196,30 @@ const ProjectList = (props) => {
                   width: '88vw'
                 }}
               >
-                {/* <OptionsBar /> */}
+                    <div>
+      <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
+        <Button onClick={() => {addData(projectData, setProjectData)}}>Add new Project</Button>
+
+      </div>
+      <hr
+        style={{
+          backgroundColor: '#bfbfbf',
+          border: 'none',
+          height: '0.15rem'
+        }}
+      ></hr>
+    </div>
+
                 <Form>
                 <List
         itemLayout="horizontal"
-        dataSource={data}
+        dataSource={projectData}
 
         
         renderItem={(item) => 
             (
 
-            <Popup ModalTitle='Edit Title and Description' itemTitle={item.title} itemDescription={item.description} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></Popup>
+            <ListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ListElement>
 
 
 

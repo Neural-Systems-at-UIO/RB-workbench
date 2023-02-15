@@ -1,7 +1,7 @@
 import { Button, Modal , Form, Input, List} from 'antd';
 import { useState } from 'react';
-const ListElement = (props) => {
-
+export const ListElement = (props) => {
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValues, setFormValues] = useState({'title': props.itemTitle, 'description': props.itemDescription})
   
@@ -32,6 +32,7 @@ const ListElement = (props) => {
     
     
                             <>
+                    <Button style={{marginRight:'1rem'}}  danger >Delete</Button>
                     <Button style={{marginRight:'1rem'}} onClick={showModal}>
                         {props.ButtonText}
                     </Button>
@@ -45,12 +46,14 @@ const ListElement = (props) => {
                 </>
     
     
-                <Button type="primary"> Launch Project</Button>
+                <Button type="primary" onClick={() => {props.setPage('workbench')}}> Launch Project</Button>
               </List.Item>
   );
 };
 
-function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription }) {
+    
+
+export function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription }) {
   const [title, setTitle] = useState(defaultTitle);
   const [description, setDescription] = useState(defaultDescription);
   const handleOK = (event) => {
@@ -79,4 +82,3 @@ function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription }) 
 
   );
   }
-export default ListElement;

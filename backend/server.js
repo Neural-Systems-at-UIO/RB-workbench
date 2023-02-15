@@ -103,7 +103,7 @@ function get_token(code, res) {
     client_secret: process.env.CLIENT_SECRET,
     redirect_uri: `${redirect_uri}/app`,
   });
-
+  
   // make POST request to get token
   axios({
     method: "post",
