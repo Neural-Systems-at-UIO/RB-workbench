@@ -1,4 +1,4 @@
-import { Menu, Layout } from 'antd'
+import { Menu, Layout , Button} from 'antd'
 import React, { useState } from 'react'
 import ConfigProvider from '../ConfigProvider'
 
@@ -6,7 +6,8 @@ import ConfigProvider from '../ConfigProvider'
 import {
   UserOutlined,
   TeamOutlined,
-  HeartOutlined
+  HeartOutlined,
+  RollbackOutlined 
 } from '@ant-design/icons'
 
 const { Sider } = Layout
@@ -39,7 +40,7 @@ function getItem (label, key, icon, children) {
   return item
 }
 
-function SidePanelLeft ({ onButtonClick }) {
+function SidePanelLeft ({ onButtonClick, setPage }) {
   const [collapsed, setCollapsed] = useState(false)
   const handleButtonClick = (item) => { onButtonClick(items[item.key - 1].label) }
 
@@ -49,12 +50,16 @@ function SidePanelLeft ({ onButtonClick }) {
         <ConfigProvider
         children = {<div></div>}
         >
+          <Button style={{marginTop:'3rem', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
+          <RollbackOutlined style={{fontSize:32}}/>
+          <p>Return to projects</p>
+          </Button>
           <Menu
             style={{
               backgroundColor: '#f8fafb',
               width: '256',
               height: '100%',
-              marginTop: '20px',
+              marginTop: '20rem',
               marginLeft: '5%',
               marginBottom: '200%'
             }}
