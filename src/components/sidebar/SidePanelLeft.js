@@ -13,22 +13,34 @@ const { Sider } = Layout
 
 const items = [
   getItem('Subject', '1', <UserOutlined />),
-  getItem('SubjectGroup', '2', <TeamOutlined />),
-  getItem('TissueSample', '3', <HeartOutlined/>),
+  getItem('TissueSample', '2', <HeartOutlined/>),
+  getItem('SubjectGroup', '3', <TeamOutlined />),
   getItem('TissueSampleCollection', '4', <HeartOutlined/>)]
 
+const itemGroups = [
+  getItem('Individual specimen', 'menu1', [], items.slice(0,2) ),
+  getItem('Specimen sets', 'menu2', [], items.slice(2,4) ) 
+]
+
+// Function for creating a menu item
 function getItem (label, key, icon, children) {
-  return {
+
+  let item = {
     key,
     icon,
     children,
     label
   }
+
+  if (children !== undefined) {
+    item.type = 'group';
+  }
+
+  return item
 }
 
 function SidePanelLeft ({ onButtonClick }) {
   const [collapsed, setCollapsed] = useState(false)
-
   const handleButtonClick = (item) => { onButtonClick(items[item.key - 1].label) }
 
   return (
@@ -47,10 +59,9 @@ function SidePanelLeft ({ onButtonClick }) {
               marginBottom: '200%'
             }}
             defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
             multiple={false}
-            mode={'vertical'}
-            items={items}
+            mode={'inline'}
+            items={itemGroups}
             onSelect={ handleButtonClick }
           />
         </ConfigProvider>
