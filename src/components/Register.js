@@ -12,54 +12,22 @@ import ConfigProvider from './ConfigProvider'
 // import EditableCell from "./table/EditableCell";  // Todo move to separate file??
 
 import '../styles/options-bar.css'
+import '../styles/Register.css'
+
+import tables from '../metadata_new/schemaTables'
 import metadata from '../metadata/metadata'
 import metadataDefinitions from '../metadata/metadata-definitions'
+
+//Todo: Use these instead of above:
+//import metadata from '../metadata/controlledInstances'
+//import metadataDefinitions from '../metadata/controlledInstancesDefinitions'
+
 
 import { widthCalc, widthCalcDropdown } from '../helpers/widthCalc'
 import { convertTableToCSV } from '../helpers/csvAdapter'
 
-import subjectTableColumns from '../metadata/defaultTableColumns/subjectColumns'
-import tissueTableColumns from '../metadata/defaultTableColumns/tissueSampleColumns'
-import subjectGroupTableColumns from '../metadata/defaultTableColumns/subjectGroupColumns'
-import tscTableColumns from '../metadata/defaultTableColumns/tissueSampleCollectionColumns'
 
-
-
-import '../styles/Register.css'
-
-
-
-// Create a table context to pass to the table components
-// Todo: move to separate file for managing tables.
-// Todo: Add special properties to keep track of ids/column variables 
-//       that are used across tables.
-const tables = {
-  Subject: {
-    columnProps: subjectTableColumns,
-    variableNames: subjectTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null,
-    dependentVariables: {IsPartOf: {SubjectGroup: 'SubjectGroupID'}}
-  },
-  SubjectGroup: {
-    columnProps: subjectGroupTableColumns,
-    variableNames: subjectGroupTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null,
-    dependentVariables: {}
-  },
-  TissueSample: {
-    columnProps: tissueTableColumns,
-    variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null,
-    dependentVariables: {IsPartOf: {TissueSampleCollection: 'TissueSampleCollectionID'}, DescendedFromSubjectID: {Subject: 'SubjectID'}}
-  },
-  TissueSampleCollection: {
-    columnProps: tscTableColumns,
-    variableNames: tscTableColumns.map((column) => column.key), // key or dataIndex?
-    data: null,
-    dependentVariables: {DescendedFromSubjectID: {Subject: 'SubjectID'}}
-  },
-  ActiveTableName: 'Subject'
-} // Use context???
+// Todo: Create a table context to pass to the table components
 
 const { Content } = Layout
 // const EditableContext = React.createContext(null);
@@ -76,7 +44,6 @@ function MetadataTable (props) {
   const [currentTableName, setCurrentTableName] = useState(nextTableName)
 
   const currentTable = tables[nextTableName]
-
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps)
   const [statefulmetadata, setstatefulmetadata] = useState(metadata)
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
@@ -98,6 +65,7 @@ function MetadataTable (props) {
   function updateTableData (newData, useCheckpoint) {
 
     // Ask Harry: What are checkpoints for?
+    // If checkpoint is true, the current state is saved in the past array
     if (useCheckpoint === undefined) {
       useCheckpoint = false
     }
@@ -245,8 +213,19 @@ function MetadataTable (props) {
 
         // let new_data = convertCSVToTable(content);
         // convert to JSON
-        const newData = JSON.parse(content)
+        let newData = JSON.parse(content)
+
+        console.log('loaded:', newData)
         
+        // Loop through all keys in the tables object and create an array of the data from each table
+        Object.keys(tables).forEach( (key, index) => { 
+          console.log('key:', key, 'index:', index)
+          if (key !== 'ActiveTableName') {
+            tables[key].data = newData[index] 
+          }
+        })
+        
+        newData = tables[currentTableName].data;
         updateTableData(newData)
       }
     }
@@ -275,6 +254,20 @@ function MetadataTable (props) {
     setSelected([])
   }
 
+  const makeSubjects = () => {
+    // NOTE: Not working yet
+    // TODO: newSubject should be an initialized subject row
+    // Make subjects for each item in a subject group
+    let temp_ = presentDS
+    let newSubjects = []
+    for (let i = 0; i < selRows.length; i++) {
+      let newSubject = {}
+      newSubjects.push(newSubject)
+    }
+    temp_ = temp_.concat(newSubjects)
+    updateTableData(temp_)
+  }
+
   const OptionsBar = () => (
     <div>
       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
@@ -286,6 +279,7 @@ function MetadataTable (props) {
         {/* <Button onClick={DownloadJSon}>Download CSV</Button> */}
         <Button onClick={UploadCSV}>Upload CSV</Button>
         <Button onClick={handleDelete} type="default" danger>Delete</Button>
+        {currentTableName==="SubjectGroup" ? <Button onClick={makeSubjects}>Make Subjects</Button> : null}
         {/* {{ add_button }} */}
       </div>
       <hr
@@ -506,6 +500,7 @@ const EditableCell = ({
     }
   }, [editing])
 
+
   const toggleEdit = () => {
     setEditing(!editing)
 
@@ -603,8 +598,9 @@ const EditableCell = ({
   if (select) {
 
     // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
+    // From Harry: 
     const currentTableName = tables.ActiveTableName
-
+    
     if ( tables[currentTableName].dependentVariables[dataIndex] ) {
       const dependentTableName = Object.keys( tables[currentTableName].dependentVariables[dataIndex] )[0]
       const dependentVariableName = tables[currentTableName].dependentVariables[dataIndex][dependentTableName];
@@ -746,6 +742,7 @@ const EditableCell = ({
       </Select>
         )
   }
+
   return <td {...restProps}>{childNode}</td>
 }
 
