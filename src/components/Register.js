@@ -758,7 +758,7 @@ const MetadataPage = (props) => {
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
 
-      <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft>
+      <SidePanelLeft setPage={props.setPage} onButtonClick={handleSelectTable}></SidePanelLeft>
       
       <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
 

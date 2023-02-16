@@ -78,7 +78,7 @@ const Workbench = (props) => {
 
     
           <TabPane tab='Metadata' key='2'>
-            <Register />
+            <Register setPage = {props.setPage}/>
           </TabPane>
           {/* <TabPane tab='Analysis' key='3'></TabPane> */}
         </Tabs>
