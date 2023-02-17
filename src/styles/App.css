@@ -145,6 +145,15 @@
   clip-path: (15.625rem 15.625rem 15.625rem 0rem);
 }
 
+.ant-menu-title-content {
+  text-align: left;
+}
+
+li {
+  display: list-item;
+  text-align: left;
+}
+
 
 /* set font size for whole website to 14pt */
 /* html {
