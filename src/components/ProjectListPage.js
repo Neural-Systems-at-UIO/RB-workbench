@@ -14,44 +14,8 @@ const { Content } = Layout
 const data = [
  
   ];
-// const ProjectList = (props) => {
 
-//     return (
-    //     <List
-    //     itemLayout="horizontal"
-    //     dataSource={data}
-    //     renderItem={(item) => (
-    //       <List.Item>
-    //         <List.Item.Meta
-    //           avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-    //           title={<a href="https://ant.design">{item.title}</a>}
-    //           description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-    //         />
-    //       </List.Item>
-    //     )}
-    //   />
-    // )
-// }
-// const OptionsBar = (props) => (
-//     <div>
-//       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
-//         <Button onClick={() => { addData( {
-//       title: 'Ant Design Title 5',
-//       description: 'Ant Design, a design language for background applications, is refined by Ant UED Team',
-
-//     }, projectData, setProjectData)}}>Add new Project</Button>
-
-//       </div>
-//       <hr
-//         style={{
-//           backgroundColor: '#bfbfbf',
-//           border: 'none',
-//           height: '0.15rem'
-//         }}
-//       ></hr>
-//     </div>
-//   )
-const ModalContent = (props) => {
+const ModalContent = () => {
     return (
 
 <Form>
@@ -67,8 +31,25 @@ const ModalContent = (props) => {
 </Form>
     )
 }
-function getData() {
-    return data
+function getData(user) {
+  return new Promise((resolve, reject) => {
+    fetch(`https://localhost:8080/get_projects?user=${user}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+
+        },
+  
+    }).then((response) => {
+        return response.json()
+    }).then((data) => {
+      console.log(data)
+        resolve(data)
+      
+    }).catch((error) => {
+        reject(error)
+    })
+  })
 }
 
 const ProjectList = (props) => {
@@ -76,7 +57,9 @@ const ProjectList = (props) => {
 
 
     useEffect(() => {
-        setProjectData(getData())
+        getData(props.user["http://schema.org/alternateName"]).then((projects => {
+            setProjectData(projects)
+            }))
     }, [])
 
 
@@ -104,7 +87,20 @@ const ProjectList = (props) => {
 
             onOk(title) {
                 let newData = {'title': tempTitle, 'description': tempDescription}
-            
+                // call the backend to add the new data
+                fetch('https://localhost:8080/set_project', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+
+                    },
+                    body: JSON.stringify({
+                        user: props.user["http://schema.org/alternateName"],
+                        project: tempTitle,
+                        description: tempDescription
+                    })
+                })  
+                // add the new data to the projectData
                 setProjectData([...projectData, newData])
                 title()
             },
@@ -170,14 +166,8 @@ const ProjectList = (props) => {
             <div
               className='MainPanel'
               style={{
-                // required
-                // borderRadius: '0 0 0 0', // required
-                // borderRadius: '1.5625rem 0   0 1.5625rem',
-  
-                // padding: '2% 1% 1% 1%',
-                // margin: '1% 1% 2% 1%'
+
                 margin: '-0.7% 0 0 0',
-                // boxShadow: '0.4375rem 1.5625rem 1.75rem 0.375rem rgba(1, 1, 2, 0.6)',
   
                 clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
               }}

@@ -7,12 +7,14 @@ const path = require('path') // Path is used for creating file paths
 const fileUpload = require('express-fileupload')
 // This app is deployed on OpenShift, and containers in OpenShift should bind to
 // any address, which is designated with 0.0.0.0 and use port 8080 by default
-
+const bodyParser = require('body-parser')
 // const ip = process.env.IP || '0.0.0.0'
 const port = process.env.PORT || 8080
 const cors = require('cors')
 const axios = require('axios')
-console.log(process.env.NODE_ENV)
+const fs = require('fs')
+
+console.log('env', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development') {
   
   var app = require('https-localhost')()
@@ -21,6 +23,8 @@ if (process.env.NODE_ENV === 'development') {
 else {
   var app = express()
 }
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 // cors enables cross origin resource sharing
 cors({origin: '*'})
 app.use(function (req, res, next) {
@@ -174,7 +178,66 @@ app.get('/getuser', function (req, res) {
   })
 })
 
+function get_projects(user) {
+  return new Promise((resolve, reject) => {
+    // read from local storage
+    //  the path is ./persistent_storage/projects.json
+    let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
+    let user_projects = projects.map((project) => {
+      if (project.owner === user) {
+        return project
+      }
+    }
+    )
+    console.log('user', user)
+    console.log('user projects: ', user_projects)
+    resolve(user_projects)
 
+  })
+
+}
+
+function set_project(user, project, description) {
+  console.log('-------------------------------------')
+  console.log(user, project)
+  return new Promise((resolve, reject) => {
+    // read from local storage
+    //  the path is ./persistent_storage/projects.json
+    let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
+    // add the project to the projects under the user
+    projects.push({ owner: user, title: project, description: description})
+    // write the projects to the local storage
+    fs.writeFile('./persistent_storage/projects.json', JSON.stringify(projects), (err) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        resolve('success')
+      }
+    })
+
+  })
+}
+
+
+app.get('/get_projects', function (req, res) {
+  console.log('here')
+  console.log(req.method)
+  let user = req.query.user
+  get_projects(user).then(function (result) {
+    res.send(result)
+  })
+})
+
+app.post('/set_project', function (req, res) {
+
+  let user = req.body.user
+  let project = req.body.project
+  let description = req.body.description
+  set_project(user, project, description).then(function (result) {
+    res.send(result)
+  })
+})
 app.use(express.static(path.resolve(__dirname, '../build/')));
 
 
