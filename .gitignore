@@ -26,3 +26,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 nb-db/www/www
+persistent_storage/projects.json
