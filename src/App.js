@@ -67,10 +67,10 @@ const App = () => {
     )
   }
   if (page==='workbench') {
-    console.log('app project', project)
+    console.log('app user', user)
 
     return (
-    <Workbench token={token} user={user} setPage={setPage} project={project} />
+    <Workbench token={token} user={user} setPage={setPage} page={page} project={project} />
 
   )}
   if (page==='projectList') {return (

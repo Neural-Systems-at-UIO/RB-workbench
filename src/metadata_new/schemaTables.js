@@ -21,6 +21,7 @@ import tscTableColumns from '../metadata/defaultTableColumns/tissueSampleCollect
 console.log(subjectTableColumns)
 
 const tables = {
+
     Subject: {
       columnProps: subjectTableColumns,
       variableNames: subjectTableColumns.map((column) => column.key), // key or dataIndex?
@@ -48,6 +49,6 @@ const tables = {
     ActiveTableName: 'Subject'
   } // Use context???
 
-  console.log('aaa')
 
-  export default tables
+
+export default tables

@@ -14,7 +14,7 @@ import ConfigProvider from './ConfigProvider'
 import '../styles/options-bar.css'
 import '../styles/Register.css'
 
-import tables from '../metadata_new/schemaTables'
+import init_tables from '../metadata_new/schemaTables'
 import metadata from '../metadata/metadata'
 import metadataDefinitions from '../metadata/metadata-definitions'
 
@@ -36,17 +36,37 @@ const { Option } = Select
 let history = []
 let selRows = []
 
+
 // Todo: move to separate file for managing tables.
 function MetadataTable (props) {
   var nextTableName = props.nextTableName
 
   // this is weird, how should it be done?
   const [currentTableName, setCurrentTableName] = useState(nextTableName)
+  const [tables, setTables] = useState(init_tables)
+  const [statefulmetadata, setstatefulmetadata] = useState(metadata)
+  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
+  
+  useEffect(() => {
+    fetch('https://localhost:8080/readTable?project='+props.project+'&user='+props.user["http://schema.org/alternateName"]) 
+    .then(response => response.json())
+    .then(data => {
+      console.log('fetched')
+      console.log(data)
+      if (data!='no table'){
+      console.log('tables')
+      console.log(tables)
+      console.log('---------------------')
+      console.log('data')
+      console.log(data)
+      setTables(data)
+      setCurrentTableName(data.ActiveTableName)
+      }
+    })
+  }, [props.page])
 
   const currentTable = tables[nextTableName]
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps)
-  const [statefulmetadata, setstatefulmetadata] = useState(metadata)
-  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions)
 
   function createBlankRow (rowNumber) {
     if (rowNumber === undefined) {
@@ -170,13 +190,11 @@ function MetadataTable (props) {
   }
 
   const postTableData = () => {
-    const allTables = Object.keys(tables).map((key) => {
-      return tables[key].data
-    })
+    
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
     console.log('reg_project: ', props.project)
-    let data = { 'table': allTables, 'user' : 'test', 'project' : props.project}
+    let data = { 'table': tables, 'user' : props.user["http://schema.org/alternateName"], 'project' : props.project}
     fetch ('https://localhost:8080/writeTable', {
       method: 'POST',
       headers: {
@@ -450,7 +468,8 @@ function MetadataTable (props) {
         statefulmetadata,
         statefulmetadataDefinitions,
         setstatefulmetadata,
-        setstatefulmetadataDefinitions
+        setstatefulmetadataDefinitions,
+        tables
       })
     }
   })
@@ -507,6 +526,7 @@ const EditableCell = ({
   statefulmetadataDefinitions,
   setstatefulmetadata,
   setstatefulmetadataDefinitions,
+  tables,
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false)
@@ -811,7 +831,7 @@ const MetadataPage = (props) => {
             >
               {/* <OptionsBar /> */}
               <Form>
-                <MetadataTable project={props.project} nextTableName={currentTableName} children={''}></MetadataTable>
+                <MetadataTable project={props.project} nextTableName={currentTableName} children={''} user={props.user} page={props.page}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>

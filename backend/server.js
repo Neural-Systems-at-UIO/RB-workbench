@@ -248,6 +248,29 @@ function writeTable(table, project, user) {
   
 }
 
+function readTable (user, project) {
+  let path = `./persistent_storage/${user}/${project}.json`
+  return new Promise((resolve, reject) => {
+    try{
+      // check if the file exists
+    if (!fs.existsSync(path)) {
+      resolve(null)
+     
+    }
+    else {
+    let openFile = fs.readFileSync(path, 'utf8')
+    let table = JSON.parse(openFile)
+    resolve(table)
+    }
+
+    }
+    catch(err) {
+      console.log(err)
+      reject(err)
+    }
+
+  })
+}
 
 
 app.post('/writeTable', function (req, res) {
@@ -260,6 +283,22 @@ app.post('/writeTable', function (req, res) {
     res.send(result)
   })
 })
+
+
+app.get('/readTable', function (req, res) {
+  let project = req.query.project
+  let user = req.query.user
+  readTable(user, project).then(function (result) {
+    if (result === null) {
+      res.send(JSON.stringify('no table'))
+    }
+    else {
+    res.send(result)
+    }
+  })
+})
+
+
 app.get('/get_projects', function (req, res) {
   console.log('here')
   console.log(req.method)
