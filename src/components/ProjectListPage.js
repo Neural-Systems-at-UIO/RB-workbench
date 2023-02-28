@@ -86,6 +86,7 @@ const ProjectList = (props) => {
             icon: null,
 
             onOk(title) {
+
                 let newData = {'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 fetch('https://localhost:8080/set_project', {
@@ -209,7 +210,7 @@ const ProjectList = (props) => {
         renderItem={(item) => 
             (
 
-            <ListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ListElement>
+            <ListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ListElement>
 
 
 

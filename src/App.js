@@ -26,6 +26,8 @@ const App = () => {
   const [token, setToken] = React.useState(null)
   const [user, setUser] = React.useState(null)
   const [page, setPage] = React.useState('projectList')
+  // this can be used instead of setPage to set the page to workbench (when it is not null then render workbench)
+  const [project, setProject] = React.useState(null)
   // console.log('App rerender')
   React.useEffect(() => {
     // console.log('useEffect')
@@ -64,13 +66,15 @@ const App = () => {
    </div>
     )
   }
-  if (page==='workbench') {return (
+  if (page==='workbench') {
+    console.log('app project', project)
 
-    <Workbench token={token} user={user} setPage={setPage}  />
+    return (
+    <Workbench token={token} user={user} setPage={setPage} project={project} />
 
   )}
   if (page==='projectList') {return (
-    <ProjectList token={token} user={user} setPage={setPage} />
+    <ProjectList token={token} user={user} setPage={setPage} setProject={setProject} />
   )}
 }
 export default App

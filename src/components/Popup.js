@@ -46,7 +46,9 @@ export const ListElement = (props) => {
                 </>
     
     
-                <Button type="primary" onClick={() => {props.setPage('workbench')}}> Launch Project</Button>
+                <Button type="primary" onClick={() => {
+                  props.setProject(formValues.title)
+                  props.setPage('workbench')}}> Launch Project</Button>
               </List.Item>
   );
 };

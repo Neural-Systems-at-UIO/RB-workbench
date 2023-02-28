@@ -1,32 +1,24 @@
 import React from 'react'
-import { Layout, Tabs, Avatar, Button, Popover, Card} from 'antd'
+import { Layout, Tabs, Avatar,Popover} from 'antd'
 import UserProfileCard from './UserProfileCard.js';
 import { UserOutlined } from '@ant-design/icons';
 import Icon from '@ant-design/icons'
-// import '../styles/App.css'
+
 import Register from './Register.js'
 import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
-// var perf = require('./sine-wave.html');
-import logUserOut from '../authentication/logOut.js';
-import getToken from '../authentication/authenticationUtilities'
+
 const { Content } = Layout
 const { TabPane } = Tabs
 
 
-// import ProjectPage from './ProjectPage.js';
-// const items = [
-//   { label: 'Registration' },
-//   { label: 'Analysis' },
-//   { label: 'Projects' }
 
-// ]
-
-// import { AppDataContext } from '../authentication/AuthenticationContext.js'
 
 const Workbench = (props) => {
   const token = props.token
   console.log(token)
+  console.log('wb_project', props.project)
+
   return (
 
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >
@@ -41,8 +33,6 @@ const Workbench = (props) => {
               float: 'left',
               right: '8vw',
               top: '-4rem',
-              // margin: '-2.5% 0 0 0px',
-              // fontSize: '14em',
               border: 0,
               zIndex: 1
             }}
@@ -54,7 +44,6 @@ const Workbench = (props) => {
               float: 'left',
               right: '8vw',
             }}>
-            {/* <h1>test</h1> */}
         <Avatar size={60} icon={<UserOutlined />}  />
         </div>
         </Popover>
@@ -78,7 +67,7 @@ const Workbench = (props) => {
 
     
           <TabPane tab='Metadata' key='2'>
-            <Register setPage = {props.setPage}/>
+            <Register setPage = {props.setPage} user = {props.user} project={props.project}/>
           </TabPane>
           {/* <TabPane tab='Analysis' key='3'></TabPane> */}
         </Tabs>

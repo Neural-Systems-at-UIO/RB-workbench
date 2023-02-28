@@ -218,8 +218,48 @@ function set_project(user, project, description) {
 
   })
 }
+function writeTable(table, project, user) {
+  return new Promise((resolve, reject) => {
+    let folderPath = `./persistent_storage/${user}/`
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath)
+    }
+    let path = `./persistent_storage/${user}/${project}.json`
+    // write the projects to the local storage
+    fs.open(path, 'w', (err, fd) => {
+      if(err) {
+        console.log('Cannot open file: ' + err)
+        reject(err)
+
+      }
+      else {
+        fs.write(fd, table, (err) => {
+          if(err) {
+            console.log('Cannot write file: ' + err)
+            reject(err)
+          }
+          else {
+            resolve('success')
+          }
+        })
+      }
+  })
+  })
+  
+}
 
 
+
+app.post('/writeTable', function (req, res) {
+  let table = req.body.table
+  let project = req.body.project
+  let user = req.body.user
+  // convert the table to a string
+  table = JSON.stringify(table)
+  writeTable(table, project, user).then(function (result) {
+    res.send(result)
+  })
+})
 app.get('/get_projects', function (req, res) {
   console.log('here')
   console.log(req.method)

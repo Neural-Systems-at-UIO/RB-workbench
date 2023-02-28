@@ -169,6 +169,23 @@ function MetadataTable (props) {
     document.body.removeChild(a)
   }
 
+  const postTableData = () => {
+    const allTables = Object.keys(tables).map((key) => {
+      return tables[key].data
+    })
+    // this will be rewritten as a web socket eventually as its nice to have two way communication
+    // also it is insane to post the entire table every time a single value is changed but YOLO
+    console.log('reg_project: ', props.project)
+    let data = { 'table': allTables, 'user' : 'test', 'project' : props.project}
+    fetch ('https://localhost:8080/writeTable', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+  }
+
   const downLoadAllTablesToJson = () => {
 
     let filename = 'labbook_metadata_table.json';
@@ -408,6 +425,7 @@ function MetadataTable (props) {
     DataSource.past = [...DataSource.past, [...tempDataObj]]
 
     tables[currentTableName].data = [...OldData]
+    postTableData()
   }
 
   const components = {
@@ -793,7 +811,7 @@ const MetadataPage = (props) => {
             >
               {/* <OptionsBar /> */}
               <Form>
-                <MetadataTable nextTableName={currentTableName} children={''}></MetadataTable>
+                <MetadataTable project={props.project} nextTableName={currentTableName} children={''}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>
