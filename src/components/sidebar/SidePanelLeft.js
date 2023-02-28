@@ -7,7 +7,8 @@ import {
   UserOutlined,
   TeamOutlined,
   HeartOutlined,
-  RollbackOutlined 
+  RollbackOutlined,
+  HomeOutlined
 } from '@ant-design/icons'
 
 const { Sider } = Layout
@@ -51,7 +52,7 @@ function SidePanelLeft ({ onButtonClick, setPage }) {
         children = {<div></div>}
         >
           <Button style={{marginTop:'3rem', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
-          <RollbackOutlined style={{fontSize:32}}/>
+          <HomeOutlined style={{fontSize:32}}/>
           <p>Return to projects</p>
           </Button>
           <Menu

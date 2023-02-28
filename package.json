@@ -11,6 +11,8 @@
     "cors": "^2.8.5",
     "download": "^8.0.0",
     "express-fileupload": "^1.4.0",
+    "force": "^0.0.3",
+    "nodemon": "^2.0.20",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
@@ -24,7 +26,7 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "(HTTPS=true PORT=3000 react-scripts start & NODE_ENV=development nodemon backend/server.js --experimental-fetch)"
+    "dev": "(HTTPS=true PORT=3000 react-scripts start & NODE_ENV=development node backend/server.js --experimental-fetch)"
   },
   "homepage": ".",
   "eslintConfig": {
