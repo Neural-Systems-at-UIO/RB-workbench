@@ -51,7 +51,7 @@ function SidePanelLeft ({ onButtonClick, setPage }) {
         <ConfigProvider
         children = {<div></div>}
         >
-          <Button style={{marginTop:'3rem', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
+          <Button style={{marginTop:'5vh', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
           <HomeOutlined style={{fontSize:32}}/>
           <p>Return to projects</p>
           </Button>
@@ -60,7 +60,7 @@ function SidePanelLeft ({ onButtonClick, setPage }) {
               backgroundColor: '#f8fafb',
               width: '256',
               height: '100%',
-              marginTop: '20rem',
+              marginTop: '5vh',
               marginLeft: '5%',
               marginBottom: '200%'
             }}
