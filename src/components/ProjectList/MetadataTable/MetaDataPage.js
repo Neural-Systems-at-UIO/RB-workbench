@@ -48,6 +48,12 @@ const MetadataPage = (props) => {
   const handleSelectTable = (selectedTableName) => {
     setCurrentTableName(selectedTableName)
   }
+
+  const specimenTable = props.projectDataTable[currentTableName];
+  console.log('metadataPage', specimenTable)
+
+
+
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
 
@@ -89,7 +95,7 @@ const MetadataPage = (props) => {
             >
               {/* <OptionsBar /> */}
               <Form>
-                <MetadataTable project={props.project} nextTableName={currentTableName} children={''} user={props.user} page={props.page}></MetadataTable>
+                <MetadataTable project={props.project} nextTableName={currentTableName} children={''} user={props.user} page={props.page} projectDataTable={props.projectDataTable}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>

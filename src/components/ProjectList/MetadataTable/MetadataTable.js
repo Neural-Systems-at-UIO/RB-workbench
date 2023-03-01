@@ -16,16 +16,17 @@ export function MetadataTable(props) {
   var selRows = [];
   var history = [];
   // this is weird, how should it be done?
+
   const [currentTableName, setCurrentTableName] = useState(nextTableName);
-  const [tables, setTables] = useState(init_tables);
+  // const currentTableName = 'Subject'
+  // const currentTableName = 'Subject'
+  const tables = props.projectDataTable;
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
+  console.log('rerendering', props.projectDataTable)
 
-
-
-  const currentTable = tables[nextTableName];
+  const currentTable = props.projectDataTable[nextTableName];
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
-
   function createBlankRow(rowNumber) {
     if (rowNumber === undefined) {
       rowNumber = 1;
@@ -48,7 +49,7 @@ export function MetadataTable(props) {
       useCheckpoint = false;
     }
 
-    tables[currentTableName].data = newData;
+    props.projectDataTable[currentTableName].data = newData;
     SetDataSource(newData, useCheckpoint);
 
     currentTable.data = newData;
@@ -62,8 +63,8 @@ export function MetadataTable(props) {
 
   if (currentTableName !== nextTableName) {
     // save current (will be previous) state
-    tables[currentTableName].columnProps = statefulColumns;
-    tables.ActiveTableName = nextTableName;
+    props.projectDataTable[currentTableName].columnProps = statefulColumns;
+    props.projectDataTable.ActiveTableName = nextTableName;
 
     resetDataSource(currentTable.data);
 
@@ -205,14 +206,14 @@ export function MetadataTable(props) {
         console.log('loaded:', newData);
 
         // Loop through all keys in the tables object and create an array of the data from each table
-        Object.keys(tables).forEach((key, index) => {
+        Object.keys(props.projectDataTable).forEach((key, index) => {
           console.log('key:', key, 'index:', index);
           if (key !== 'ActiveTableName') {
-            tables[key].data = newData[index];
+            props.projectDataTable[key].data = newData[index];
           }
         });
 
-        newData = tables[currentTableName].data;
+        newData = props.projectDataTable[currentTableName].data;
         updateTableData(newData);
       };
     };
@@ -394,9 +395,10 @@ export function MetadataTable(props) {
     history = [...history, tempDataObj];
     DataSource.past = [...DataSource.past, [...tempDataObj]];
 
-    tables[currentTableName].data = [...OldData];
+    props.projectDataTable[currentTableName].data = [...OldData];
     postTableData();
   };
+  // updateTableData(currentTable.data);
 
   const components = {
     body: {

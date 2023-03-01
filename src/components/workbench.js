@@ -39,7 +39,7 @@ const Workbench = (props) => {
 
     
           <TabPane tab='Metadata' key='2'>
-            <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project}/>
+            <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
           </TabPane>
           {/* <TabPane tab='Analysis' key='3'></TabPane> */}
         </Tabs>
