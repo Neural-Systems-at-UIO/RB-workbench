@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import useUndo from 'use-undo';
-import ConfigProvider from './ConfigProvider';
-import init_tables from '../metadata_new/schemaTables';
-import metadata from '../metadata/metadata';
-import metadataDefinitions from '../metadata/metadata-definitions';
-import { widthCalc, widthCalcDropdown } from '../helpers/widthCalc';
-import { convertTableToCSV } from '../helpers/csvAdapter';
-import { EditableRow } from './Register';
+import ConfigProvider from '../../ConfigProvider';
+import init_tables from '../../../metadata_new/schemaTables';
+import metadata from '../../../metadata/metadata';
+import metadataDefinitions from '../../../metadata/metadata-definitions';
+import { widthCalc, widthCalcDropdown } from '../../../helpers/widthCalc';
+import { convertTableToCSV } from '../../../helpers/csvAdapter';
+import { EditableRow } from './MetaDataPage';
 import { EditableCell } from "./EditableCell";
 
 // Todo: move to separate file for managing tables.
@@ -21,23 +21,7 @@ export function MetadataTable(props) {
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
 
-  useEffect(() => {
-    fetch('https://localhost:8080/readTable?project=' + props.project + '&user=' + props.user["http://schema.org/alternateName"])
-      .then(response => response.json())
-      .then(data => {
-        console.log('fetched');
-        console.log(data);
-        if (data != 'no table') {
-          console.log('tables');
-          console.log(tables);
-          console.log('---------------------');
-          console.log('data');
-          console.log(data);
-          setTables(data);
-          setCurrentTableName(data.ActiveTableName);
-        }
-      });
-  }, [props.page]);
+
 
   const currentTable = tables[nextTableName];
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);

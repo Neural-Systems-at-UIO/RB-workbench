@@ -1,19 +1,17 @@
 
 
 import {List, Modal, Avatar, Layout, Form, Button, Input, Popover} from 'antd';
-import  {ListElement} from './Popup';
+import  {ListElement} from './ListElement';
 import { useState, useEffect } from 'react';
 import { Header } from 'antd/lib/layout/layout'
 import Icon from '@ant-design/icons'
-import UserProfileCard from './UserProfileCard.js';
+import UserProfileCard from '../UserProfileCard';
 import { UserOutlined } from '@ant-design/icons';
-import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
+import { ReactComponent as EbrainsLogo } from '../../resources/ebrains-ai-cropped.svg'
 
 const { Content } = Layout
 
-const data = [
- 
-  ];
+
 
 const ModalContent = () => {
     return (
@@ -52,17 +50,23 @@ function getData(user) {
   })
 }
 
+
+
+
+
 const ProjectList = (props) => {
-    var [projectData, setProjectData] = useState([])
+    var [projectData, setProjectData] = useState([]) // Project data is an array of all projects for the user
 
 
     useEffect(() => {
         getData(props.user["http://schema.org/alternateName"]).then((projects => {
             setProjectData(projects)
             }))
-    }, [])
+    }, []) 
 
 
+    
+    
     const addData = (projectData, setProjectData) => {
      
         var  tempTitle= ''
@@ -126,37 +130,12 @@ const ProjectList = (props) => {
 
     return (
         
-        <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
-        <Header style={{ height: '7vh' }}>
-     
-     <Icon
-       component={EbrainsLogo}
-       style={{
-         position: 'absolute',
-         float: 'left',
-         right: '8vw',
-         top: '-4rem',
-         // margin: '-2.5% 0 0 0px',
-         // fontSize: '14em',
-         border: 0,
-         zIndex: 1
-       }}
-     />
-     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={props.user}></UserProfileCard>}>
-       <div zIndex={9} onClick={() => {console.log('clicked')}} style={{
-         position: 'absolute',
-         zIndex:1,
-         float: 'left',
-         right: '8vw',
-       }}>
-       {/* <h1>test</h1> */}
-   <Avatar size={60} icon={<UserOutlined />}  />
-   </div>
-   </Popover>
-</Header>
+        <Layout className = "metadata-page-container" style={{  minHeight: '92.55vh' }}>
+        <Header className="header" style={{backgroundColor:'transparent', minHeight:'4.5rem'}}>
+        </Header>
         {/* <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft> */}
         
-        <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
+        <Layout className="table-container" style={{ backgroundColor: 'transparant' }}>
   
           {/* Container holding table */}
           <Content style={{ }}

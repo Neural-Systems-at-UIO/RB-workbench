@@ -5,7 +5,20 @@ export const ListElement = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValues, setFormValues] = useState({'title': props.itemTitle, 'description': props.itemDescription})
   
-  
+  function getProjectMetadata()   
+      
+    {  
+          fetch('https://localhost:8080/readTable?project=' + props.project + '&user=' + props.user["http://schema.org/alternateName"])
+            .then(response => response.json())
+            .then(data => {
+              
+              if (data != 'no table') {
+
+              }
+            });
+
+      
+      }
   
   const showModal = () => {
     setIsModalOpen(true);

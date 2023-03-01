@@ -4,12 +4,12 @@ import { Form, Select, Layout } from 'antd'
 
 // Import custom components
 
-import SidePanelLeft from './sidebar/SidePanelLeft'
+import SidePanelLeft from '../../sidebar/SidePanelLeft'
 // import EditableRow from "./table/EditableRow";    // Todo move to separate file??
 // import EditableCell from "./table/EditableCell";  // Todo move to separate file??
 
-import '../styles/options-bar.css'
-import '../styles/Register.css'
+import '../../../styles/options-bar.css'
+import '../../../styles/Register.css'
 
 
 //Todo: Use these instead of above:
