@@ -10,9 +10,53 @@ import { convertTableToCSV } from '../../../helpers/csvAdapter';
 import { EditableRow } from './MetaDataPage';
 import { EditableCell } from "./EditableCell";
 
+
+// This component is responsible for displaying the metadata table.
+// It has the following functionality (in addition to the table itself):
+// - Undo/redo
+// - Options bar / toolbar
+//    - Add row
+//    - Delete row
+//    - Save table
+//    - Export table
+//    - Import table
+
+
+
+// Suggestions
+// EH: input to this component should be an object with the following properties:
+// - project name
+// - owner (user name)
+// - metadata table 
+// - current metatable name
+
+// Current table name can still be a stateful variable. This would allow the undo functionality to work.
+// Don't need it for re-render, just to store the previous value.
+
+
+// Questions
+// EH: 
+//  - Should column properties be saved to the project? 
+//    This is perhaps only relevant for saving user-defined cell dropdown items.
+//  - What is the difference between selected, selectedRowKeys, and selRows and selectedRows? - simplify...
+
+
+
+
+
+
 // Todo: move to separate file for managing tables.
 export function MetadataTable(props) {
-  var nextTableName = props.nextTableName;
+
+  // Props: 
+  //
+  // nextTableName: the name of the table to be displayed
+  // project: the name of the project
+  // user: the user object
+  // children
+
+
+  var nextTableName = props.nextTableName; // rename to newTableName?
   var selRows = [];
   var history = [];
   // this is weird, how should it be done?
@@ -20,11 +64,9 @@ export function MetadataTable(props) {
   const [tables, setTables] = useState(init_tables);
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
-
-
+  const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
 
   const currentTable = tables[nextTableName];
-  const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
 
   function createBlankRow(rowNumber) {
     if (rowNumber === undefined) {
@@ -278,6 +320,10 @@ export function MetadataTable(props) {
       ></hr>
     </div>
   );
+
+  // move to top of component
+
+  // what is the difference between selected, selectedRowKeys, and selRows and selectedRows?
 
   const [selected, setSelected] = useState([]); // selected rows
   const rowSelection = {
