@@ -1,7 +1,7 @@
 
 
 import {List, Modal, Avatar, Layout, Form, Button, Input, Popover} from 'antd';
-import  {ListElement} from './ListElement';
+import  {ProjectListElement} from './ProjectListItem';
 import { useState, useEffect } from 'react';
 import { Header } from 'antd/lib/layout/layout'
 import Icon from '@ant-design/icons'
@@ -189,7 +189,7 @@ const ProjectList = (props) => {
         renderItem={(item) => 
             (
 
-            <ListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ListElement>
+            <ProjectListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} setProjectDataTable={props.setProjectDataTable} user={props.user["http://schema.org/alternateName"]} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ProjectListElement>
 
 
 

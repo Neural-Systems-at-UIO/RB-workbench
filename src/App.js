@@ -1,6 +1,5 @@
 import React from 'react'
 import './styles/App.css'
-import ProjectList from './components/ProjectList/ProjectListPage.js';
 import { Header } from 'antd/lib/layout/layout'
 import Icon from '@ant-design/icons'
 import { ReactComponent as EbrainsLogo } from './resources/ebrains-ai-cropped.svg'
@@ -12,10 +11,10 @@ import { UserOutlined } from '@ant-design/icons';
 import './styles/index.css'
 import {  Spin } from 'antd'
 
-import Workbench from './components/workbench.js'
 
 import getUser from './authentication/GetUserInfo'
 import getToken from './authentication/authenticationUtilities'
+import { PageSwitcher } from './PageSwitcher';
 
 console.log(getToken)
 const Loading = () => {
@@ -28,16 +27,6 @@ const Loading = () => {
   </Spin>
    </div>
   )
-}
-function PageSwitcher(page, token, user, setPage, setProject, project) {
-  if (page==='workbench') {
-    return (
-    <Workbench token={token} user={user} setPage={setPage} page={page} project={project} />
-
-  )}
-  else if (page==='projectList') {return (
-    <ProjectList token={token} user={user} setPage={setPage} setProject={setProject} />
-  )}
 }
 const ProfileAvatar = ({user}) => {
   console.log('pfa user',  user)
@@ -55,6 +44,8 @@ const ProfileAvatar = ({user}) => {
 </Popover>
   )
 }
+
+
 const App = () => {
   // App should handle
 
@@ -91,6 +82,7 @@ const App = () => {
     )
   }
   else {
+    
     let AppStyle = {
       overflow: 'hidden',
       height: '100%'
@@ -101,11 +93,11 @@ const App = () => {
     return (
       <div className='App' style = {AppStyle}>
         <Layout style={LayoutStyle}>
- 
+        <useHookTest></useHookTest>
         <ProfileAvatar user={user}></ProfileAvatar>
 
         {/* </Header> */}
-        {PageSwitcher(page, token, user, setPage, setProject, project)}
+        <PageSwitcher page={page} token={token} user={user} setPage={setPage} setProject={setProject} project={project}> </PageSwitcher>
         </Layout>
       </div>
     )

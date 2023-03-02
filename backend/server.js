@@ -182,6 +182,12 @@ function get_projects(user) {
   return new Promise((resolve, reject) => {
     // read from local storage
     //  the path is ./persistent_storage/projects.json
+    // check if projects file exists
+    if (!fs.existsSync('./persistent_storage/projects.json')) {
+      // create the file
+      fs.writeFileSync('./persistent_storage/projects.json', '[]')
+    }
+
     let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
     let user_projects = projects.map((project) => {
       if (project.owner === user) {
@@ -204,6 +210,10 @@ function set_project(user, project, description) {
     // read from local storage
     //  the path is ./persistent_storage/projects.json
     let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
+    if (!fs.existsSync('./persistent_storage/projects.json')) {
+      // create the file
+      fs.writeFileSync('./persistent_storage/projects.json', '[]')
+    }
     // add the project to the projects under the user
     projects.push({ owner: user, title: project, description: description})
     // write the projects to the local storage

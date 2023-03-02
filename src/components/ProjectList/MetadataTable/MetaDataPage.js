@@ -43,15 +43,25 @@ export const EditableRow = ({index, ...props}) => {
 }
 
 const MetadataPage = (props) => {
+  
   const [currentTableName, setCurrentTableName] = useState('Subject')
   
   const handleSelectTable = (selectedTableName) => {
     setCurrentTableName(selectedTableName)
   }
+
+  const handleHomeButtonClick = () => {
+    props.setPage('projectList')
+  }
+
+  const specimenTable = props.projectDataTable[currentTableName];
+  console.log('metadataPage', specimenTable)
+
+
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
 
-      <SidePanelLeft setPage={props.setPage} onButtonClick={handleSelectTable}></SidePanelLeft>
+      <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick}></SidePanelLeft>
       
       <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
 
@@ -89,7 +99,7 @@ const MetadataPage = (props) => {
             >
               {/* <OptionsBar /> */}
               <Form>
-                <MetadataTable project={props.project} nextTableName={currentTableName} children={''} user={props.user} page={props.page}></MetadataTable>
+                <MetadataTable project={props.project} nextTableName={currentTableName} children={''} user={props.user} page={props.page} projectDataTable={props.projectDataTable}></MetadataTable>
                 {/* <Buildtable></Buildtable> */}
               </Form>
             </div>
