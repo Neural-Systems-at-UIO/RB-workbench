@@ -53,7 +53,7 @@ function SidePanelLeft ({ onButtonClick, setPage }) {
         >
           <Button style={{marginTop:'5vh', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
           <HomeOutlined style={{fontSize:32}}/>
-          <p>Return to projects</p>
+          {!collapsed?<p>Return to projects</p>:null}
           </Button>
           <Menu
             style={{
