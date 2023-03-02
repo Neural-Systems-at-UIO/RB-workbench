@@ -1,3 +1,7 @@
+// SidePanelLeft is a component that renders the left sidebar of the app
+// It contains the menu items for switching between the different specimen 
+// tables and a home button for returning to the project page.
+
 import { Menu, Layout , Button} from 'antd'
 import React, { useState } from 'react'
 import ConfigProvider from '../ConfigProvider'
@@ -7,18 +11,23 @@ import {
   UserOutlined,
   TeamOutlined,
   HeartOutlined,
-  RollbackOutlined,
   HomeOutlined
 } from '@ant-design/icons'
 
+export default SidePanelLeft
+
 const { Sider } = Layout
 
+const backgroundColor = '#f8fafb'; // Todo: Get from context provider
+
+// Define menu items for the specimen tables
 const items = [
   getItem('Subject', '1', <UserOutlined />),
   getItem('TissueSample', '2', <HeartOutlined/>),
   getItem('SubjectGroup', '3', <TeamOutlined />),
   getItem('TissueSampleCollection', '4', <HeartOutlined/>)]
 
+// Define menu groups to group tables for individual specimen and specimen sets
 const itemGroups = [
   getItem('Individual specimen', 'menu1', [], items.slice(0,2) ),
   getItem('Specimen sets', 'menu2', [], items.slice(2,4) ) 
@@ -41,39 +50,59 @@ function getItem (label, key, icon, children) {
   return item
 }
 
-function SidePanelLeft ({ onButtonClick, setPage }) {
-  const [collapsed, setCollapsed] = useState(false)
-  const handleButtonClick = (item) => { onButtonClick(items[item.key - 1].label) }
+function HomeButton ({ isCollapsed, onHomeButtonClick }) {
 
+  const homeButtonStyle = {marginTop:'5vh', 'alignItems':'center', height:'4.5rem'};
+  const iconStyle = {fontSize:32};
+  
   return (
-  // <div className='SidePanelLeft'>
-      <Sider style={{ backgroundColor: '#f8fafb' }} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <ConfigProvider
-        children = {<div></div>}
-        >
-          <Button style={{marginTop:'5vh', 'alignItems':'center', height:'4.5rem'}} onClick={() => {setPage('projectList')}}  >
-          <HomeOutlined style={{fontSize:32}}/>
-          {!collapsed?<p>Return to projects</p>:null}
-          </Button>
-          <Menu
-            style={{
-              backgroundColor: '#f8fafb',
-              width: '256',
-              height: '100%',
-              marginTop: '5vh',
-              marginLeft: '5%',
-              marginBottom: '200%'
-            }}
-            defaultSelectedKeys={['1']}
-            multiple={false}
-            mode={'inline'}
-            items={itemGroups}
-            onSelect={ handleButtonClick }
-          />
-        </ConfigProvider>
-      </Sider>
-
-  // </div>
+    <Button style={homeButtonStyle} onClick={onHomeButtonClick}  >
+      <HomeOutlined style={iconStyle}/>
+      {!isCollapsed?<p>Return to projects</p>:null}
+    </Button>
   )
 }
-export default SidePanelLeft
+
+function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
+  
+  const handleMenuItemClick = (item) => { onMenuItemClick(items[item.key - 1].label) }
+  const selectedPageIndex = items.findIndex((item) => item.label === selectedPageName);
+  const selectedPageKey = items[selectedPageIndex].key;
+
+  const menuStyle = {
+    backgroundColor: backgroundColor,
+    width: '256',
+    height: '100%',
+    marginTop: '5vh',
+    marginLeft: '5%',
+    marginBottom: '200%'
+  }
+
+  return (
+    <Menu
+      style={menuStyle}
+      defaultSelectedKeys={['1']}
+      selectedKeys={[selectedPageKey]}
+      multiple={false}
+      mode={'inline'}
+      items={itemGroups}
+      onSelect={ handleMenuItemClick }
+    />
+  )
+}
+
+function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick }) {
+
+  const [collapsed, setCollapsed] = useState(false)
+
+  const sidebarStyle = { backgroundColor: backgroundColor };
+
+  return (
+    <Sider style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+      <ConfigProvider>
+        <HomeButton isCollapsed={collapsed} onHomeButtonClick={onHomeButtonClick} />
+        <SpecimenMenu selectedPageName={selectedPageName} onMenuItemClick={onMenuItemClick} />
+      </ConfigProvider>
+    </Sider>
+  )
+}
