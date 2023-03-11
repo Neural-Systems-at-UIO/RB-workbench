@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { EditableContext } from './MetaDataPage';
+import { EditableContext } from './EditableRow.js';
 
 
 export function EditableCell({

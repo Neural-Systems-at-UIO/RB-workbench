@@ -303,8 +303,7 @@ app.get('/readTable', function (req, res) {
       res.send(JSON.stringify('no table'))
     }
     else {
-    result["ActiveTableName"] = 'Subject'
-    res.send(result)
+      res.send(result)
     }
   })
 })

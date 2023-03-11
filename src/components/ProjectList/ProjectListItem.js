@@ -2,9 +2,6 @@ import { Button, Modal , Form, Input, List} from 'antd';
 import { useState } from 'react'
 
 
-
-
-
 export function ProjectListElement(props) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,16 +9,15 @@ export function ProjectListElement(props) {
 
   function getProjectMetadata(project, user) {
     return new Promise((resolve, reject) => {
-      console.log('-----------------------------------------')
-      console.log('project', project)
-      console.log('user', user)
+      // console.log('-----------------------------------------')
+      // console.log('project', project)
+      // console.log('user', user)
 
       fetch('https://localhost:8080/readTable?project=' + project + '&user=' + user)
         .then(response => response.json())
         .then(data => {
-          console.log('data', data)
-          console.log('-----------------------------------------')
-
+          // console.log('data', data)
+          // console.log('-----------------------------------------')
           resolve(data);
           // if (data != 'no table') {
           // }
@@ -30,7 +26,7 @@ export function ProjectListElement(props) {
 
 
   }
-  console.log('PLE user', props.user)
+  //console.log('PLE user', props.user)
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -43,10 +39,12 @@ export function ProjectListElement(props) {
     setIsModalOpen(false);
   };
   const handleLaunch = (project, user) => {
-      props.setProject(formValues.title);
-      props.setPage('workbench');
+      //props.setProject(formValues.title);
+      //props.setPage('workbench');
       getProjectMetadata(project, user).then((data) => {
         if (data != 'no table') {
+          props.setProject(formValues.title);
+          props.setPage('workbench');
           props.setProjectDataTable(data);
         }
       });
@@ -86,7 +84,6 @@ export function ProjectListElement(props) {
   );
 }
 
-    
 
 export function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription }) {
   const [title, setTitle] = useState(defaultTitle);

@@ -1,51 +1,39 @@
 import React, { useState } from 'react'
 import { Form, Select, Layout } from 'antd'
 
-
 // Import custom components
 
-import SidePanelLeft from '../../sidebar/SidePanelLeft'
+import SidePanelLeft from './sidebar/SidePanelLeft'
 // import EditableRow from "./table/EditableRow";    // Todo move to separate file??
 // import EditableCell from "./table/EditableCell";  // Todo move to separate file??
 
-import '../../../styles/options-bar.css'
-import '../../../styles/Register.css'
+import '../styles/options-bar.css'
+import '../styles/Register.css'
 
 
 //Todo: Use these instead of above:
 //import metadata from '../metadata/controlledInstances'
 //import metadataDefinitions from '../metadata/controlledInstancesDefinitions'
 
-
-import { MetadataTable } from './MetadataTable'
-
+import { MetadataTable } from './MetadataTable/MetadataTable'
 
 // Todo: Create a table context to pass to the table components
 
 const { Content } = Layout
-// const EditableContext = React.createContext(null);
 
 
 
-export const EditableContext = React.createContext(null)
-
-export const EditableRow = ({index, ...props}) => {
-  const [form] = Form.useForm()
-  console.log(props)
-
-  return (
-      <Form form={form} component={false}>
-        <EditableContext.Provider value={form}>
-          <tr {...props} />
-        </EditableContext.Provider>
-      </Form>
-  )
-}
 
 const MetadataPage = (props) => {
   
-  const [currentTableName, setCurrentTableName] = useState('Subject')
+  const [currentTableName, setCurrentTableName] = useState(props.projectDataTable.ActiveTableName)
   
+  // useEffect(() => {
+  //   console.log('mp useEffect')
+  //   setCurrentTableName(props.projectDataTable.ActiveTableName);
+  // }, [props.projectDataTable.ActiveTableName]);
+
+
   const handleSelectTable = (selectedTableName) => {
     setCurrentTableName(selectedTableName)
   }
@@ -54,12 +42,16 @@ const MetadataPage = (props) => {
     props.setPage('projectList')
   }
 
-  const specimenTable = props.projectDataTable[currentTableName];
-  console.log('metadataPage', specimenTable)
-
+  //const specimenTable = props.projectDataTable[currentTableName];
+  //console.log('metadataPage', specimenTable)
 
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
+      <div>
+        <p>
+          <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em' }}>{props.project}</h1>
+        </p>
+      </div>
 
       <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick}></SidePanelLeft>
       

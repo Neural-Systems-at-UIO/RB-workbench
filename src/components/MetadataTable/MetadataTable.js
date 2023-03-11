@@ -1,16 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button } from 'antd';
-import useUndo from 'use-undo';
-import ConfigProvider from '../../ConfigProvider';
-import init_tables from '../../../metadata_new/schemaTables';
-import metadata from '../../../metadata/metadata';
-import metadataDefinitions from '../../../metadata/metadata-definitions';
-import { widthCalc, widthCalcDropdown } from '../../../helpers/widthCalc';
-import { convertTableToCSV } from '../../../helpers/csvAdapter';
-import { EditableRow } from './MetaDataPage';
-import { EditableCell } from "./EditableCell";
-
-
 // This component is responsible for displaying the metadata table.
 // It has the following functionality (in addition to the table itself):
 // - Undo/redo
@@ -22,6 +9,25 @@ import { EditableCell } from "./EditableCell";
 //    - Import table
 
 
+// IMPORTS
+import React, { useEffect, useState } from 'react';
+import { Table, Button } from 'antd';
+import useUndo from 'use-undo';
+import ConfigProvider from '../ConfigProvider';
+import init_tables from '../../metadata_new/schemaTables';
+import metadata from '../../metadata/metadata';
+import metadataDefinitions from '../../metadata/metadata-definitions';
+import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
+import { convertTableToCSV } from '../../helpers/csvAdapter';
+import { EditableRow } from './TableComponents/EditableRow';
+import { EditableCell } from './TableComponents/EditableCell';
+
+const TABLE_COMPONENTS = {
+  body: {
+    row: EditableRow,
+    cell: EditableCell
+  }
+};
 
 // Suggestions
 // EH: input to this component should be an object with the following properties:
@@ -43,8 +49,6 @@ import { EditableCell } from "./EditableCell";
 
 
 
-
-
 // Todo: move to separate file for managing tables.
 export function MetadataTable(props) {
 
@@ -62,15 +66,56 @@ export function MetadataTable(props) {
   // this is weird, how should it be done?
 
   const [currentTableName, setCurrentTableName] = useState(nextTableName);
-  // const currentTableName = 'Subject'
-  // const currentTableName = 'Subject'
+  const [currentProjectName, setCurrentProjectName] = useState(props.project);
+
+  useEffect(() => {
+    return () => {
+      console.log('Child component is unmounting.');
+    };
+  }, []);
+
   const tables = props.projectDataTable;
+
+  // These are used when new metadata instances are added to column dropdowns.
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
-  console.log('rerendering', props.projectDataTable)
 
   const currentTable = props.projectDataTable[nextTableName];
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
+
+
+  if (currentTable.data === null) {
+    currentTable.data = [createBlankRow()];
+  }
+
+
+  const [
+    DataSource, {
+      set: SetDataSource, reset: resetDataSource, undo: undoDataSource, redo: redoDataSource
+    }
+  ] = useUndo(currentTable.data, { useCheckpoints: true });
+
+  const { present: presentDS } = DataSource;
+  let count = presentDS.length;
+
+  console.log("currentProjectName:", currentProjectName)
+  console.log("nextProjectName:", props.project)
+  if (currentTableName !== nextTableName || currentProjectName !== props.project) {
+    // save current (will be previous) state
+    props.projectDataTable[currentTableName].columnProps = statefulColumns;
+    props.projectDataTable.ActiveTableName = nextTableName;
+
+    resetDataSource(currentTable.data);
+
+    // save current state??
+    setCurrentProjectName(props.project)
+    console.log("setCurrentTableName")
+    setCurrentTableName(nextTableName);
+    console.log("setStatefulColumns")
+    setStatefulColumns([...currentTable.columnProps]);
+  }
+
+
   function createBlankRow(rowNumber) {
     if (rowNumber === undefined) {
       rowNumber = 1;
@@ -79,10 +124,6 @@ export function MetadataTable(props) {
     currentTable.variableNames.forEach((name) => { newRow[name] = null; });
 
     return newRow;
-  }
-
-  if (currentTable.data === null) {
-    currentTable.data = [createBlankRow()];
   }
 
   function updateTableData(newData, useCheckpoint) {
@@ -99,27 +140,7 @@ export function MetadataTable(props) {
     currentTable.data = newData;
   }
 
-  const [
-    DataSource, {
-      set: SetDataSource, reset: resetDataSource, undo: undoDataSource, redo: redoDataSource
-    }
-  ] = useUndo(currentTable.data, { useCheckpoints: true });
 
-  if (currentTableName !== nextTableName) {
-    // save current (will be previous) state
-    props.projectDataTable[currentTableName].columnProps = statefulColumns;
-    props.projectDataTable.ActiveTableName = nextTableName;
-
-    resetDataSource(currentTable.data);
-
-    // save current state??
-    setCurrentTableName(nextTableName);
-    setStatefulColumns([...currentTable.columnProps]);
-
-  }
-
-  const { present: presentDS } = DataSource;
-  let count = presentDS.length;
 
   // Following are callback functions for the options bar
   function handleUndoDS(e) {
@@ -415,6 +436,7 @@ export function MetadataTable(props) {
 
     statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
 
+    console.log("setStatefulColumns")
     setStatefulColumns([...statefulColumns]);
 
     SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
@@ -448,12 +470,9 @@ export function MetadataTable(props) {
   };
   // updateTableData(currentTable.data);
 
-  const components = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell
-    }
-  };
+
+
+  
   const columns = statefulColumns.map((col) => {
     if (!col.editable & !col.select) {
       return col;
@@ -476,6 +495,7 @@ export function MetadataTable(props) {
     };
   });
 
+  console.log('Rerender table with  data:', presentDS)
   return (
     <div>
       <ConfigProvider
@@ -490,7 +510,7 @@ export function MetadataTable(props) {
             type: 'checkbox',
             ...rowSelection
           }}
-          components={components}
+          components={TABLE_COMPONENTS}
           columns={columns}
           dataSource={presentDS}
           scroll={{ x: '30vh', y: '76vh' }}
