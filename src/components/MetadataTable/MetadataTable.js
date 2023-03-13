@@ -14,7 +14,6 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import useUndo from 'use-undo';
 import ConfigProvider from '../ConfigProvider';
-import init_tables from '../../metadata_new/schemaTables';
 import metadata from '../../metadata/metadata';
 import metadataDefinitions from '../../metadata/metadata-definitions';
 import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
