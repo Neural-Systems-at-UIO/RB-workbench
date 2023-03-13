@@ -49,7 +49,9 @@ export function ProjectListElement(props) {
           props.setProjectDataTable(data);
         }
         else {
-          props.setProjectDataTable(init_tables);
+          // deep copy
+          let temp_table = JSON.parse(JSON.stringify(init_tables)); 
+          props.setProjectDataTable(temp_table);
         }
       });
     }
