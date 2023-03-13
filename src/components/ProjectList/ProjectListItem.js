@@ -1,5 +1,6 @@
 import { Button, Modal , Form, Input, List} from 'antd';
 import { useState } from 'react'
+import init_tables from '../../metadata_new/schemaTables';
 
 
 export function ProjectListElement(props) {
@@ -42,10 +43,13 @@ export function ProjectListElement(props) {
       //props.setProject(formValues.title);
       //props.setPage('workbench');
       getProjectMetadata(project, user).then((data) => {
+        props.setProject(formValues.title);
+        props.setPage('workbench');
         if (data != 'no table') {
-          props.setProject(formValues.title);
-          props.setPage('workbench');
           props.setProjectDataTable(data);
+        }
+        else {
+          props.setProjectDataTable(init_tables);
         }
       });
     }
@@ -56,13 +60,10 @@ export function ProjectListElement(props) {
   let handleLaunchWithProject = provideHandlelaunch(formValues.title, props.user);
   return (
     // align list left
-    <List.Item style={{
-      textAlign: 'left'
-    }}>
+    <List.Item style={{textAlign: 'left'}}>
       <List.Item.Meta
         title={<a href="https://ant.design">{formValues.title}</a>}
         description={formValues.description} />
-      {/* <Button > Edit Title & Description</Button> */}
 
 
       <>

@@ -50,6 +50,8 @@ const TABLE_COMPONENTS = {
 
 
 // Todo: move to separate file for managing tables.
+var selRows = [];
+
 export function MetadataTable(props) {
 
   // Props: 
@@ -61,7 +63,6 @@ export function MetadataTable(props) {
 
 
   var nextTableName = props.nextTableName; // rename to newTableName?
-  var selRows = [];
   var history = [];
   // this is weird, how should it be done?
 
