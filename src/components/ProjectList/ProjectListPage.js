@@ -71,7 +71,11 @@ const ProjectList = (props) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                user: props.user["http://schema.org/alternateName"],
+                project: project
+             })
         })
         // remove the project from the projectData
         setProjectData(projectData.filter((item) => item.title !== project))
