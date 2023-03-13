@@ -20,7 +20,8 @@
     "react-scripts": "^5.0.1",
     "styled-components": "^5.3.6",
     "unzipper": "^0.10.11",
-    "use-undo": "^1.1.1"
+    "use-undo": "^1.1.1",
+    "uuidv4": "^6.2.13"
   },
   "scripts": {
     "start": "node backend/server.js --experimental-fetch",

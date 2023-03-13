@@ -39,6 +39,10 @@ export function ProjectListElement(props) {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleDelete = () => {
+    console.log(props.itemTitle)
+    props.deleteProject(props.itemTitle);
+  };
   const handleLaunch = (project, user) => {
       //props.setProject(formValues.title);
       //props.setPage('workbench');
@@ -50,7 +54,7 @@ export function ProjectListElement(props) {
         }
         else {
           // deep copy
-          let temp_table = JSON.parse(JSON.stringify(init_tables)); 
+          let temp_table = JSON.parse(JSON.stringify(init_tables));
           props.setProjectDataTable(temp_table);
         }
       });
@@ -62,14 +66,14 @@ export function ProjectListElement(props) {
   let handleLaunchWithProject = provideHandlelaunch(formValues.title, props.user);
   return (
     // align list left
-    <List.Item style={{textAlign: 'left'}}>
+    <List.Item style={{textAlign: 'left'}} key={props.itemkey}>
       <List.Item.Meta
         title={<a href="https://ant.design">{formValues.title}</a>}
         description={formValues.description} />
 
 
       <>
-        <Button style={{ marginRight: '1rem' }} danger>Delete</Button>
+        <Button style={{ marginRight: '1rem' }} danger onClick={handleDelete}>Delete</Button>
         <Button style={{ marginRight: '1rem' }} onClick={showModal}>
           {props.ButtonText}
         </Button>
