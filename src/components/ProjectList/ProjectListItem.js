@@ -12,8 +12,13 @@ export function ProjectListElement(props) {
       // console.log('-----------------------------------------')
       // console.log('project', project)
       // console.log('user', user)
-
-      fetch('https://localhost:8080/readTable?project=' + project + '&user=' + user)
+      if (process.env.NODE_ENV === "development") {
+        var target_url = process.env.REACT_APP_DEV_URL;
+      }
+      else {
+        var target_url = process.env.REACT_APP_PROD_URL;
+      }
+      fetch(`${target_url}readTable?project=${project}&user=${user}`)
         .then(response => response.json())
         .then(data => {
           // console.log('data', data)

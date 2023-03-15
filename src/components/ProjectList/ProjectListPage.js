@@ -31,7 +31,13 @@ const ModalContent = () => {
 }
 function getData(user) {
   return new Promise((resolve, reject) => {
-    fetch(`https://localhost:8080/get_projects?user=${user}`, {
+    if (process.env.NODE_ENV === "development") {
+      var target_url = process.env.REACT_APP_DEV_URL;
+    }
+    else {
+      var target_url = process.env.REACT_APP_PROD_URL;
+    }
+    fetch(`${target_url}/get_projects?user=${user}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -93,7 +99,13 @@ const ProjectList = (props) => {
 
                 let newData = {'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
-                fetch('https://localhost:8080/set_project', {
+                if (process.env.NODE_ENV === "development") {
+                  var target_url = process.env.REACT_APP_DEV_URL;
+                }
+                else {
+                  var target_url = process.env.REACT_APP_PROD_URL;
+                }
+                fetch(`${target_url}/set_project`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
