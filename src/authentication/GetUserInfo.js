@@ -3,11 +3,14 @@ function getUser(token) {
       var xhr = new XMLHttpRequest();
       if (process.env.NODE_ENV === "development") {
         var target_url = process.env.REACT_APP_DEV_URL;
+        xhr.open("GET", `${target_url}/getuser`, true);
       }
       else {
-        var target_url = process.env.REACT_APP_PROD_URL;
+        // var target_url = process.env.REACT_APP_PROD_URL;
+        xhr.open("GET", `getuser`, true);
       }
-      xhr.open("GET", `${target_url}/getuser`, true);
+
+
       // add authorization header
       xhr.setRequestHeader("Authorization", token);
       xhr.send();

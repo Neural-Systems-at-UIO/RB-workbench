@@ -30,7 +30,7 @@ USER 1001
 EXPOSE 8080 
 
 # Start app. Need to run setup first to prepare the app for production
-CMD node setup.js
+CMD node backend/server.js
 
 
 # To build, use the following command:
