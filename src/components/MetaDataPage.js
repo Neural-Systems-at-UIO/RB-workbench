@@ -47,13 +47,7 @@ const MetadataPage = (props) => {
 
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh' }}>
-      <div>
-        <p>
-          <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em' }}>{props.project}</h1>
-        </p>
-      </div>
-
-      <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick}></SidePanelLeft>
+      <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick} projectName={props.project}></SidePanelLeft>
       
       <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
 

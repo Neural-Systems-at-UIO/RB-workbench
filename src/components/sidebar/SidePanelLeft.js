@@ -91,7 +91,7 @@ function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
   )
 }
 
-function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick }) {
+function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, projectName }) {
 
   const [collapsed, setCollapsed] = useState(false)
 
@@ -100,6 +100,7 @@ function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick }
   return (
     <Sider style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
       <ConfigProvider>
+        <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em', textAlign: 'center' }}>{projectName}</h1>
         <HomeButton isCollapsed={collapsed} onHomeButtonClick={onHomeButtonClick} />
         <SpecimenMenu selectedPageName={selectedPageName} onMenuItemClick={onMenuItemClick} />
       </ConfigProvider>
