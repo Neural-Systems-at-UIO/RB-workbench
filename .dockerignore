@@ -1,0 +1,16 @@
+# Ignore the docket files
+.dockerignore
+#Dockerfile
+
+# Ignore node modules which will anyway be created when we run npm install
+/node_modules
+
+# Ignore production files, they will be created when docker image is run
+/build
+
+# Data folder
+/persistent_storage
+
+# Environment variables
+.env
+.vscode

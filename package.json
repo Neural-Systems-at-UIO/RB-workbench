@@ -23,7 +23,7 @@
     "use-undo": "^1.1.1"
   },
   "scripts": {
-    "start": "node backend/server.js --experimental-fetch",
+    "start": "NODE_ENV=production node backend/server.js --experimental-fetch",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

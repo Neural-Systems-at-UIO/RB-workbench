@@ -5,6 +5,8 @@
 // [ ] Create exportable function that take json as input and saves to excel
 // [ ] Go the other way around: Create function that takes excel as input and saves to json
 
+// How to create a blob for an excel file?
+
 const jsonObject = require('./labbook_metadata_table-4.json');
 const fs = require('fs');
 var controlledterms = fs.readdirSync('C:/Users/archanag/WORK/OPENMINDS_code/controlledTerms');

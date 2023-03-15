@@ -1,4 +1,3 @@
-
 // Get modules that are needed for the server
 const express = require('express') // Express is a framework for creating web apps
 const path = require('path') // Path is used for creating file paths
@@ -61,7 +60,15 @@ app.get('/', function (req, res) {
   console.log('runs')
   // render index_dev.html from src/frontend/authentication
 
-  res.sendFile(path.join(__dirname, '../', 'src/', 'authentication', 'index_dev.html'))
+  if (process.env.NODE_ENV === 'development') {
+    // send user to localhost:3000
+    res.sendFile(path.join(__dirname, '../', 'src/', 'authentication', 'index_dev.html'))
+
+  }
+  else {
+    res.sendFile(path.join(__dirname, '../', 'src/', 'authentication', 'index_prod.html'))
+
+  }
 })
 // app cannot get the static files
 
