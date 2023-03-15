@@ -1,5 +1,6 @@
 import { Button, Modal , Form, Input, List} from 'antd';
 import { useState } from 'react'
+import init_tables from '../../metadata_new/schemaTables';
 
 
 export function ProjectListElement(props) {
@@ -45,14 +46,23 @@ export function ProjectListElement(props) {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleDelete = () => {
+    console.log(props.itemTitle)
+    props.deleteProject(props.itemTitle);
+  };
   const handleLaunch = (project, user) => {
       //props.setProject(formValues.title);
       //props.setPage('workbench');
       getProjectMetadata(project, user).then((data) => {
+        props.setProject(formValues.title);
+        props.setPage('workbench');
         if (data != 'no table') {
-          props.setProject(formValues.title);
-          props.setPage('workbench');
           props.setProjectDataTable(data);
+        }
+        else {
+          // deep copy
+          let temp_table = JSON.parse(JSON.stringify(init_tables));
+          props.setProjectDataTable(temp_table);
         }
       });
     }
@@ -63,17 +73,14 @@ export function ProjectListElement(props) {
   let handleLaunchWithProject = provideHandlelaunch(formValues.title, props.user);
   return (
     // align list left
-    <List.Item style={{
-      textAlign: 'left'
-    }}>
+    <List.Item style={{textAlign: 'left'}} key={props.itemkey}>
       <List.Item.Meta
         title={<a href="https://ant.design">{formValues.title}</a>}
         description={formValues.description} />
-      {/* <Button > Edit Title & Description</Button> */}
 
 
       <>
-        <Button style={{ marginRight: '1rem' }} danger>Delete</Button>
+        <Button style={{ marginRight: '1rem' }} danger onClick={handleDelete}>Delete</Button>
         <Button style={{ marginRight: '1rem' }} onClick={showModal}>
           {props.ButtonText}
         </Button>

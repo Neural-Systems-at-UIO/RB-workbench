@@ -213,8 +213,7 @@ function get_projects(user) {
 
 }
 
-
-function set_project(user, project, description) {
+function set_project(user, project, description, key) {
   console.log('-------------------------------------')
   console.log(user, project)
   return new Promise((resolve, reject) => {
@@ -226,7 +225,7 @@ function set_project(user, project, description) {
       fs.writeFileSync('./persistent_storage/projects.json', '[]')
     }
     // add the project to the projects under the user
-    projects.push({ owner: user, title: project, description: description})
+    projects.push({ key:key, owner: user, title: project, description: description})
     // write the projects to the local storage
     fs.writeFile('./persistent_storage/projects.json', JSON.stringify(projects), (err) => {
       if (err) {
@@ -293,6 +292,40 @@ function readTable (user, project) {
   })
 }
 
+function delete_project(user, project) {
+  return new Promise((resolve, reject) => {
+    let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
+    console.log('user: ', user)
+    console.log('project: ', project)
+    console.log('projects: ', projects)
+    let filtered_projects = projects.filter((proj) => {
+      if (!((proj.owner == user) && (proj.title == project))) {
+        return proj
+      }
+    }
+    )
+
+    // delete the project from the projects
+ 
+    // write the projects to the local storage
+    fs.writeFile('./persistent_storage/projects.json', JSON.stringify(filtered_projects), (err) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        resolve('success')
+      }
+    })
+
+  })
+}
+app.post('/delete_project', function (req, res) {
+  let project = req.body.project
+  let user = req.body.user
+  delete_project(user, project).then(function (result) {
+    res.send('ok')
+  })
+})
 
 app.post('/writeTable', function (req, res) {
   let table = req.body.table
@@ -334,7 +367,8 @@ app.post('/set_project', function (req, res) {
   let user = req.body.user
   let project = req.body.project
   let description = req.body.description
-  set_project(user, project, description).then(function (result) {
+  let key = req.body.key
+  set_project(user, project, description, key).then(function (result) {
     res.send(result)
   })
 })

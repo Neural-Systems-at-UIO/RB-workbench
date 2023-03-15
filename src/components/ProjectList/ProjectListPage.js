@@ -72,7 +72,23 @@ const ProjectList = (props) => {
     }, []) 
 
 
-    
+    const deleteProject = (project) => {
+        // call the backend to delete the project
+        fetch('https://localhost:8080/delete_project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: props.user["http://schema.org/alternateName"],
+                project: project
+             })
+        })
+        // remove the project from the projectData
+        setProjectData(projectData.filter((item) => item.title !== project))
+        console.log(projectData)
+        console.log('-------------------')
+    }
     
     const addData = (projectData, setProjectData) => {
      
@@ -98,7 +114,8 @@ const ProjectList = (props) => {
 
             onOk(title) {
 
-                let newData = {'title': tempTitle, 'description': tempDescription}
+                let tempKey = crypto.randomUUID()
+                let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
                   var target_url = process.env.REACT_APP_DEV_URL;
@@ -116,7 +133,8 @@ const ProjectList = (props) => {
                     body: JSON.stringify({
                         user: props.user["http://schema.org/alternateName"],
                         project: tempTitle,
-                        description: tempDescription
+                        description: tempDescription,
+                        key:tempKey
                     })
                 })  
                 // add the new data to the projectData
@@ -203,7 +221,7 @@ const ProjectList = (props) => {
         renderItem={(item) => 
             (
 
-            <ProjectListElement ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} setProjectDataTable={props.setProjectDataTable} user={props.user["http://schema.org/alternateName"]} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ProjectListElement>
+            <ProjectListElement deleteProject={deleteProject} itemkey={item.key} ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} setProjectDataTable={props.setProjectDataTable} user={props.user["http://schema.org/alternateName"]} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ProjectListElement>
 
 
 
