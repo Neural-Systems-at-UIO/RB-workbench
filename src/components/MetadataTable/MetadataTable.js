@@ -218,7 +218,7 @@ export function MetadataTable(props) {
       var target = `${target_url}/writeTable`
     }
     else {
-      var target = `write_table`
+      var target = '/writeTable'
     }
     fetch(target, {
       method: 'POST',
