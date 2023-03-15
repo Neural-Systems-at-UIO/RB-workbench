@@ -185,6 +185,7 @@ app.get('/getuser', function (req, res) {
   })
 })
 
+
 function get_projects(user) {
   return new Promise((resolve, reject) => {
     // read from local storage
@@ -196,12 +197,14 @@ function get_projects(user) {
     }
 
     let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
-    let user_projects = projects.map((project) => {
+    let user_projects = projects.filter((project) => {
       if (project.owner === user) {
         return project
       }
     }
     )
+    
+
     console.log('user', user)
     console.log('user projects: ', user_projects)
     resolve(user_projects)
@@ -209,6 +212,7 @@ function get_projects(user) {
   })
 
 }
+
 
 function set_project(user, project, description) {
   console.log('-------------------------------------')
