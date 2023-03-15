@@ -33,11 +33,12 @@ function getData(user) {
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV === "development") {
       var target_url = process.env.REACT_APP_DEV_URL;
+      var target = `${target_url}/get_projects?user=${user}`
     }
     else {
-      var target_url = process.env.REACT_APP_PROD_URL;
+      var target = `get_projects?user=${user}`
     }
-    fetch(`${target_url}/get_projects?user=${user}`, {
+    fetch(target, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -101,11 +102,12 @@ const ProjectList = (props) => {
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
                   var target_url = process.env.REACT_APP_DEV_URL;
+                  var target = `${target_url}/set_project`
                 }
                 else {
-                  var target_url = process.env.REACT_APP_PROD_URL;
+                  var target = '/set_project';
                 }
-                fetch(`${target_url}/set_project`, {
+                fetch(target, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

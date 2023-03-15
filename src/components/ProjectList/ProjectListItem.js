@@ -14,11 +14,13 @@ export function ProjectListElement(props) {
       // console.log('user', user)
       if (process.env.NODE_ENV === "development") {
         var target_url = process.env.REACT_APP_DEV_URL;
+        var target = `${target_url}/readTable?project=${project}&user=${user}`
       }
       else {
-        var target_url = process.env.REACT_APP_PROD_URL;
+        var target = `/readTable?project=${project}&user=${user}`
       }
-      fetch(`${target_url}readTable?project=${project}&user=${user}`)
+      
+      fetch(target)
         .then(response => response.json())
         .then(data => {
           // console.log('data', data)

@@ -213,7 +213,14 @@ export function MetadataTable(props) {
     // also it is insane to post the entire table every time a single value is changed but YOLO
     console.log('reg_project: ', props.project);
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
-    fetch('https://localhost:8080/writeTable', {
+    if (process.env.NODE_ENV === "development") {
+      var target_url = process.env.REACT_APP_DEV_URL;
+      var target = `${target_url}/writeTable`
+    }
+    else {
+      var target = `write_table`
+    }
+    fetch(target, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
