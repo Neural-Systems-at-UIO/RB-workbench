@@ -31,8 +31,14 @@ const Workbench = (props) => {
                 <TabPane tab='Metadata' key='2'>
                   <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
                 </TabPane>
-                {/* <TabPane tab='Analysis' key='3'></TabPane> */}
-              </Tabs>
+                <TabPane tab='Analysis' key='3'>
+                  {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
+              
+                  <iframe src="https://quint-ebrainsworkbench.apps.hbp.eu/" width="100%" height="100%" frameBorder="0"></iframe>
+                    
+
+                </TabPane>
+                              </Tabs>
             </div>
           </Content>
         </Layout>
