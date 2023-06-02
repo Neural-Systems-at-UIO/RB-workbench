@@ -16,7 +16,6 @@ export function PageSwitcher({token, user}) {
   if (page === 'workbench') {
     return (
       <Workbench token={token} user={user} setPage={setPage} page={page} project={project} projectDataTable={projectDataTable} />
-
     );
   }
   else if (page === 'projectList') {

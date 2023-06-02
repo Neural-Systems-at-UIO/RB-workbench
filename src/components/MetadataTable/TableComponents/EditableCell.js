@@ -4,19 +4,46 @@ import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
 
+/**
+ * EditableCell component for rendering an editable cell in a table.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.title - The title of the cell.
+ * @param {boolean} props.editable - Indicates whether the cell is editable or not.
+ * @param {*} props.children - The content to be rendered within the cell (List of [undefined, value])
+ * @param {string} props.dataIndex - The data index of the cell (This is the name of the column in the table)
+ * @param {Object} props.record - The data of the row the cell belongs to.
+ * @param {boolean} props.select - Indicates whether the cell is a dropdown or not.
+ * @param {Function} props.handleSave - The function to handle saving the cell data.
+ * @param {*} props.statefulmetadata - The stateful metadata associated with the cell.
+ * @param {*} props.statefulmetadataDefinitions - The definitions of stateful metadata.
+ * @param {Function} props.setstatefulmetadata - The function to set the stateful metadata.
+ * @param {Function} props.setstatefulmetadataDefinitions - The function to set the definitions of stateful metadata.
+ * @param {*} props.tables - The tables associated with the cell.
+ * @param {...*} props.restProps - Additional props to be spread on the underlying HTML element.
+ * @returns {JSX.Element} The rendered component.
+ */
 export function EditableCell({
   title, editable, children, dataIndex, record, select, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, tables, ...restProps
 }) {
+  
+  //console.log('children:', children)
+  //console.log('restProps:', restProps)
+
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef(null); // Harry: What is this?
   const form = useContext(EditableContext);
+  
+  const optionsAntd = []; // A list of dropdown options in antdesign format
+  const [name, setName] = useState('');
+
   useEffect(() => {
     if (editing) {
       inputRef.current.focus();
     }
   }, [editing]);
 
-
+  // toggleEdit is used to flip the state of the editing boolean
   const toggleEdit = () => {
     setEditing(!editing);
 
@@ -25,7 +52,8 @@ export function EditableCell({
     });
   };
 
-  const save = async (event) => {
+  // finishEditCell is called when the user presses enter or clicks outside the cell
+  const finishEditCell = async (event) => {
     try {
       const values = await form.validateFields();
       toggleEdit();
@@ -46,9 +74,6 @@ export function EditableCell({
     }
     setEditing(false);
   };
-
-  const optionsAntd = [];
-  const [name, setName] = useState('');
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -80,34 +105,7 @@ export function EditableCell({
   let childNode = children;
 
   if (editable) {
-    childNode = editing
-      ? (
-        <Form.Item
-          style={{
-            margin: 0
-          }}
-          name={dataIndex}
-          rules={[
-            {
-              required: false,
-              message: `${title} is required.`
-            }
-          ]}
-        >
-          <Input ref={inputRef} onBlur={save} onPressEnter={save} />
-        </Form.Item>
-      )
-      : (
-        <div
-          className="editable-cell-value-wrap"
-          style={{
-            paddingRight: 24
-          }}
-          onClick={toggleEdit}
-        >
-          {children}
-        </div>
-      );
+    childNode = editing ? CellInputField(dataIndex, title, inputRef, finishEditCell) : CellValueDisplay(children, toggleEdit)
   }
 
 
@@ -251,4 +249,51 @@ export function EditableCell({
   }
 
   return <td {...restProps}>{childNode}</td>;
+}
+
+/**
+ * CellInputField component for rendering an input field within a table cell.
+ *
+ * @param {string} dataIndex - The data index of the cell (This is the same as title).. Todo: Why do we need both??
+ * @param {string} columnTitle - The title of the column.
+ * @param {React.Ref} inputRef - The ref object for accessing the input field. Todo: Where does this come from? What is it?
+ * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
+ * @returns {JSX.Element} The rendered component.
+ */
+const CellInputField = (dataIndex, columnTitle, inputRef, handleFinishEditCell) => {
+  /// This function returns the (editable) input field for a cell
+  return (
+    <Form.Item
+      style={{ margin: 0 }}
+      name={dataIndex}
+      rules={[
+        {
+          required: false,
+          message: `${columnTitle} is required.`
+        }
+      ]}
+    >
+      <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
+    </Form.Item>
+  )
+}
+
+const CellValueDisplay = (children, toggleEdit) => {
+// Component that displays the value of a cell which is not being edited
+
+  const cellStyle = {
+    paddingRight: 24,
+    display: "flex",
+    alignItems: "center",
+  }
+
+  return (
+    <div
+      className="editable-cell-value-wrap"
+      style={cellStyle}
+      onClick={toggleEdit}
+    >
+      {children}
+    </div>
+  )
 }

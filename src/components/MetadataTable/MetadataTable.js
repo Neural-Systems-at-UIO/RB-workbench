@@ -14,8 +14,10 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import useUndo from 'use-undo';
 import ConfigProvider from '../ConfigProvider';
-import metadata from '../../metadata/metadata';
-import metadataDefinitions from '../../metadata/metadata-definitions';
+//import metadata from '../../metadata/metadata';
+//import metadataDefinitions from '../../metadata/metadata-definitions';
+import metadata from '../../metadata/controlledInstances';
+import metadataDefinitions from '../../metadata/controlledInstancesDefinitions';
 import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
 import { convertTableToCSV } from '../../helpers/csvAdapter';
 import { EditableRow } from './TableComponents/EditableRow';
@@ -384,6 +386,7 @@ export function MetadataTable(props) {
     const originalData = { ...row };
 
     const columns = Object.keys(row);
+
     // regex for newline,  any number of spaces, newline
     for (const key in Object.keys(row)) {
       const id = columns[key];
@@ -392,8 +395,12 @@ export function MetadataTable(props) {
         var matchValue = row[id];
         originalData[matchCol] = item[id];
         OldData.splice(index, 1, { ...item, ...row });
+      } else {
+        // No values have changed, so do nothing. Todo: Confirm with Harry.
+        // return
       }
     }
+
     if (typeof event !== 'undefined') {
       matchCol = dataIndex;
       matchValue = event;
@@ -412,12 +419,17 @@ export function MetadataTable(props) {
       }
     }
 
+    if (matchCol === undefined) {
+      return
+    }
+
     // Adjust width of column if necessary
     let matchColIndex = columns.indexOf(matchCol);
     matchColIndex = matchColIndex - 1; // subtract 1 for the key column
 
     const matchValueType = typeof matchValue;
 
+    console.log("matchColIndex", matchColIndex)
     let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
 
     if (matchValueType === 'number') {
@@ -484,6 +496,7 @@ export function MetadataTable(props) {
     if (!col.editable & !col.select) {
       return col;
     }
+    console.log('col.select:', col.select)
     return {
       ...col,
       onCell: (record) => ({
