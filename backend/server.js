@@ -207,6 +207,32 @@ function set_project(user, project, description, key) {
 
   })
 }
+
+function edit_project(user, project, description, key) {
+  return new Promise((resolve, reject) => {
+    // read from local storage
+    let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
+    // find the project with the matching key
+    let projectIndex = projects.findIndex(p => p.key === key)
+    if (projectIndex === -1) {
+      reject('Project not found')
+    }
+    else {
+      // update the project with the new title and description
+      projects[projectIndex].title = project
+      projects[projectIndex].description = description
+      // write the projects to the local storage
+      fs.writeFile('./persistent_storage/projects.json', JSON.stringify(projects), (err) => {
+        if (err) {
+          reject(err)
+        }
+        else {
+          resolve('success')
+        }
+      })
+    }
+  })
+}
 function writeTable(table, project, user) {
   return new Promise((resolve, reject) => {
     let folderPath = `./persistent_storage/${user}/`
@@ -341,6 +367,18 @@ app.post('/set_project', function (req, res) {
     res.send(result)
   })
 })
+
+
+app.post('/edit_project', function (req, res) {
+  let user = req.body.user
+  let project = req.body.project
+  let description = req.body.description
+  let key = req.body.key
+  edit_project(user, project, description, key).then(function (result) {
+    res.send(result)
+  })
+})
+
 app.use(express.static(path.resolve(__dirname, '../build/')));
 
 
