@@ -74,8 +74,8 @@ const ProjectList = (props) => {
 
     const deleteProject = (project) => {
         // call the backend to delete the project
-        fetch('https://localhost:8080/delete_project', {
-            method: 'POST',
+        fetch(`${process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL}/delete_project`, {
+          method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

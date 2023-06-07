@@ -45,7 +45,7 @@ const handleSubmit = (values) => {
     key: props.itemkey
   }
   console.log(req_body)
-  fetch('https://localhost:8080/edit_project', {
+  fetch(`${process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL}/edit_project`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
