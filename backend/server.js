@@ -42,26 +42,8 @@ app.use(fileUpload({
   createParentPath: true
 }))
 
-// console log the current directory
-
-// change dir to be back two directories
-// console.log that your server is up and running
-// https.createServer(
-// {
-// key:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/privkey.pem'),
-// cert:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/cert.pem'),
-// ca:fs.readFileSync('/etc/letsencrypt/live/www.brainalign.org/fullchain.pem')},
-// app).listen(port)
-// Serve the react app for the default (/) route
-// console.log(path.resolve(__dirname, '../build/static/'))
-// app.use(express.static(path.resolve(__dirname, '../build/static/')));
-
 
 app.get('/', function (req, res) {
-  // res.render('index.html')
-  console.log('runs')
-  // render index_dev.html from src/frontend/authentication
-
   if (process.env.NODE_ENV === 'development') {
     // send user to localhost:3000
     res.sendFile(path.join(__dirname, '../', 'src/', 'authentication', 'index_dev.html'))
@@ -75,7 +57,6 @@ app.get('/', function (req, res) {
 // app cannot get the static files
 
 app.get('/app', function (req, res) {
-  console.log('here')
   if (process.env.NODE_ENV === 'development') {
     // send user to localhost:3000
     res.redirect('https://localhost:3000' + req.url)
@@ -89,7 +70,6 @@ app.get('/app', function (req, res) {
 
 // api endpoint for getting the data from the api
 app.get('/get_metadata', function (req, res) {
-  console.log('metadata')
   // get the metadata from get_data and send it to the frontend
   // get_data().then(function (result) {
   //     res.send(result)
@@ -134,10 +114,6 @@ function get_token(code, res) {
       res.send(token);
     })
     .catch((error) => {
-      // ;
-      // 
-      // console.log(error)
-      // ;
       res.status(error.response.status);
       res.send(error);
     });
@@ -167,7 +143,6 @@ function GetUser(token) {
         resolve(result);
       })
       .catch(function (error) {
-        // ;
         console.log(error)
         reject(error);
       }
@@ -202,10 +177,6 @@ function get_projects(user) {
       }
     }
     )
-    
-
-    console.log('user', user)
-    console.log('user projects: ', user_projects)
     resolve(user_projects)
 
   })
@@ -213,7 +184,6 @@ function get_projects(user) {
 }
 
 function set_project(user, project, description, key) {
-  console.log('-------------------------------------')
   console.log(user, project)
   return new Promise((resolve, reject) => {
     // read from local storage

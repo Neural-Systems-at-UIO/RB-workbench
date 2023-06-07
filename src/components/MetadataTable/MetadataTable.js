@@ -169,6 +169,8 @@ export function MetadataTable(props) {
     const newDS = [...presentDS, newRow];
     const useCheckpoint = true;
     updateTableData(newDS, useCheckpoint);
+    postTableData();
+
   };
 
   /**
@@ -189,6 +191,8 @@ export function MetadataTable(props) {
 
     let useCheckpoint = true;
     updateTableData(newDS, useCheckpoint);
+    postTableData();
+
   };
 
   /**
