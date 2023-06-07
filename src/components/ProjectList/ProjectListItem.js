@@ -33,11 +33,33 @@ export function ProjectListElement(props) {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (values) => {
-    setFormValues(values);
-    setIsModalOpen(false);
-    // log the new title from the form  to the console
-  };
+const handleSubmit = (values) => {
+  setFormValues(values);
+  setIsModalOpen(false);
+  // Send a POST request to the backend API to edit the project
+  console.log(values)
+  let req_body = {
+    user: props.user,
+    project: values.title,
+    description: values.description,
+    key: props.itemkey
+  }
+  console.log(req_body)
+  fetch('https://localhost:8080/edit_project', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(req_body)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+};
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -71,6 +93,8 @@ export function ProjectListElement(props) {
   }
 
   let handleLaunchWithProject = provideHandlelaunch(formValues.title, props.user);
+  console.log('props now!', props)
+  console.log('here', props.itemkey)
   return (
     // align list left
     <List.Item style={{textAlign: 'left'}} key={props.itemkey}>
@@ -87,7 +111,8 @@ export function ProjectListElement(props) {
           onClose={handleCancel}
           onSubmit={handleSubmit}
           defaultTitle={formValues.title}
-          defaultDescription={formValues.description} />
+          defaultDescription={formValues.description} 
+          itemkey={props.itemkey}/>
       </>
       <Button type="primary" onClick={ handleLaunchWithProject }> Launch Project</Button>
     </List.Item>
@@ -95,13 +120,14 @@ export function ProjectListElement(props) {
 }
 
 
-export function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription }) {
+export function Popup({ isOpen, onClose, onSubmit, defaultTitle, defaultDescription ,itemkey}) {
   const [title, setTitle] = useState(defaultTitle);
   const [description, setDescription] = useState(defaultDescription);
   const handleOK = (event) => {
     event.preventDefault();
     console.log(title, description)
-    onSubmit({'title': title, 'description': description});
+    console.log(event)
+    onSubmit({'title': title, 'description': description, 'itemkey':itemkey});
     };
 
   return (
