@@ -54,7 +54,7 @@ const App = () => {
   const [user, setUser] = React.useState(null)
 
   function handleTokenReceived(token) {
-    window.history.replaceState({}, document.title, "/app") // clear url 
+    window.history.pushState({}, document.title, "/") // clear url 
     setToken(token)
     return token
   }
