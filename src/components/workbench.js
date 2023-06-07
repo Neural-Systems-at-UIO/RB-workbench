@@ -38,7 +38,7 @@ const Workbench = (props) => {
                     
 
                 </TabPane>
-                              </Tabs>
+              </Tabs>
             </div>
           </Content>
         </Layout>
