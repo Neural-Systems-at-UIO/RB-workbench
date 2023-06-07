@@ -2,11 +2,11 @@ function getUser(token) {
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
       if (process.env.NODE_ENV === "development") {
-        var target_url = process.env.REACT_APP_DEV_URL;
+        var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
         xhr.open("GET", `${target_url}/getuser`, true);
       }
       else {
-        // var target_url = process.env.REACT_APP_PROD_URL;
+        // var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
         xhr.open("GET", `getuser`, true);
       }
 

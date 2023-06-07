@@ -32,7 +32,7 @@ const ModalContent = () => {
 function getData(user) {
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV === "development") {
-      var target_url = process.env.REACT_APP_DEV_URL;
+      var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
       var target = `${target_url}/get_projects?user=${user}`
     }
     else {
@@ -118,7 +118,7 @@ const ProjectList = (props) => {
                 let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
-                  var target_url = process.env.REACT_APP_DEV_URL;
+                  var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
                   var target = `${target_url}/set_project`
                 }
                 else {

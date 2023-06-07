@@ -10,10 +10,10 @@
         state[key] = value;
       }
       let URL = "https://ebrains-workbench.apps-dev.hbp.eu";
-      let client_id = "ebrains-workbench";
-      let redirect_uri = `${URL}/app`;
+      let oidc_client_id = "ebrains-workbench";
+      let oidc_redirect_uri = `${URL}/app`;
       
-      location.href = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${client_id}&redirect_uri=${redirect_uri}&state=${encodeURIComponent(
+      location.href = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${oidc_client_id}&redirect_uri=${oidc_redirect_uri}&state=${encodeURIComponent(
         JSON.stringify(state)
       )}`;
     </script>

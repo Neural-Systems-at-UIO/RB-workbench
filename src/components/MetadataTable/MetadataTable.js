@@ -216,7 +216,7 @@ export function MetadataTable(props) {
     console.log('reg_project: ', props.project);
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
     if (process.env.NODE_ENV === "development") {
-      var target_url = process.env.REACT_APP_DEV_URL;
+      var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
       var target = `${target_url}/writeTable`
     }
     else {
