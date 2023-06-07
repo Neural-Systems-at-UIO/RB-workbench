@@ -68,7 +68,7 @@ uniqueColumnOptions.forEach( (termName) => {
         const fileData = JSON.parse(data);
         // Get the name of the instance
         instanceNames.push( fileData['name']);
-        instanceDescriptions.push(fileData['description']);
+        instanceDescriptions.push(fileData['definition']);
     });
         // Get the name of the instance
         //console.log(instanceName)
