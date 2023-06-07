@@ -7,8 +7,10 @@ var sandsVersion = "v3";
 // New def:
 let columnProps = [
     { key: 'SubjectID',     type: 'input' }, 
-    { key: 'Age',           type: 'input' }, 
+    { key: 'Age',           type: 'input' },
+    { key: 'AgeUnit',       type: 'input', options: `controlledTerms/${controlledTermsVersion}/unitOfMeasurement`, filter: 'AgeUnit' },
     { key: 'Weight',        type: 'input' }, 
+    { key: 'WeightUnit',    type: 'input', options: `controlledTerms/${controlledTermsVersion}/unitOfMeasurement`, filter: 'WeightUnit'}, 
     { key: 'AgeCategory',   type: 'string', options: `controlledTerms/${controlledTermsVersion}/ageCategory`},
     { key: 'BiologicalSex', type: 'string', options: `controlledTerms/${controlledTermsVersion}/biologicalSex`},
     { key: 'Pathology',     type: 'string', options: `controlledTerms/${controlledTermsVersion}/disease`},
