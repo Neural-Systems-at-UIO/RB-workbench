@@ -11,17 +11,20 @@ const bodyParser = require('body-parser')
 const port = process.env.PORT || 8080
 const cors = require('cors')
 const axios = require('axios')
+const dotenv = require("dotenv")
 const fs = require('fs')
 
 console.log('env', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development') {
-  
   var app = require('https-localhost')()
-  
 }
 else {
   var app = express()
 }
+
+// Get environment variables from .env file
+dotenv.config();
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // cors enables cross origin resource sharing
@@ -38,7 +41,6 @@ app.use(cors())
 app.use(fileUpload({
   createParentPath: true
 }))
-require("dotenv").config();
 
 // console log the current directory
 
@@ -85,7 +87,6 @@ app.get('/app', function (req, res) {
 })
 
 
-
 // api endpoint for getting the data from the api
 app.get('/get_metadata', function (req, res) {
   console.log('metadata')
@@ -100,18 +101,16 @@ function get_token(code, res) {
   var target_url =
     "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/token";
   //
-  if (process.env.NODE_ENV === "production") {
-    redirect_uri = process.env.REACT_APP_PROD_URL;
-  }
-  else if (process.env.NODE_ENV === "development") {
-    redirect_uri = process.env.REACT_APP_DEV_URL;
-  }
-  console.log(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
+ 
+  redirect_uri = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+  
+  console.log(process.env.WORKBENCH_OIDC_CLIENT_ID, process.env.WORKBENCH_OIDC_CLIENT_SECRET)
+  console.log('redirect_uri:', redirect_uri)
   const params = new URLSearchParams({
     grant_type: "authorization_code",
-    client_id: process.env.CLIENT_ID,
+    client_id: process.env.WORKBENCH_OIDC_CLIENT_ID,
     code: code,
-    client_secret: process.env.CLIENT_SECRET,
+    client_secret: process.env.WORKBENCH_OIDC_CLIENT_SECRET,
     redirect_uri: `${redirect_uri}/app`,
   });
   

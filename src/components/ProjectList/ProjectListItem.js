@@ -14,7 +14,7 @@ export function ProjectListElement(props) {
       // console.log('project', project)
       // console.log('user', user)
       if (process.env.NODE_ENV === "development") {
-        var target_url = process.env.OIDC_CLIENT_REDIRECT_URL;
+        var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
         var target = `${target_url}/readTable?project=${project}&user=${user}`
       }
       else {

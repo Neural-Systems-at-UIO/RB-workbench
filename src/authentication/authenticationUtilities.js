@@ -13,8 +13,9 @@ function getToken() {
         const code = getCodeFromURL();
         const xhr = new XMLHttpRequest();
         console.log('promise')
+        console.log('redirect_uri:', process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL)
         if (process.env.NODE_ENV === "development") {
-            var redirect_uri = process.env.OIDC_CLIENT_REDIRECT_URL;
+            var redirect_uri = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
             xhr.open("GET", `${redirect_uri}/auth?code=${code}`, true);
         } else {
             xhr.open("GET", `auth?code=${code}`, true);

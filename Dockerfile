@@ -40,7 +40,7 @@ CMD node backend/server.js
 # docker build --platform=linux/amd64 .
 
 # To run, use the following command:
-# docker run -it -d -P --name workbench --env OIDC_CLIENT_SECRET=$OIDC_CLIENT_SECRET <IMAGE ID>
+# docker run -it -d -P --name workbench --env WORKBENCH_OIDC_CLIENT_SECRET=$OIDC_CLIENT_SECRET <IMAGE ID>
 
 # To push to EBRAINS Docker registry
 # docker login docker-registry.ebrains.eu
