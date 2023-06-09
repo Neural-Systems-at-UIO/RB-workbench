@@ -321,6 +321,8 @@ export function MetadataTable(props) {
 
     updateTableData(temp_);
     setSelected([]);
+    postTableData();
+
   };
 
   const makeSubjects = () => {
