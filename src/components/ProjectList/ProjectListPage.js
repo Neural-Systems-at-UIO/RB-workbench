@@ -8,7 +8,7 @@ import Icon from '@ant-design/icons'
 import UserProfileCard from '../UserProfileCard';
 import { UserOutlined } from '@ant-design/icons';
 import { ReactComponent as EbrainsLogo } from '../../resources/ebrains-ai-cropped.svg'
-
+import {  message, Popconfirm } from 'antd';
 const { Content } = Layout
 
 

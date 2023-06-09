@@ -1,6 +1,7 @@
 import { Button, Modal , Form, Input, List} from 'antd';
 import { useState } from 'react'
 import init_tables from '../../metadata_new/schemaTables';
+import { Popconfirm } from 'antd';
 
 
 export function ProjectListElement(props) {
@@ -102,7 +103,15 @@ const handleSubmit = (values) => {
         title={<a onClick={handleLaunchWithProject}>{formValues.title}</a>}
         description={formValues.description} />
       <>
-        <Button style={{ marginRight: '1rem' }} danger onClick={handleDelete}>Delete</Button>
+        <Popconfirm
+          title="Are you sure to delete this project?"
+          description="This action cannot be undone."
+          onConfirm={handleDelete}
+          okText="Yes"
+          cancelText="No"
+        >
+        <Button style={{ marginRight: '1rem' }} danger>Delete</Button>
+        </Popconfirm>
         <Button style={{ marginRight: '1rem' }} onClick={showModal}>
           {props.ButtonText}
         </Button>
