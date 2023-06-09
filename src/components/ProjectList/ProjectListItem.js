@@ -104,7 +104,7 @@ const handleSubmit = (values) => {
         description={formValues.description} />
       <>
         <Popconfirm
-          title="Are you sure to delete this project?"
+          title="Are you sure you want to delete this project?"
           description="This action cannot be undone."
           onConfirm={handleDelete}
           okText="Yes"
