@@ -25,7 +25,7 @@ const { Content } = Layout
 
 
 const MetadataPage = (props) => {
-  
+  const [collapsed, setCollapsed] = useState(false)
   const [currentTableName, setCurrentTableName] = useState(props.projectDataTable.ActiveTableName)
   
   // useEffect(() => {
@@ -44,10 +44,20 @@ const MetadataPage = (props) => {
 
   //const specimenTable = props.projectDataTable[currentTableName];
   //console.log('metadataPage', specimenTable)
-
+  let mainPanelStyle = {
+    // outline: '0.3125rem solid black',
+    padding: '2% 1% 2% 1%',
+    margin: '1% 1% 2% 0%',
+    borderRadius: '0.9375rem',
+    boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
+    height: '90.5vh',
+    width: collapsed ? '95vw':'91vw',
+    // set a transition on width
+    transition: 'width 0.2s ease-in-out',
+  }
   return (
     <Layout className = "metadata-page-container" style={{ backgroundColor: '#f8fafb', minHeight: '92.55vh'}}>
-      <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick} projectName={props.project}></SidePanelLeft>
+      <SidePanelLeft selectedPageName={currentTableName} onMenuItemClick={handleSelectTable} onHomeButtonClick={handleHomeButtonClick} projectName={props.project} collapsed={collapsed} setCollapsed={setCollapsed}></SidePanelLeft>
       
       <Layout className="table-container" style={{ backgroundColor: '#f8fafb' }}>
 
@@ -73,15 +83,7 @@ const MetadataPage = (props) => {
             }}
           >
             <div
-              style={{
-                // outline: '0.3125rem solid black',
-                padding: '2% 1% 2% 1%',
-                margin: '1% 1% 2% 0%',
-                borderRadius: '0.9375rem',
-                boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
-                height: '90.5vh',
-                width: '88vw'
-              }}
+              style={mainPanelStyle}
             >
               {/* <OptionsBar /> */}
               <Form>

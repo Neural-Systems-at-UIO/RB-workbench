@@ -181,7 +181,7 @@ const ProjectList = (props) => {
 
                 margin: '-0.7% 0 0 0',
   
-                clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
+                clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)',
               }}
             >
  
@@ -191,11 +191,14 @@ const ProjectList = (props) => {
                 style={{
                   // outline: '0.3125rem solid black',
                   padding: '2% 1% 2% 1%',
-                  margin: '1% 1% 2% 1%',
+                  margin: '1% 4% 4% 4%',
                   borderRadius: '0.9375rem',
                   boxShadow: '0.3125rem 0.5rem 1.5rem 0.3125rem rgba(208, 216, 243, 0.6)',
                   height: '90.5vh',
-                  width: '88vw'
+                  width: '90vw',
+                  // center
+
+                  alignItems: 'center',
                 }}
               >
                     <div>

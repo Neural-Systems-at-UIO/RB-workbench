@@ -91,9 +91,8 @@ function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
     />
   )
 }
-function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, projectName }) {
+function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, projectName, collapsed, setCollapsed}) {
 
-  const [collapsed, setCollapsed] = useState(false)
 
   const sidebarStyle = { backgroundColor: backgroundColor,
 };
