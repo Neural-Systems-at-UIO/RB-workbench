@@ -12,3 +12,11 @@ code {
     monospace;
 }
 
+.ant-layout-sider {
+	background-color: rgb(248, 250, 251);
+	flex: 0 0 200px;
+	/* max-width: 200px; */
+	min-width: 200px;
+	/* width: 200px; */
+}
+

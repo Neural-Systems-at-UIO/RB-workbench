@@ -6,7 +6,8 @@ import { Menu, Layout , Button} from 'antd'
 import React, { useState } from 'react'
 import ConfigProvider from '../ConfigProvider'
 
-// import './SidePanelLeft.css'
+
+import './SidePanelLeft.css'
 import {
   UserOutlined,
   TeamOutlined,
@@ -23,9 +24,9 @@ const backgroundColor = '#f8fafb'; // Todo: Get from context provider
 // Define menu items for the specimen tables
 const items = [
   getItem('Subject', '1', <UserOutlined />),
-  getItem('TissueSample', '2', <HeartOutlined/>),
-  getItem('SubjectGroup', '3', <TeamOutlined />),
-  getItem('TissueSampleCollection', '4', <HeartOutlined/>)]
+  getItem('Tissue Sample', '2', <HeartOutlined/>),
+  getItem('Subject Group', '3', <TeamOutlined />),
+  getItem('Tissue Sample Collection', '4', <HeartOutlined/>)]
 
 // Define menu groups to group tables for individual specimen and specimen sets
 const itemGroups = [
@@ -40,7 +41,7 @@ function getItem (label, key, icon, children) {
     key,
     icon,
     children,
-    label
+    label,
   }
 
   if (children !== undefined) {
@@ -71,7 +72,7 @@ function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
 
   const menuStyle = {
     backgroundColor: backgroundColor,
-    width: '256',
+    // width: '500',
     height: '100%',
     marginTop: '5vh',
     marginLeft: '5%',
@@ -90,15 +91,16 @@ function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
     />
   )
 }
-
 function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, projectName }) {
 
   const [collapsed, setCollapsed] = useState(false)
 
-  const sidebarStyle = { backgroundColor: backgroundColor };
+  const sidebarStyle = { backgroundColor: backgroundColor,
+};
+
 
   return (
-    <Sider style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Sider className="my-sider-class" style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
       <ConfigProvider>
         <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em', textAlign: 'center' }}>{projectName}</h1>
         <HomeButton isCollapsed={collapsed} onHomeButtonClick={onHomeButtonClick} />
@@ -107,3 +109,4 @@ function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, 
     </Sider>
   )
 }
+ 
