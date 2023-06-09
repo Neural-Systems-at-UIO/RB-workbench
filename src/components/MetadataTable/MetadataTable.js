@@ -81,10 +81,13 @@ export function MetadataTable(props) {
   // These are used when new metadata instances are added to column dropdowns.
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
-
+  console.log('props', props)
+  console.log('nextTableName', nextTableName)
+  // remove spaces from table name
+  nextTableName = nextTableName.replace(/\s/g, '');
   const currentTable = props.projectDataTable[nextTableName];
+  console.log('currentTable', currentTable) 
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
-
 
   if (currentTable.data === null) {
     currentTable.data = [createBlankRow()];
