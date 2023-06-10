@@ -67,6 +67,7 @@ export function MetadataTable(props) {
   var history = [];
   // this is weird, how should it be done?
 
+  const [customOptionList, setCustomOptionList] = useState({})
   const [currentTableName, setCurrentTableName] = useState(nextTableName);
   const [currentProjectName, setCurrentProjectName] = useState(props.project);
 
@@ -519,6 +520,8 @@ export function MetadataTable(props) {
         statefulmetadataDefinitions,
         setstatefulmetadata,
         setstatefulmetadataDefinitions,
+        customOptionList, 
+        setCustomOptionList,
         tables
       })
     };

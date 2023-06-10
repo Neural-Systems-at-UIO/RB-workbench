@@ -35,7 +35,7 @@ import { EditableContext } from './EditableRow.js';
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
 
   const form = useContext(EditableContext);
@@ -88,25 +88,29 @@ export function EditableCell({
   };
 
   const handleAddNewMetadataOption = (e) => {
+    // Callback that handles adding a custom (user defined) metadata option
     e.preventDefault();
-    let items = [];
-    if (statefulmetadata[columnName]) {
-      items = statefulmetadata[columnName];
-    }
-    let definitions = [];
-    if (statefulmetadataDefinitions[columnName]) {
-      definitions = statefulmetadataDefinitions[columnName];
-    }
-    items = [customOptionName, ...items];
-    statefulmetadata[columnName] = items;
-    const newdefinition = 'A custom option added by the user';
-    definitions = [newdefinition, ...definitions];
-    statefulmetadataDefinitions[columnName] = definitions;
-    setstatefulmetadataDefinitions(statefulmetadataDefinitions);
-    setstatefulmetadata(statefulmetadata);
+
+    if (!customOptionName) {return;}
+
+    // Retrieve the current items and definitions based on the columnName
+    const items = customOptionList[columnName] || [];
+
+    // Add the new item and definition at the beginning of their respective arrays
+    const updatedItems = [customOptionName, ...items];
+
+    // Update the stateful metadata arrays with the new items and definitions
+    customOptionList[columnName] = updatedItems;
+
+    // Set the updated stateful metadata arrays
+    setCustomOptionList(customOptionList);
+
+    // Reset the input field for a custom dropdown option
     setCustomOptionName('');
+
+    // Set focus back to the input field with a slight delay
     setTimeout(() => {
-      inputRef.current?.focus();
+      inputRef.current?.focus();  // ? is used to prevent an error if inputRef.current is null
     }, 0);
   };
 
@@ -141,6 +145,9 @@ export function EditableCell({
       statefulmetadataDefinitions[columnName] = [];
     }
 
+
+    const dropdownOptions = getColumnDropdownOptions(columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList)
+
     for (let i = 0; i < statefulmetadata[columnName].length; i++) {
       const option = (
         <Select
@@ -170,6 +177,7 @@ export function EditableCell({
           {/* allow the user to add new options to a select  if missing */}
           <Select
             showSearch
+            options={dropdownOptions}
             optionFilterProp="children"
             placeholder="Select a option..."
             id="selectmain"
@@ -208,13 +216,14 @@ export function EditableCell({
               </>
             )}
           >
-            {optionsAntd}
+            {/* {optionsAntd} */}
           </Select>
           {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         </Form.Item>
       ) : (
         <Select
           showSearch
+          options={dropdownOptions}
           optionFilterProp="children"
           placeholder="Select an option..."
           id="select"
@@ -251,13 +260,15 @@ export function EditableCell({
             </>
           )}
         >
-          {optionsAntd}
+          {/* {optionsAntd} */}
         </Select>
       );
   }
 
   return <td {...restProps}>{childNode}</td>;
 }
+
+// SUBCOMPONENTS
 
 /**
  * CellInputField component for rendering an input field within a table cell.
@@ -304,4 +315,44 @@ const CellValueDisplay = (children, toggleIsEditing) => {
       {children}
     </div>
   )
+}
+
+
+// UTILITY FUNCTIONS
+
+const getColumnDropdownOptions = (columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList) => {
+
+  let userDefinedOptions = {}
+  let controlledOptions = {}
+
+  if (customOptionList[columnName]) {
+    userDefinedOptions = {
+      label: 'User defined',
+      options: customOptionList[columnName].map((item) => ({
+        value: item,
+        label: item,
+        title: 'A custom option added by the user',
+      }))
+    }
+  }
+
+  if (statefulmetadata[columnName]) {
+    controlledOptions = {
+      label: 'Controlled',
+      options: statefulmetadata[columnName].map((item) => ({
+        label: item,
+        value: item,
+      }))
+    }
+  }
+
+  let options = []
+  if (Object.keys(userDefinedOptions).length !== 0) {
+    options.push(userDefinedOptions)
+  } 
+  if (Object.keys(controlledOptions).length !== 0) {
+    options.push(controlledOptions)
+  } 
+
+  return options;
 }
