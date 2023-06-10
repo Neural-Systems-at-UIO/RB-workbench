@@ -509,11 +509,11 @@ export function MetadataTable(props) {
     return {
       ...col,
       onCell: (record) => ({
-        record,
-        editable: col.editable,
-        select: col.select,
-        dataIndex: col.dataIndex,
-        title: col.title,
+        rowRecord: record,
+        columnName: col.dataIndex,
+        columnTitle: col.title,
+        isEditable: col.editable,
+        isSelectable: col.select,
         handleSave,
         statefulmetadata,
         statefulmetadataDefinitions,

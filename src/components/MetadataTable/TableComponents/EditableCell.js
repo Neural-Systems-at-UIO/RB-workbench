@@ -3,100 +3,108 @@ import { Button, Form, Input, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
+// Todo: 
+//    [ ] isEditable and isSelectable could be combined into one prop
+//    [ ] The statefulmetadata and statefulmetadataDefinitions could be combined into one object
+//    [ ] Remove setstatefulmetadata and setstatefulmetadataDefinitions
+
+// Questions:
+//    [ ] What is the purpose of EditableContext? How does it work?
+  
+
+// Terminology:
+//    - Record : An object containing row or cell data represented with key-value pairs
 
 /**
  * EditableCell component for rendering an editable cell in a table.
  *
  * @param {Object} props - The component props.
- * @param {string} props.title - The title of the cell.
- * @param {boolean} props.editable - Indicates whether the cell is editable or not.
+ * @param {Object} props.rowRecord - The data of the row the cell belongs to in the form of an object with key-value pairs.
+ * @param {string} props.columnTitle - The title of the column of the cell.
+ * @param {string} props.columnName - The data index of the cell (This is the name of the column in the table)  
+ * @param {boolean} props.isEditable - Indicates whether the cell is editable or not.
+ * @param {boolean} props.isSelectable - Indicates whether the cell is a dropdown or not.
  * @param {*} props.children - The content to be rendered within the cell (List of [undefined, value])
- * @param {string} props.dataIndex - The data index of the cell (This is the name of the column in the table)
- * @param {Object} props.record - The data of the row the cell belongs to.
- * @param {boolean} props.select - Indicates whether the cell is a dropdown or not.
  * @param {Function} props.handleSave - The function to handle saving the cell data.
- * @param {*} props.statefulmetadata - The stateful metadata associated with the cell.
- * @param {*} props.statefulmetadataDefinitions - The definitions of stateful metadata.
+ * @param {Object} props.statefulmetadata - The stateful metadata associated with the cell.
+ * @param {Object} props.statefulmetadataDefinitions - The definitions of stateful metadata.
  * @param {Function} props.setstatefulmetadata - The function to set the stateful metadata.
  * @param {Function} props.setstatefulmetadataDefinitions - The function to set the definitions of stateful metadata.
- * @param {*} props.tables - The tables associated with the cell.
+ * @param {Object} props.tables - The tables associated with the cell.
  * @param {...*} props.restProps - Additional props to be spread on the underlying HTML element.
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  title, editable, children, dataIndex, record, select, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, tables, ...restProps
 }) {
-  
-  //console.log('children:', children)
-  //console.log('restProps:', restProps)
 
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef(null); // Harry: What is this?
   const form = useContext(EditableContext);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [customOptionName, setCustomOptionName] = useState('');
+
+  const inputRef = useRef(null); // Harry: What is this?
   
   const optionsAntd = []; // A list of dropdown options in antdesign format
-  const [name, setName] = useState('');
 
   useEffect(() => {
-    if (editing) {
+    if (isEditing) {
+      // Set focus on the input field whenever edit mode is entered
       inputRef.current.focus();
     }
-  }, [editing]);
+  }, [isEditing]);
 
-  // toggleEdit is used to flip the state of the editing boolean
-  const toggleEdit = () => {
-    setEditing(!editing);
-
-    form.setFieldsValue({
-      [dataIndex]: record[dataIndex]
-    });
+  // toggleIsEditing is used to flip the state of the isEditing boolean
+  const toggleIsEditing = () => {
+    setIsEditing(!isEditing);
+    const cellRecord = { [columnName]: rowRecord[columnName] }
+    form.setFieldsValue(cellRecord);
   };
 
   // finishEditCell is called when the user presses enter or clicks outside the cell
   const finishEditCell = async (event) => {
     try {
-      const values = await form.validateFields();
-      toggleEdit();
-      handleSave({ ...record, ...values });
+      const cellRecord = await form.validateFields();
+      toggleIsEditing(); // Why is this happening after validating fields???
+      handleSave({ ...rowRecord, ...cellRecord });
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
   };
 
   const saveDropDown = async (event) => {
-    toggleEdit();
+    toggleIsEditing();
     try {
-      const values = await form.validateFields();
-
-      handleSave({ ...record, ...values }, event, dataIndex);
+      const cellRecord = await form.validateFields();
+      handleSave({ ...rowRecord, ...cellRecord }, event, columnName);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
-    setEditing(false);
+    setIsEditing(false); // Why, it is already happening in toggleIsEditing?
   };
 
-  const onNameChange = (event) => {
-    setName(event.target.value);
+  const handleCustomOptionNameChanged = (event) => {
+    setCustomOptionName(event.target.value);
   };
 
-  const addItem = (e) => {
+  const handleAddNewMetadataOption = (e) => {
     e.preventDefault();
     let items = [];
-    if (statefulmetadata[dataIndex]) {
-      items = statefulmetadata[dataIndex];
+    if (statefulmetadata[columnName]) {
+      items = statefulmetadata[columnName];
     }
     let definitions = [];
-    if (statefulmetadataDefinitions[dataIndex]) {
-      definitions = statefulmetadataDefinitions[dataIndex];
+    if (statefulmetadataDefinitions[columnName]) {
+      definitions = statefulmetadataDefinitions[columnName];
     }
-    items = [name, ...items];
-    statefulmetadata[dataIndex] = items;
+    items = [customOptionName, ...items];
+    statefulmetadata[columnName] = items;
     const newdefinition = 'A custom option added by the user';
     definitions = [newdefinition, ...definitions];
-    statefulmetadataDefinitions[dataIndex] = definitions;
+    statefulmetadataDefinitions[columnName] = definitions;
     setstatefulmetadataDefinitions(statefulmetadataDefinitions);
     setstatefulmetadata(statefulmetadata);
-    setName('');
+    setCustomOptionName('');
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
@@ -104,58 +112,58 @@ export function EditableCell({
 
   let childNode = children;
 
-  if (editable) {
-    childNode = editing ? CellInputField(dataIndex, title, inputRef, finishEditCell) : CellValueDisplay(children, toggleEdit)
+  if (isEditable) {
+    childNode = isEditing ? CellInputField(columnName, columnTitle, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
   }
 
 
-  if (select) {
+  if (isSelectable) {
 
     // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
     // From Harry: 
     const currentTableName = tables.ActiveTableName;
 
-    if (tables[currentTableName].dependentVariables[dataIndex]) {
-      const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[dataIndex])[0];
-      const dependentVariableName = tables[currentTableName].dependentVariables[dataIndex][dependentTableName];
+    if (tables[currentTableName].dependentVariables[columnName]) {
+      const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[columnName])[0];
+      const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
       if (tables[dependentTableName].data !== null) {
         let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
-        statefulmetadata[dataIndex] = value;
+        statefulmetadata[columnName] = value;
       }
     }
 
     // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
-    if (statefulmetadata[dataIndex] === undefined) {
-      statefulmetadata[dataIndex] = [];
+    if (statefulmetadata[columnName] === undefined) {
+      statefulmetadata[columnName] = [];
     }
 
-    if (statefulmetadataDefinitions[dataIndex] === undefined) {
-      statefulmetadataDefinitions[dataIndex] = [];
+    if (statefulmetadataDefinitions[columnName] === undefined) {
+      statefulmetadataDefinitions[columnName] = [];
     }
 
-    for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
+    for (let i = 0; i < statefulmetadata[columnName].length; i++) {
       const option = (
         <Select
-          value={statefulmetadata[dataIndex][i]}
-          title={statefulmetadataDefinitions[dataIndex][i]}
+          value={statefulmetadata[columnName][i]}
+          title={statefulmetadataDefinitions[columnName][i]}
         >
-          {statefulmetadata[dataIndex][i]}
+          {statefulmetadata[columnName][i]}
         </Select>
       );
       optionsAntd.push(option);
     }
-    childNode = editing
+    childNode = isEditing
       ? (
 
         <Form.Item
           style={{
             margin: 0
           }}
-          name={dataIndex}
+          name={columnName}
           rules={[
             {
               required: false,
-              message: `${title} is required.`
+              message: `${columnTitle} is required.`
             }
           ]}
         >
@@ -191,9 +199,9 @@ export function EditableCell({
                   <Input
                     placeholder="Please enter item"
                     ref={inputRef}
-                    value={name}
-                    onChange={onNameChange} />
-                  <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                    value={customOptionName}
+                    onChange={handleCustomOptionNameChanged} />
+                  <Button type="text" icon={<PlusOutlined />} onClick={handleAddNewMetadataOption}>
                     Add item
                   </Button>
                 </Space>
@@ -234,9 +242,9 @@ export function EditableCell({
                 <Input
                   placeholder="Please enter item"
                   ref={inputRef}
-                  value={name}
-                  onChange={onNameChange} />
-                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                  value={customOptionName}
+                  onChange={handleCustomOptionNameChanged} />
+                <Button type="text" icon={<PlusOutlined />} onClick={handleAddNewMetadataOption}>
                   Add item
                 </Button>
               </Space>
@@ -254,18 +262,18 @@ export function EditableCell({
 /**
  * CellInputField component for rendering an input field within a table cell.
  *
- * @param {string} dataIndex - The data index of the cell (This is the same as title).. Todo: Why do we need both??
+ * @param {string} columnName - The data index of the cell (This is the same as title).. Todo: Why do we need both??
  * @param {string} columnTitle - The title of the column.
  * @param {React.Ref} inputRef - The ref object for accessing the input field. Todo: Where does this come from? What is it?
  * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
  * @returns {JSX.Element} The rendered component.
  */
-const CellInputField = (dataIndex, columnTitle, inputRef, handleFinishEditCell) => {
+const CellInputField = (columnName, columnTitle, inputRef, handleFinishEditCell) => {
   /// This function returns the (editable) input field for a cell
   return (
     <Form.Item
       style={{ margin: 0 }}
-      name={dataIndex}
+      name={columnName}
       rules={[
         {
           required: false,
@@ -278,7 +286,7 @@ const CellInputField = (dataIndex, columnTitle, inputRef, handleFinishEditCell) 
   )
 }
 
-const CellValueDisplay = (children, toggleEdit) => {
+const CellValueDisplay = (children, toggleIsEditing) => {
 // Component that displays the value of a cell which is not being edited
 
   const cellStyle = {
@@ -291,7 +299,7 @@ const CellValueDisplay = (children, toggleEdit) => {
     <div
       className="editable-cell-value-wrap"
       style={cellStyle}
-      onClick={toggleEdit}
+      onClick={toggleIsEditing}
     >
       {children}
     </div>
