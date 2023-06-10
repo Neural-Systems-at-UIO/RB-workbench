@@ -8,10 +8,16 @@ import { EditableContext } from './EditableRow.js';
 //    [ ] The statefulmetadata and statefulmetadataDefinitions could be combined into one object
 //    [ ] Dropdowns for dependent variables should not have the grouping of options
 //    [ ] Dependent variables (dropdown options) should not be updated here.
+//    [ ] The dropdown options should be updated in the parent component (MetadataTable.js)
+//    [ ] Create more subcomponents
 
 // Questions:
-//    [ ] What is the purpose of EditableContext? How does it work?
-//    [ ] Should user be allowed to add new dependent variables from a cell dropdown?
+//    - What is the purpose of EditableContext? How does it work?
+//    - Should user be allowed to add new dependent variables from a cell dropdown?
+//    - Should user be allowed to add new independent variables from a cell dropdown?
+//    - Can we combine finishEditCell and saveDropDown?
+//    - Why does the select component seem to be inversed with regards to the isEditing state?
+//        i.e when isEditing is true, the custom renderer with add item is not needed
   
 
 // Terminology:
@@ -30,6 +36,8 @@ import { EditableContext } from './EditableRow.js';
  * @param {Function} props.handleSave - The function to handle saving the cell data.
  * @param {Object} props.statefulmetadata - The stateful metadata associated with the cell.
  * @param {Object} props.statefulmetadataDefinitions - The definitions of stateful metadata.
+ * @param {Object} props.customOptionList - The custom option list.
+ * @param {Object} props.setCustomOptionList - The function to set the custom option list.
  * @param {Object} props.tables - The tables associated with the cell.
  * @param {...*} props.restProps - Additional props to be spread on the underlying HTML element.
  * @returns {JSX.Element} The rendered component.
@@ -37,6 +45,9 @@ import { EditableContext } from './EditableRow.js';
 export function EditableCell({
   rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
+  // This component allows cell editing in the MetadataTable component
+  // It has an internal state that keeps track of whether the cell is being edited or not
+  // If mode is edit, it returns a form item with an input field, otherwise it returns the cell value
 
   const form = useContext(EditableContext);
 
@@ -46,8 +57,6 @@ export function EditableCell({
   // inputRef is passed as the ref property to the input field components. 
   // It used to set focus on the selected input field when editing.
   const inputRef = useRef(null);
-  
-  const optionsAntd = []; // A list of dropdown options in antdesign format
 
   useEffect(() => {
     if (isEditing) {
@@ -122,7 +131,6 @@ export function EditableCell({
     childNode = isEditing ? CellInputField(columnName, columnTitle, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
   }
 
-
   if (isSelectable) {
 
     [statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
@@ -130,20 +138,8 @@ export function EditableCell({
 
     childNode = isEditing ?
       (
-
-        <Form.Item
-          style={{
-            margin: 0
-          }}
-          name={columnName}
-          rules={[
-            {
-              required: false,
-              message: `${columnTitle} is required.`
-            }
-          ]}
-        >
-          {/* allow the user to add new options to a select  if missing */}
+        // Allow the user to add new options to a select if missing
+        <FormItem name={columnName} title={columnTitle} isRequired={false}>
           <Select
             showSearch
             options={dropdownOptions}
@@ -187,7 +183,7 @@ export function EditableCell({
           >
           </Select>
           {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
-        </Form.Item>
+        </FormItem>
       ) : (
         <Select
           showSearch
@@ -211,20 +207,12 @@ export function EditableCell({
                 style={{
                   margin: '8px 0'
                 }} />
-              <Space
-                style={{
-                  padding: '0 8px 4px'
-                }}
-              >
-                <Input
-                  placeholder="Please enter item"
-                  ref={inputRef}
-                  value={customOptionName}
-                  onChange={handleCustomOptionNameChanged} />
-                <Button type="text" icon={<PlusOutlined />} onClick={handleAddNewMetadataOption}>
-                  Add item
-                </Button>
-              </Space>
+              <CustomOptionInput 
+                inputRef={inputRef} 
+                value={customOptionName} 
+                onChange={handleCustomOptionNameChanged}
+                onAddItemClick={handleAddNewMetadataOption} 
+              />
             </>
           )}
         >
@@ -236,6 +224,24 @@ export function EditableCell({
 }
 
 // SUBCOMPONENTS
+
+const FormItem = ({children, name, title, isRequired}) => {
+  // FormItem is a wrapper component for a form item that is used for cell input field componenets
+  const formItemStyle = { margin: 0 };
+  const formItemRules = [
+    {
+      required: isRequired,
+      message: `${title} is required.`
+    }
+  ];
+
+  return (
+    <Form.Item name={name} style={formItemStyle} rules={formItemRules}>
+      {children}
+    </Form.Item>
+  )
+}
+
 
 /**
  * CellInputField component for rendering an input field within a table cell.
@@ -249,18 +255,9 @@ export function EditableCell({
 const CellInputField = (columnName, columnTitle, inputRef, handleFinishEditCell) => {
   /// This function returns the (editable) input field for a cell
   return (
-    <Form.Item
-      style={{ margin: 0 }}
-      name={columnName}
-      rules={[
-        {
-          required: false,
-          message: `${columnTitle} is required.`
-        }
-      ]}
-    >
+    <FormItem name={columnName} title={columnTitle} isRequired={false}>
       <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
-    </Form.Item>
+    </FormItem>
   )
 }
 
@@ -284,6 +281,27 @@ const CellValueDisplay = (children, toggleIsEditing) => {
   )
 }
 
+const CustomOptionInput = ({inputRef, value, onChange, onAddItemClick}) => {
+  // Component where user can add a new option to a dropdown
+
+  return (
+    <Space
+    style={{
+      padding: '0 8px 4px'
+    }}
+    >
+    <Input
+      placeholder="Please enter item"
+      ref={inputRef}
+      value={value}
+      onChange={onChange} />
+    <Button type="text" icon={<PlusOutlined />} onClick={onAddItemClick}>
+      Add item
+    </Button>
+    </Space>
+  )
+}
+
 
 // UTILITY FUNCTIONS
 
@@ -304,12 +322,14 @@ const getColumnDropdownOptions = (columnName, statefulmetadata, statefulmetadata
   }
 
   if (statefulmetadata[columnName]) {
-    controlledOptions = {
-      label: 'Controlled',
-      options: statefulmetadata[columnName].map((item) => ({
-        label: item,
-        value: item,
-      }))
+    if (statefulmetadata[columnName].length > 0) {
+      controlledOptions = {
+        label: 'Controlled',
+        options: statefulmetadata[columnName].map((item) => ({
+          label: item,
+          value: item,
+        }))
+      }
     }
   }
 
