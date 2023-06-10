@@ -50,7 +50,7 @@ export function EditableCell({
   useEffect(() => {
     if (isEditing) {
       // Set focus on the input field whenever edit mode is entered
-      inputRef.current.focus();
+      inputRef.current?.focus();
     }
   }, [isEditing]);
 
