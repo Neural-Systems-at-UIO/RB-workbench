@@ -30,7 +30,7 @@ import { convertTableToCSV } from '../../helpers/csvAdapter';
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
-import { getMetadataOptions } from '../../helpers/table/getMetadataOptions';
+import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
 
 const TABLE_COMPONENTS = {
   body: {
@@ -39,7 +39,7 @@ const TABLE_COMPONENTS = {
   }
 };
 
-const metadataOptionMap = getMetadataOptions();
+var metadataOptionMap = getMetadataOptions();
 
 // Suggestions
 // EH: input to this component should be an object with the following properties:
@@ -100,7 +100,6 @@ export function MetadataTable(props) {
   if (currentTable.data === null) {
     currentTable.data = [createBlankRow()];
   }
-
 
   const [
     DataSource, {
@@ -389,19 +388,26 @@ export function MetadataTable(props) {
    *
    */
   const handleSave = (row, event, dataIndex) => {
-    const OldData = [...presentDS];
+
+    // Todo: Rename row to PreviousRowRecord
+
+    const OldData = [...presentDS]; // Why is this called old data???
     const index = OldData.findIndex((item) => row.key === item.key);
-    const item = OldData[index];
+    
+    const item = OldData[index]; // Rename to currentRowRecord
+    console.log('item', item)
+    console.log('row', row)
 
     const originalData = { ...row };
 
-    const columns = Object.keys(row);
-
+    const columnNames = Object.keys(row);
+    var matchCol=null
     // regex for newline,  any number of spaces, newline
     for (const key in Object.keys(row)) {
-      const id = columns[key];
+      const id = columnNames[key];
       if (row[id] !== item[id]) {
-        var matchCol = id;
+        console.log('id', id)
+        matchCol = id;
         var matchValue = row[id];
         originalData[matchCol] = item[id];
         OldData.splice(index, 1, { ...item, ...row });
@@ -410,6 +416,23 @@ export function MetadataTable(props) {
         // return
       }
     }
+
+    // console.log('columnName', matchCol)
+    // console.log('dataIndex', dataIndex)
+
+
+    // for (const columnName of columnNames) {
+    //   if (row[columnName] !== item[columnName]) {
+    //     var matchCol = columnName;
+    //     var matchValue = row[columnName];
+    //     originalData[matchCol] = item[columnName];
+    //     OldData.splice(index, 1, { ...item, ...row });
+    //   } else {
+    //     // No values have changed, so do nothing. Todo: Confirm with Harry.
+    //     // return
+    //   }
+    // }
+
 
     if (typeof event !== 'undefined') {
       matchCol = dataIndex;
@@ -431,39 +454,9 @@ export function MetadataTable(props) {
 
     if (matchCol === undefined) {
       return
-    }
+    }    
 
-    // Adjust width of column if necessary
-    let matchColIndex = columns.indexOf(matchCol);
-    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
-
-    const matchValueType = typeof matchValue;
-
-    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
-
-    if (matchValueType === 'number') {
-      matchValue = metadata[matchCol][matchValue];
-
-      if (matchValue.length > maxColumnWidth) {
-        maxColumnWidth = matchValue.length;
-        statefulColumns[matchColIndex].width = widthCalcDropdown(
-          matchValue,
-          '0.82'
-        );
-      }
-
-    } else {
-      if (matchValue.length > maxColumnWidth) {
-        maxColumnWidth = matchValue.length;
-        statefulColumns[matchColIndex].width = widthCalc(
-          matchValue,
-          '1.25'
-        );
-      }
-    }
-
-    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
-
+    updateMaxColumnWidth(columnNames, matchValue, matchCol)
     setStatefulColumns([...statefulColumns]);
 
     SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
@@ -492,13 +485,49 @@ export function MetadataTable(props) {
     DataSource.past = [...DataSource.past, [...tempDataObj]];
 
     props.projectDataTable[currentTableName].data = [...OldData];
+
+    metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
+
     postTableData();
   };
   // updateTableData(currentTable.data);
 
+  const updateMaxColumnWidth = (columnNames, dataValue, matchCol) => {
+    
+    // Adjust width of column if necessary
+    let matchColIndex = columnNames.indexOf(matchCol);
+    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
 
+    const matchValueType = typeof dataValue;
 
-  
+    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
+
+    if (matchValueType === 'number') {
+      dataValue = metadata[matchCol][dataValue];  // TODO: Why metadata? What if custom options were added?
+
+      if (dataValue.length > maxColumnWidth) {
+        maxColumnWidth = dataValue.length;
+        statefulColumns[matchColIndex].width = widthCalcDropdown(
+          dataValue,
+          '0.82'
+        );
+      }
+
+    } else {
+      if (dataValue.length > maxColumnWidth) {
+        maxColumnWidth = dataValue.length;
+        statefulColumns[matchColIndex].width = widthCalc(
+          dataValue,
+          '1.25'
+        );
+      }
+    }
+
+    // Todo: Why is this done here, when it is also done above?
+    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
+    return statefulColumns
+  }
+
   const columns = statefulColumns.map((col) => {
     if (!col.editable & !col.select) {
       return col;

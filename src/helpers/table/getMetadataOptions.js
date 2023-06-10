@@ -105,15 +105,49 @@ export function getMetadataOptions() {
     // This function updates the dropdown options for a column with dependent variables,
     // i.e. isPartOf or DescendedFrom
 
-    // Update dropdown options for dependent columns, i.e isPartOf or DescendedFrom
-    if (specimenTables[tableName].dependentVariables[columnName]) {
-        const dependentTableName = Object.keys(specimenTables[tableName].dependentVariables[columnName])[0];
-        const dependentVariableName = specimenTables[tableName].dependentVariables[columnName][dependentTableName];
-        if (specimenTables[dependentTableName].data !== null) {
-          let value = specimenTables[dependentTableName].data.map((row) => row[dependentVariableName]);
-          columnOptions[columnName] = value;
+    // Todo: Fix so that these are specific to the table a column is part of.
+    // I.e both Subject and TissueSample has the IsPartOf column, but they should have different options
+
+    // Loop through all specimen tables
+    for (const key in specimenTables) {
+      const dependentVariable = specimenTables[key].dependentVariables;
+      if (dependentVariable) {
+        for (const propName in dependentVariable) {
+          if (tableName in dependentVariable[propName]) {
+            // Get dependent variable name
+            const dependentVariableName = dependentVariable[propName][tableName];
+            if (dependentVariableName === columnName) {
+              // Get values from table
+              const value = specimenTables[tableName].data.map((row) => row[dependentVariableName]);
+
+              columnOptions[propName] = [
+                {
+                  label: dependentVariableName, 
+                  options: value.map((name) => {
+                    return {
+                      value: name,
+                      label: name,
+                    };
+                  })
+                }
+              ];
+            }
+          }
         }
       }
+    }
+
+
+
+    // // Update dropdown options for dependent columns, i.e isPartOf or DescendedFrom
+    // if (specimenTables[tableName].dependentVariables[columnName]) {
+    //     const dependentTableName = Object.keys(specimenTables[tableName].dependentVariables[columnName])[0];
+    //     const dependentVariableName = specimenTables[tableName].dependentVariables[columnName][dependentTableName];
+    //     if (specimenTables[dependentTableName].data !== null) {
+    //       let value = specimenTables[dependentTableName].data.map((row) => row[dependentVariableName]);
+    //       columnOptions[columnName] = value;
+    //     }
+    //   }
 
     return columnOptions
   }
