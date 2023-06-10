@@ -30,12 +30,16 @@ import { convertTableToCSV } from '../../helpers/csvAdapter';
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
+import { getMetadataOptions } from '../../helpers/table/getMetadataOptions';
+
 const TABLE_COMPONENTS = {
   body: {
     row: EditableRow,
     cell: EditableCell
   }
 };
+
+const metadataOptionMap = getMetadataOptions();
 
 // Suggestions
 // EH: input to this component should be an object with the following properties:
@@ -55,8 +59,6 @@ const TABLE_COMPONENTS = {
 //  - What is the difference between selected, selectedRowKeys, and selRows and selectedRows? - simplify...
 
 
-
-
 // Todo: move to separate file for managing tables.
 var selRows = [];
 
@@ -68,7 +70,6 @@ export function MetadataTable(props) {
   // project: the name of the project
   // user: the user object
   // children
-
 
   var nextTableName = props.nextTableName; // rename to newTableName?
   var history = [];
@@ -87,8 +88,9 @@ export function MetadataTable(props) {
   const tables = props.projectDataTable;
 
   // These are used when new metadata instances are added to column dropdowns.
+  // Todo: Replace with columnOptions, where columnOptions are updated if new SubjectGroups or TissueSampleCollections are added.
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
-  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
+  
   console.log('props', props)
   console.log('nextTableName', nextTableName)
   // remove spaces from table name
@@ -513,7 +515,7 @@ export function MetadataTable(props) {
     if (!col.editable & !col.select) {
       return col;
     }
-    console.log('col.select:', col.select)
+    //console.log('col.select:', col.select)
     return {
       ...col,
       onCell: (record) => ({
@@ -523,8 +525,7 @@ export function MetadataTable(props) {
         isEditable: col.editable,
         isSelectable: col.select,
         handleSave,
-        statefulmetadata,
-        statefulmetadataDefinitions,
+        metadataOptionMap,
         customOptionList, 
         setCustomOptionList,
         tables

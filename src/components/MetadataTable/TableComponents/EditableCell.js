@@ -5,7 +5,6 @@ import { EditableContext } from './EditableRow.js';
 
 // Todo: 
 //    [ ] isEditable and isSelectable could be combined into one prop
-//    [ ] The statefulmetadata and statefulmetadataDefinitions could be combined into one object
 //    [ ] Dropdowns for dependent variables should not have the grouping of options
 //    [ ] Dependent variables (dropdown options) should not be updated here.
 //    [ ] The dropdown options should be updated in the parent component (MetadataTable.js)
@@ -34,8 +33,7 @@ import { EditableContext } from './EditableRow.js';
  * @param {boolean} props.isSelectable - Indicates whether the cell is a dropdown or not.
  * @param {*} props.children - The content to be rendered within the cell (List of [undefined, value])
  * @param {Function} props.handleSave - The function to handle saving the cell data.
- * @param {Object} props.statefulmetadata - The stateful metadata associated with the cell.
- * @param {Object} props.statefulmetadataDefinitions - The definitions of stateful metadata.
+ * @param {Object} props.metadataOptionMap - A map of metadata option groups for each table column.
  * @param {Object} props.customOptionList - The custom option list.
  * @param {Object} props.setCustomOptionList - The function to set the custom option list.
  * @param {Object} props.tables - The tables associated with the cell.
@@ -43,7 +41,7 @@ import { EditableContext } from './EditableRow.js';
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, customOptionList, setCustomOptionList, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
   // This component allows cell editing in the MetadataTable component
   // It has an internal state that keeps track of whether the cell is being edited or not
@@ -133,8 +131,8 @@ export function EditableCell({
 
   if (isSelectable) {
 
-    [statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
-    const dropdownOptions = getColumnDropdownOptions(columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList)
+    //[statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
+    const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
 
     childNode = isEditing ?
       (
@@ -305,10 +303,12 @@ const CustomOptionInput = ({inputRef, value, onChange, onAddItemClick}) => {
 
 // UTILITY FUNCTIONS
 
-const getColumnDropdownOptions = (columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList) => {
+const getColumnDropdownOptions = (columnName, metadataOptionMap, customOptionList) => {
+  // This function combines the metadata options with the user defined options
+  // for a column and returns the combined list in the format required by the
+  // Ant Design Select component for grouping options
 
   let userDefinedOptions = {}
-  let controlledOptions = {}
 
   if (customOptionList[columnName]) {
     userDefinedOptions = {
@@ -321,25 +321,16 @@ const getColumnDropdownOptions = (columnName, statefulmetadata, statefulmetadata
     }
   }
 
-  if (statefulmetadata[columnName]) {
-    if (statefulmetadata[columnName].length > 0) {
-      controlledOptions = {
-        label: 'Controlled',
-        options: statefulmetadata[columnName].map((item) => ({
-          label: item,
-          value: item,
-        }))
-      }
-    }
-  }
-
   let options = []
   if (Object.keys(userDefinedOptions).length !== 0) {
     options.push(userDefinedOptions)
   } 
-  if (Object.keys(controlledOptions).length !== 0) {
-    options.push(controlledOptions)
-  } 
+
+  if (metadataOptionMap[columnName]) {
+    if (metadataOptionMap[columnName].length > 0) {
+      options.push(...metadataOptionMap[columnName])
+    }
+  }
 
   return options;
 }
