@@ -9,6 +9,13 @@
 //    - Import table
 
 
+// Todo: 
+//    [ ] If a subject group is removed, the isPartOf property of the subject beloning to that SubjectGroup should be set to null
+
+// Questions:
+//    [ ]
+  
+
 // IMPORTS
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';

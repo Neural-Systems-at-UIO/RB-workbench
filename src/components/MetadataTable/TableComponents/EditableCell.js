@@ -6,6 +6,8 @@ import { EditableContext } from './EditableRow.js';
 // Todo: 
 //    [ ] isEditable and isSelectable could be combined into one prop
 //    [ ] The statefulmetadata and statefulmetadataDefinitions could be combined into one object
+//    [ ] Dropdowns for dependent variables should not have the grouping of options
+//    [ ] Dependent variables (dropdown options) should not be updated here.
 
 // Questions:
 //    [ ] What is the purpose of EditableContext? How does it work?
@@ -43,7 +45,7 @@ export function EditableCell({
 
   // inputRef is passed as the ref property to the input field components. 
   // It used to set focus on the selected input field when editing.
-  const inputRef = useRef(null); // Harry: What is this?
+  const inputRef = useRef(null);
   
   const optionsAntd = []; // A list of dropdown options in antdesign format
 
@@ -123,25 +125,11 @@ export function EditableCell({
 
   if (isSelectable) {
 
-    // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
-    // From Harry: 
-
     [statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
     const dropdownOptions = getColumnDropdownOptions(columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList)
 
-    for (let i = 0; i < statefulmetadata[columnName].length; i++) {
-      const option = (
-        <Select
-          value={statefulmetadata[columnName][i]}
-          title={statefulmetadataDefinitions[columnName][i]}
-        >
-          {statefulmetadata[columnName][i]}
-        </Select>
-      );
-      optionsAntd.push(option);
-    }
-    childNode = isEditing
-      ? (
+    childNode = isEditing ?
+      (
 
         <Form.Item
           style={{
@@ -197,7 +185,6 @@ export function EditableCell({
               </>
             )}
           >
-            {/* {optionsAntd} */}
           </Select>
           {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
         </Form.Item>
@@ -241,7 +228,6 @@ export function EditableCell({
             </>
           )}
         >
-          {/* {optionsAntd} */}
         </Select>
       );
   }
@@ -254,9 +240,9 @@ export function EditableCell({
 /**
  * CellInputField component for rendering an input field within a table cell.
  *
- * @param {string} columnName - The data index of the cell (This is the same as title).. Todo: Why do we need both??
+ * @param {string} columnName - The data index of the cell (This is the same as title)..
  * @param {string} columnTitle - The title of the column.
- * @param {React.Ref} inputRef - The ref object for accessing the input field. Todo: Where does this come from? What is it?
+ * @param {React.Ref} inputRef - The ref object for accessing the input field.
  * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
  * @returns {JSX.Element} The rendered component.
  */
