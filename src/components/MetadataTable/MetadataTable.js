@@ -518,8 +518,6 @@ export function MetadataTable(props) {
         handleSave,
         statefulmetadata,
         statefulmetadataDefinitions,
-        setstatefulmetadata,
-        setstatefulmetadataDefinitions,
         customOptionList, 
         setCustomOptionList,
         tables

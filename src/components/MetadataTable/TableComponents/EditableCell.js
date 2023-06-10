@@ -6,7 +6,6 @@ import { EditableContext } from './EditableRow.js';
 // Todo: 
 //    [ ] isEditable and isSelectable could be combined into one prop
 //    [ ] The statefulmetadata and statefulmetadataDefinitions could be combined into one object
-//    [ ] Remove setstatefulmetadata and setstatefulmetadataDefinitions
 
 // Questions:
 //    [ ] What is the purpose of EditableContext? How does it work?
@@ -28,14 +27,12 @@ import { EditableContext } from './EditableRow.js';
  * @param {Function} props.handleSave - The function to handle saving the cell data.
  * @param {Object} props.statefulmetadata - The stateful metadata associated with the cell.
  * @param {Object} props.statefulmetadataDefinitions - The definitions of stateful metadata.
- * @param {Function} props.setstatefulmetadata - The function to set the stateful metadata.
- * @param {Function} props.setstatefulmetadataDefinitions - The function to set the definitions of stateful metadata.
  * @param {Object} props.tables - The tables associated with the cell.
  * @param {...*} props.restProps - Additional props to be spread on the underlying HTML element.
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, customOptionList, setCustomOptionList, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, statefulmetadata, statefulmetadataDefinitions, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
 
   const form = useContext(EditableContext);
