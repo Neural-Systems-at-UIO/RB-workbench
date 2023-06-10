@@ -9,6 +9,7 @@ import { EditableContext } from './EditableRow.js';
 
 // Questions:
 //    [ ] What is the purpose of EditableContext? How does it work?
+//    [ ] Should user be allowed to add new dependent variables from a cell dropdown?
   
 
 // Terminology:
@@ -40,6 +41,8 @@ export function EditableCell({
   const [isEditing, setIsEditing] = useState(false);
   const [customOptionName, setCustomOptionName] = useState('');
 
+  // inputRef is passed as the ref property to the input field components. 
+  // It used to set focus on the selected input field when editing.
   const inputRef = useRef(null); // Harry: What is this?
   
   const optionsAntd = []; // A list of dropdown options in antdesign format
@@ -122,27 +125,8 @@ export function EditableCell({
 
     // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
     // From Harry: 
-    const currentTableName = tables.ActiveTableName;
 
-    if (tables[currentTableName].dependentVariables[columnName]) {
-      const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[columnName])[0];
-      const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
-      if (tables[dependentTableName].data !== null) {
-        let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
-        statefulmetadata[columnName] = value;
-      }
-    }
-
-    // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
-    if (statefulmetadata[columnName] === undefined) {
-      statefulmetadata[columnName] = [];
-    }
-
-    if (statefulmetadataDefinitions[columnName] === undefined) {
-      statefulmetadataDefinitions[columnName] = [];
-    }
-
-
+    [statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
     const dropdownOptions = getColumnDropdownOptions(columnName, statefulmetadata, statefulmetadataDefinitions, customOptionList)
 
     for (let i = 0; i < statefulmetadata[columnName].length; i++) {
@@ -352,4 +336,38 @@ const getColumnDropdownOptions = (columnName, statefulmetadata, statefulmetadata
   } 
 
   return options;
+}
+
+
+function updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName) {
+
+  // This function updates the dropdown options for a column with dependent variables,
+  // i.e. isPartOf or DescendedFrom
+  // It also makes sure that missing/undefined columns are set to empty arrays
+
+  // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
+  // From Harry: 
+
+  const currentTableName = tables.ActiveTableName;
+
+  // Update dropdown options for dependent columns, i.e isPartOf or DescendedFrom
+  if (tables[currentTableName].dependentVariables[columnName]) {
+    const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[columnName])[0];
+    const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
+    if (tables[dependentTableName].data !== null) {
+      let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
+      statefulmetadata[columnName] = value;
+    }
+  }
+
+  // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
+  if (statefulmetadata[columnName] === undefined) {
+    statefulmetadata[columnName] = [];
+  }
+
+  if (statefulmetadataDefinitions[columnName] === undefined) {
+    statefulmetadataDefinitions[columnName] = [];
+  }
+
+  return [statefulmetadata, statefulmetadataDefinitions]
 }
