@@ -91,12 +91,10 @@ export function MetadataTable(props) {
   // Todo: Replace with columnOptions, where columnOptions are updated if new SubjectGroups or TissueSampleCollections are added.
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   
-  console.log('props', props)
-  console.log('nextTableName', nextTableName)
   // remove spaces from table name
   nextTableName = nextTableName.replace(/\s/g, '');
   const currentTable = props.projectDataTable[nextTableName];
-  console.log('currentTable', currentTable) 
+
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
 
   if (currentTable.data === null) {
@@ -113,8 +111,6 @@ export function MetadataTable(props) {
   const { present: presentDS } = DataSource;
   let count = presentDS.length;
 
-  console.log("currentProjectName:", currentProjectName)
-  console.log("nextProjectName:", props.project)
   if (currentTableName !== nextTableName || currentProjectName !== props.project) {
     // save current (will be previous) state
     props.projectDataTable[currentTableName].columnProps = statefulColumns;
@@ -124,9 +120,7 @@ export function MetadataTable(props) {
 
     // save current state??
     setCurrentProjectName(props.project)
-    console.log("setCurrentTableName")
     setCurrentTableName(nextTableName);
-    console.log("setStatefulColumns")
     setStatefulColumns([...currentTable.columnProps]);
   }
 
@@ -230,7 +224,6 @@ export function MetadataTable(props) {
 
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
-    console.log('reg_project: ', props.project);
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
     if (process.env.NODE_ENV === "development") {
       var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
@@ -294,11 +287,9 @@ export function MetadataTable(props) {
         // convert to JSON
         let newData = JSON.parse(content);
 
-        console.log('loaded:', newData);
-
         // Loop through all keys in the tables object and create an array of the data from each table
         Object.keys(props.projectDataTable).forEach((key, index) => {
-          console.log('key:', key, 'index:', index);
+          // console.log('key:', key, 'index:', index);
           if (key !== 'ActiveTableName') {
             props.projectDataTable[key].data = newData[index];
           }
@@ -448,7 +439,6 @@ export function MetadataTable(props) {
 
     const matchValueType = typeof matchValue;
 
-    console.log("matchColIndex", matchColIndex)
     let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
 
     if (matchValueType === 'number') {
@@ -474,11 +464,9 @@ export function MetadataTable(props) {
 
     statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
 
-    console.log("setStatefulColumns")
     setStatefulColumns([...statefulColumns]);
 
     SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
-
 
     // Ask Harry: What happens here? Related to updating many rows at once?
     DataSource.present = { ...OldData };
@@ -515,7 +503,6 @@ export function MetadataTable(props) {
     if (!col.editable & !col.select) {
       return col;
     }
-    //console.log('col.select:', col.select)
     return {
       ...col,
       onCell: (record) => ({
@@ -533,7 +520,7 @@ export function MetadataTable(props) {
     };
   });
 
-  console.log('Rerender table with  data:', presentDS)
+  console.log('Rerender table with data:', presentDS)
   return (
     <div>
       <ConfigProvider

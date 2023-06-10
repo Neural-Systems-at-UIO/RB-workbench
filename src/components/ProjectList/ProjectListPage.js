@@ -48,7 +48,6 @@ function getData(user) {
     }).then((response) => {
         return response.json()
     }).then((data) => {
-      console.log(data)
         resolve(data)
       
     }).catch((error) => {
