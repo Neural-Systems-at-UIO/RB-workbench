@@ -486,7 +486,10 @@ export function MetadataTable(props) {
 
     props.projectDataTable[currentTableName].data = [...OldData];
 
-    metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
+    // Todo: Add this when a good solution is in place to take care of IsPartOf which
+    // is a dependent variable of Subject and TissueSample. Right now, each property is 
+    // assumed to be the same across all tables, but IsPartOf is not.
+    //metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
 
     postTableData();
   };
