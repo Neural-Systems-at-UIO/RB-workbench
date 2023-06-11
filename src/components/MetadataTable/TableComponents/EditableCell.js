@@ -361,6 +361,8 @@ function updateMetadataOptions(metadataOptionMap, tables, columnName) {
           })
         }
       ];
+    } else {
+      metadataOptionMap[columnName] = [];
     }
   }
   return metadataOptionMap
