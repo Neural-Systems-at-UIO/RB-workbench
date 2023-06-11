@@ -16,9 +16,11 @@ import { EditableContext } from './EditableRow.js';
 //    - Should user be allowed to add new independent variables from a cell dropdown?
 //    - Can we combine finishEditCell and saveDropDown?
 //    - Why does the select component seem to be inversed with regards to the isEditing state?
-//        i.e when isEditing is true, the custom renderer with add item is not needed
+//        i.e when isEditing is true, the custom renderer with "add item" is not needed
+//        Possible answer: When a dropdown is folded, it needs a render method, but when 
+//        it is open and waiting to be closed, it does not need a render method.
+//    - This seem to happen on all mouse events, but only needs to happen on clicks?
   
-
 // Terminology:
 //    - Record : An object containing row or cell data represented with key-value pairs
 
@@ -131,7 +133,7 @@ export function EditableCell({
 
   if (isSelectable) {
 
-    //[statefulmetadata, statefulmetadataDefinitions] = updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName)
+    metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
     const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
 
     childNode = isEditing ?
@@ -240,7 +242,6 @@ const FormItem = ({children, name, title, isRequired}) => {
   )
 }
 
-
 /**
  * CellInputField component for rendering an input field within a table cell.
  *
@@ -335,15 +336,11 @@ const getColumnDropdownOptions = (columnName, metadataOptionMap, customOptionLis
   return options;
 }
 
-
-function updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, tables, columnName) {
+function updateMetadataOptions(metadataOptionMap, tables, columnName) {
 
   // This function updates the dropdown options for a column with dependent variables,
   // i.e. isPartOf or DescendedFrom
   // It also makes sure that missing/undefined columns are set to empty arrays
-
-  // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
-  // From Harry: 
 
   const currentTableName = tables.ActiveTableName;
 
@@ -353,18 +350,18 @@ function updateMetadataOptions(statefulmetadata, statefulmetadataDefinitions, ta
     const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
     if (tables[dependentTableName].data !== null) {
       let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
-      statefulmetadata[columnName] = value;
+      metadataOptionMap[columnName] = [
+        {
+          label: dependentTableName, 
+          options: value.map((name) => {
+            return {
+              value: name,
+              label: name,
+            };
+          })
+        }
+      ];
     }
   }
-
-  // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
-  if (statefulmetadata[columnName] === undefined) {
-    statefulmetadata[columnName] = [];
-  }
-
-  if (statefulmetadataDefinitions[columnName] === undefined) {
-    statefulmetadataDefinitions[columnName] = [];
-  }
-
-  return [statefulmetadata, statefulmetadataDefinitions]
+  return metadataOptionMap
 }
