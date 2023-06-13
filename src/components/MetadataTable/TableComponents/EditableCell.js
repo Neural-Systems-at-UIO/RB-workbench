@@ -143,7 +143,8 @@ export function EditableCell({
           <Select
             showSearch
             options={dropdownOptions}
-            optionFilterProp="children"
+            optionFilterProp="label"
+            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
             placeholder="Select a option..."
             id="selectmain"
             style={{
@@ -154,7 +155,6 @@ export function EditableCell({
             onChange={saveDropDown}
             value={children[1]}
             size={'large'}
-            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
             dropdownMatchSelectWidth={false}
             dropdownRender={(menu) => (
               <>
@@ -188,7 +188,7 @@ export function EditableCell({
         <Select
           showSearch
           options={dropdownOptions}
-          optionFilterProp="children"
+          optionFilterProp="label"
           placeholder="Select an option..."
           id="select"
           onChange={saveDropDown}
@@ -199,7 +199,7 @@ export function EditableCell({
             width: '100%',
             cursor: 'pointer',
           }}
-          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+          filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
           dropdownRender={(menu) => (
             <>
               {menu}
