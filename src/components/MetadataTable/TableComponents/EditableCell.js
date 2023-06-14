@@ -141,6 +141,7 @@ export function EditableCell({
     metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
     // Todo: Update this on table rerender.
     const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
+    const dropdownValue = children[1] || ''
 
     const selectStyle = {width: '100%', cursor: 'pointer'}
 
@@ -158,7 +159,7 @@ export function EditableCell({
             style={selectStyle}
             ref={inputRef}
             onChange={saveDropDown}
-            value={children[1]}
+            value={dropdownValue}
             //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
             dropdownRender={(menu) => (
               <>
@@ -185,7 +186,7 @@ export function EditableCell({
           placeholder="Select an option..."
           id="select"
           onChange={saveDropDown}
-          value={children[1]}
+          value={dropdownValue}
           //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
           style={selectStyle}
           dropdownStyle={{width: '500px', minWidth:"500px"}}
