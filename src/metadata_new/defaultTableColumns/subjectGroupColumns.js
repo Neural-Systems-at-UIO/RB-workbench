@@ -1,5 +1,5 @@
 var controlledTermsVersion = "v1";
-var sandsVersion = "v3";
+// var sandsVersion = "v3";
 
 // New def:
 let columnProps = [
@@ -9,7 +9,7 @@ let columnProps = [
     { key: 'Weight',            type: 'input' }, 
     { key: 'AgeCategory',       type: 'string', options: `controlledTerms/${controlledTermsVersion}/ageCategory`},
     { key: 'BiologicalSex',     type: 'string', options: `controlledTerms/${controlledTermsVersion}/biologicalSex`},
-    { key: 'Pathology',         type: 'string', options: `controlledTerms/${controlledTermsVersion}/disease`},
+    { key: 'Pathology',         type: 'string', options: [`controlledTerms/${controlledTermsVersion}/disease`, `controlledTerms/${controlledTermsVersion}/diseaseModel`]},
     { key: 'Handedness',        type: 'string', options: `controlledTerms/${controlledTermsVersion}/handedness`},
     { key: 'Species',           type: 'string', options: `controlledTerms/${controlledTermsVersion}/species`},
     { key: 'Strain',            type: 'string', options: `controlledTerms/${controlledTermsVersion}/strain`}, // Todo: dependent on species selection

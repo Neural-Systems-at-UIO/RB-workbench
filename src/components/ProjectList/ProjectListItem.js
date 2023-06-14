@@ -89,13 +89,10 @@ const handleSubmit = (values) => {
   }
 
   const provideHandlelaunch = (project, user) => {
-    console.log('user', user)
     return () => handleLaunch(project, user);
   }
 
   let handleLaunchWithProject = provideHandlelaunch(formValues.title, props.user);
-  console.log('props now!', props)
-  console.log('here', props.itemkey)
   return (
     // align list left
     <List.Item style={{textAlign: 'left'}} key={props.itemkey}>

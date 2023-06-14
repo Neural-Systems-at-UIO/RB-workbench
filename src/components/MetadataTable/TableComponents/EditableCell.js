@@ -3,247 +3,205 @@ import { Button, Form, Input, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
+// Todo: 
+//    [ ] isEditable and isSelectable could be combined into one prop
+//    [ ] Dropdowns for dependent variables should not have the grouping of options
+//    [ ] Dependent variables (dropdown options) should not be updated here.
+//    [ ] The dropdown options should be updated in the parent component (MetadataTable.js)
+//    [ ] Create more subcomponents
+//    [ ] Is the isEditing logic needed for the dropdown. It appears not to be.
+
+// Questions:
+//    - What is the purpose of EditableContext? How does it work?
+//    - Should user be allowed to add new dependent variables from a cell dropdown?
+//    - Should user be allowed to add new independent variables from a cell dropdown?
+//    - Can we combine finishEditCell and saveDropDown?
+//    - Why does the select component seem to be inversed with regards to the isEditing state?
+//        i.e when isEditing is true, the custom renderer with "add item" is not needed
+//        Possible answer: When a dropdown is folded, it needs a render method, but when 
+//        it is open and waiting to be closed, it does not need a render method.
+//    - This seem to happen on all mouse events, but only needs to happen on clicks?
+  
+// Terminology:
+//    - Record : An object containing row or cell data represented with key-value pairs
 
 /**
  * EditableCell component for rendering an editable cell in a table.
  *
  * @param {Object} props - The component props.
- * @param {string} props.title - The title of the cell.
- * @param {boolean} props.editable - Indicates whether the cell is editable or not.
+ * @param {Object} props.rowRecord - The data of the row the cell belongs to in the form of an object with key-value pairs.
+ * @param {string} props.columnTitle - The title of the column of the cell.
+ * @param {string} props.columnName - The data index of the cell (This is the name of the column in the table)  
+ * @param {boolean} props.isEditable - Indicates whether the cell is editable or not.
+ * @param {boolean} props.isSelectable - Indicates whether the cell is a dropdown or not.
  * @param {*} props.children - The content to be rendered within the cell (List of [undefined, value])
- * @param {string} props.dataIndex - The data index of the cell (This is the name of the column in the table)
- * @param {Object} props.record - The data of the row the cell belongs to.
- * @param {boolean} props.select - Indicates whether the cell is a dropdown or not.
  * @param {Function} props.handleSave - The function to handle saving the cell data.
- * @param {*} props.statefulmetadata - The stateful metadata associated with the cell.
- * @param {*} props.statefulmetadataDefinitions - The definitions of stateful metadata.
- * @param {Function} props.setstatefulmetadata - The function to set the stateful metadata.
- * @param {Function} props.setstatefulmetadataDefinitions - The function to set the definitions of stateful metadata.
- * @param {*} props.tables - The tables associated with the cell.
+ * @param {Object} props.metadataOptionMap - A map of metadata option groups for each table column.
+ * @param {Object} props.customOptionList - The custom option list.
+ * @param {Object} props.setCustomOptionList - The function to set the custom option list.
+ * @param {Object} props.tables - The tables associated with the cell.
  * @param {...*} props.restProps - Additional props to be spread on the underlying HTML element.
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  title, editable, children, dataIndex, record, select, handleSave, statefulmetadata, statefulmetadataDefinitions, setstatefulmetadata, setstatefulmetadataDefinitions, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
-  
-  //console.log('children:', children)
-  //console.log('restProps:', restProps)
+  // This component allows cell editing in the MetadataTable component
+  // It has an internal state that keeps track of whether the cell is being edited or not
+  // If mode is edit, it returns a form item with an input field, otherwise it returns the cell value
 
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef(null); // Harry: What is this?
   const form = useContext(EditableContext);
-  
-  const optionsAntd = []; // A list of dropdown options in antdesign format
-  const [name, setName] = useState('');
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [customOptionName, setCustomOptionName] = useState('');
+
+  // inputRef is passed as the ref property to the input field components. 
+  // It used to set focus on the selected input field when editing.
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    if (editing) {
-      inputRef.current.focus();
+    if (isEditing) {
+      // Set focus on the input field whenever edit mode is entered
+      inputRef.current?.focus();
     }
-  }, [editing]);
+  }, [isEditing]);
 
-  // toggleEdit is used to flip the state of the editing boolean
-  const toggleEdit = () => {
-    setEditing(!editing);
-
-    form.setFieldsValue({
-      [dataIndex]: record[dataIndex]
-    });
+  // toggleIsEditing is used to flip the state of the isEditing boolean
+  const toggleIsEditing = () => {
+    setIsEditing(!isEditing);
+    const cellRecord = { [columnName]: rowRecord[columnName] }
+    form.setFieldsValue(cellRecord);
   };
 
   // finishEditCell is called when the user presses enter or clicks outside the cell
   const finishEditCell = async (event) => {
     try {
-      const values = await form.validateFields();
-      toggleEdit();
-      handleSave({ ...record, ...values });
+      const cellRecord = await form.validateFields();
+      toggleIsEditing(); // Why is this happening after validating fields???
+      handleSave({ ...rowRecord, ...cellRecord });
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
   };
 
   const saveDropDown = async (event) => {
-    toggleEdit();
+    // This function is different from finishEditCell by design.
+    // We don't know why, but found through observation that it is needed.
+    
+    toggleIsEditing();
     try {
-      const values = await form.validateFields();
-
-      handleSave({ ...record, ...values }, event, dataIndex);
+      const cellRecord = await form.validateFields();
+      handleSave({ ...rowRecord, ...cellRecord }, event, columnName);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
-    setEditing(false);
+    setIsEditing(false); // Why, it is already happening in toggleIsEditing?
   };
 
-  const onNameChange = (event) => {
-    setName(event.target.value);
+  const handleCustomOptionNameChanged = (event) => {
+    setCustomOptionName(event.target.value);
   };
 
-  const addItem = (e) => {
+  const handleAddNewMetadataOption = (e) => {
+    // Callback that handles adding a custom (user defined) metadata option
     e.preventDefault();
-    let items = [];
-    if (statefulmetadata[dataIndex]) {
-      items = statefulmetadata[dataIndex];
-    }
-    let definitions = [];
-    if (statefulmetadataDefinitions[dataIndex]) {
-      definitions = statefulmetadataDefinitions[dataIndex];
-    }
-    items = [name, ...items];
-    statefulmetadata[dataIndex] = items;
-    const newdefinition = 'A custom option added by the user';
-    definitions = [newdefinition, ...definitions];
-    statefulmetadataDefinitions[dataIndex] = definitions;
-    setstatefulmetadataDefinitions(statefulmetadataDefinitions);
-    setstatefulmetadata(statefulmetadata);
-    setName('');
+
+    if (!customOptionName) {return;}
+
+    // Retrieve the current items and definitions based on the columnName
+    const items = customOptionList[columnName] || [];
+
+    // Add the new item and definition at the beginning of their respective arrays
+    const updatedItems = [customOptionName, ...items];
+
+    // Update the stateful metadata arrays with the new items and definitions
+    customOptionList[columnName] = updatedItems;
+
+    // Set the updated stateful metadata arrays
+    setCustomOptionList(customOptionList);
+
+    // Reset the input field for a custom dropdown option
+    setCustomOptionName('');
+
+    // Set focus back to the input field with a slight delay
     setTimeout(() => {
-      inputRef.current?.focus();
+      inputRef.current?.focus();  // ? is used to prevent an error if inputRef.current is null
     }, 0);
   };
 
   let childNode = children;
 
-  if (editable) {
-    childNode = editing ? CellInputField(dataIndex, title, inputRef, finishEditCell) : CellValueDisplay(children, toggleEdit)
+  if (isEditable) {
+    childNode = isEditing ? CellInputField(columnName, columnTitle, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
   }
 
+  if (isSelectable) {
 
-  if (select) {
+    // Todo: Update this on table rerender. (It does not have to be done for every row, just once per table)
+    metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
+    // Todo: Update this on table rerender.
+    const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
 
-    // Todo: Ask Harry: This seems to be updated at a high rate, maybe we can do this only once or when needed
-    // From Harry: 
-    const currentTableName = tables.ActiveTableName;
+    const selectStyle = {width: '100%', cursor: 'pointer'}
 
-    if (tables[currentTableName].dependentVariables[dataIndex]) {
-      const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[dataIndex])[0];
-      const dependentVariableName = tables[currentTableName].dependentVariables[dataIndex][dependentTableName];
-      if (tables[dependentTableName].data !== null) {
-        let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
-        statefulmetadata[dataIndex] = value;
-      }
-    }
-
-    // TODO: Do this somewhere else to make sure it is only done once and wherever it is needed
-    if (statefulmetadata[dataIndex] === undefined) {
-      statefulmetadata[dataIndex] = [];
-    }
-
-    if (statefulmetadataDefinitions[dataIndex] === undefined) {
-      statefulmetadataDefinitions[dataIndex] = [];
-    }
-
-    for (let i = 0; i < statefulmetadata[dataIndex].length; i++) {
-      const option = (
-        <Select
-          value={statefulmetadata[dataIndex][i]}
-          title={statefulmetadataDefinitions[dataIndex][i]}
-        >
-          {statefulmetadata[dataIndex][i]}
-        </Select>
-      );
-      optionsAntd.push(option);
-    }
-    childNode = editing
-      ? (
-
-        <Form.Item
-          style={{
-            margin: 0
-          }}
-          name={dataIndex}
-          rules={[
-            {
-              required: false,
-              message: `${title} is required.`
-            }
-          ]}
-        >
-          {/* allow the user to add new options to a select  if missing */}
+    childNode = isEditing ?
+      (
+        // Allow the user to add new options to a select if missing
+        <FormItem name={columnName} title={columnTitle} isRequired={false}>
           <Select
             showSearch
-            optionFilterProp="children"
-            placeholder="Select a option..."
+            options={dropdownOptions}
+            optionFilterProp="label"
+            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+            placeholder="Select an option..."
             id="selectmain"
-            style={{
-              width: '100%',
-              cursor: 'pointer'
-            }}
+            style={selectStyle}
             ref={inputRef}
             onChange={saveDropDown}
             value={children[1]}
-            size={'large'}
-            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-            dropdownMatchSelectWidth={false}
+            //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
             dropdownRender={(menu) => (
               <>
                 {menu}
-                <Divider
-                  style={{
-                    margin: '8px 0'
-                  }} />
-                <Space
-                  width="10px"
-                  style={{
-                    padding: '0 8px 4px'
-                  }}
-                >
-                  <Input
-                    placeholder="Please enter item"
-                    ref={inputRef}
-                    value={name}
-                    onChange={onNameChange} />
-                  <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                    Add item
-                  </Button>
-                </Space>
+                <Divider style={{margin: '8px 0'}} />
+                <CustomOptionInput 
+                  inputRef={inputRef} 
+                  value={customOptionName} 
+                  onChange={handleCustomOptionNameChanged}
+                  onAddItemClick={handleAddNewMetadataOption} 
+                />
               </>
             )}
           >
-            {optionsAntd}
           </Select>
           {/* <Input ref={inputRef} onPressEnter={save} onBlur={save} /> */}
-        </Form.Item>
+        </FormItem>
       ) : (
         <Select
           showSearch
-          optionFilterProp="children"
+          options={dropdownOptions}
+          optionFilterProp="label"
+          filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
           placeholder="Select an option..."
           id="select"
           onChange={saveDropDown}
           value={children[1]}
-          size={'large'}
-          dropdownMatchSelectWidth={false}
-          style={{
-            width: '100%',
-            cursor: 'pointer',
-          }}
-          filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+          //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
+          style={selectStyle}
+          dropdownStyle={{width: '500px', minWidth:"500px"}}
           dropdownRender={(menu) => (
             <>
               {menu}
-              <Divider
-                style={{
-                  margin: '8px 0'
-                }} />
-              <Space
-                style={{
-                  padding: '0 8px 4px'
-                }}
-              >
-                <Input
-                  placeholder="Please enter item"
-                  ref={inputRef}
-                  value={name}
-                  onChange={onNameChange} />
-                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
-                  Add item
-                </Button>
-              </Space>
+              <Divider style={{margin: '8px 0'}} />
+              <CustomOptionInput 
+                inputRef={inputRef} 
+                value={customOptionName} 
+                onChange={handleCustomOptionNameChanged}
+                onAddItemClick={handleAddNewMetadataOption} 
+              />
             </>
           )}
         >
-          {optionsAntd}
         </Select>
       );
   }
@@ -251,34 +209,44 @@ export function EditableCell({
   return <td {...restProps}>{childNode}</td>;
 }
 
-/**
- * CellInputField component for rendering an input field within a table cell.
- *
- * @param {string} dataIndex - The data index of the cell (This is the same as title).. Todo: Why do we need both??
- * @param {string} columnTitle - The title of the column.
- * @param {React.Ref} inputRef - The ref object for accessing the input field. Todo: Where does this come from? What is it?
- * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
- * @returns {JSX.Element} The rendered component.
- */
-const CellInputField = (dataIndex, columnTitle, inputRef, handleFinishEditCell) => {
-  /// This function returns the (editable) input field for a cell
+// SUBCOMPONENTS
+
+const FormItem = ({children, name, title, isRequired}) => {
+  // FormItem is a wrapper component for a form item that is used for cell input field componenets
+  const formItemStyle = { margin: 0 };
+  const formItemRules = [
+    {
+      required: isRequired,
+      message: `${title} is required.`
+    }
+  ];
+
   return (
-    <Form.Item
-      style={{ margin: 0 }}
-      name={dataIndex}
-      rules={[
-        {
-          required: false,
-          message: `${columnTitle} is required.`
-        }
-      ]}
-    >
-      <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
+    <Form.Item name={name} style={formItemStyle} rules={formItemRules}>
+      {children}
     </Form.Item>
   )
 }
 
-const CellValueDisplay = (children, toggleEdit) => {
+/**
+ * CellInputField component for rendering an input field within a table cell.
+ *
+ * @param {string} columnName - The data index of the cell (This is the same as title)..
+ * @param {string} columnTitle - The title of the column.
+ * @param {React.Ref} inputRef - The ref object for accessing the input field.
+ * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
+ * @returns {JSX.Element} The rendered component.
+ */
+const CellInputField = (columnName, columnTitle, inputRef, handleFinishEditCell) => {
+  /// This function returns the (editable) input field for a cell
+  return (
+    <FormItem name={columnName} title={columnTitle} isRequired={false}>
+      <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
+    </FormItem>
+  )
+}
+
+const CellValueDisplay = (children, toggleIsEditing) => {
 // Component that displays the value of a cell which is not being edited
 
   const cellStyle = {
@@ -291,9 +259,97 @@ const CellValueDisplay = (children, toggleEdit) => {
     <div
       className="editable-cell-value-wrap"
       style={cellStyle}
-      onClick={toggleEdit}
+      onClick={toggleIsEditing}
     >
       {children}
     </div>
   )
+}
+
+const CustomOptionInput = ({inputRef, value, onChange, onAddItemClick}) => {
+  // Component where user can add a new option to a dropdown
+
+  return (
+    <Space
+    style={{
+      padding: '0 8px 4px'
+    }}
+    >
+    <Input
+      placeholder="Please enter item"
+      ref={inputRef}
+      value={value}
+      onChange={onChange} />
+    <Button type="text" icon={<PlusOutlined />} onClick={onAddItemClick}>
+      Add item
+    </Button>
+    </Space>
+  )
+}
+
+
+// UTILITY FUNCTIONS
+
+const getColumnDropdownOptions = (columnName, metadataOptionMap, customOptionList) => {
+  // This function combines the metadata options with the user defined options
+  // for a column and returns the combined list in the format required by the
+  // Ant Design Select component for grouping options
+
+  let userDefinedOptions = {}
+
+  if (customOptionList[columnName]) {
+    userDefinedOptions = {
+      label: 'User defined',
+      options: customOptionList[columnName].map((item) => ({
+        value: item,
+        label: item,
+        title: 'A custom option added by the user',
+      }))
+    }
+  }
+
+  let options = []
+  if (Object.keys(userDefinedOptions).length !== 0) {
+    options.push(userDefinedOptions)
+  } 
+
+  if (metadataOptionMap[columnName]) {
+    if (metadataOptionMap[columnName].length > 0) {
+      options.push(...metadataOptionMap[columnName])
+    }
+  }
+
+  return options;
+}
+
+function updateMetadataOptions(metadataOptionMap, tables, columnName) {
+
+  // This function updates the dropdown options for a column with dependent variables,
+  // i.e. isPartOf or DescendedFrom
+  // It also makes sure that missing/undefined columns are set to empty arrays
+
+  const currentTableName = tables.ActiveTableName;
+
+  // Update dropdown options for dependent columns, i.e isPartOf or DescendedFrom
+  if (tables[currentTableName].dependentVariables[columnName]) {
+    const dependentTableName = Object.keys(tables[currentTableName].dependentVariables[columnName])[0];
+    const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
+    if (tables[dependentTableName].data !== null) {
+      let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
+      metadataOptionMap[columnName] = [
+        {
+          label: dependentTableName, 
+          options: value.map((name) => {
+            return {
+              value: name,
+              label: name,
+            };
+          })
+        }
+      ];
+    } else {
+      metadataOptionMap[columnName] = [];
+    }
+  }
+  return metadataOptionMap
 }

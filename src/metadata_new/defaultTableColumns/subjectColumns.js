@@ -1,6 +1,5 @@
 var controlledTermsVersion = "v1";
-var sandsVersion = "v3";
-
+//var sandsVersion = "v3";
 
 // Todo: What to do when options can derive from multiple controlled terms?
 
@@ -13,7 +12,7 @@ let columnProps = [
     { key: 'WeightUnit',    type: 'input', options: `controlledTerms/${controlledTermsVersion}/unitOfMeasurement`, filter: 'WeightUnit'}, 
     { key: 'AgeCategory',   type: 'string', options: `controlledTerms/${controlledTermsVersion}/ageCategory`},
     { key: 'BiologicalSex', type: 'string', options: `controlledTerms/${controlledTermsVersion}/biologicalSex`},
-    { key: 'Pathology',     type: 'string', options: `controlledTerms/${controlledTermsVersion}/disease`},
+    { key: 'Pathology',     type: 'string', options: [`controlledTerms/${controlledTermsVersion}/disease`, `controlledTerms/${controlledTermsVersion}/diseaseModel`]},
     { key: 'Handedness',    type: 'string', options: `controlledTerms/${controlledTermsVersion}/handedness`},
     { key: 'Species',       type: 'string', options: `controlledTerms/${controlledTermsVersion}/species`},
     { key: 'Strain',        type: 'string', options: `controlledTerms/${controlledTermsVersion}/strain`}, // Todo: dependent on species selection

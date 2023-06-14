@@ -1,5 +1,5 @@
 var controlledTermsVersion = "v1";
-var sandsVersion = "v3";
+// var sandsVersion = "v3";
 
 // New def:
 let columnProps = [

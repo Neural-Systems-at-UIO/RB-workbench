@@ -9,6 +9,13 @@
 //    - Import table
 
 
+// Todo: 
+//    [ ] If a subject group is removed, the isPartOf property of the subject beloning to that SubjectGroup should be set to null
+
+// Questions:
+//    [ ]
+  
+
 // IMPORTS
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
@@ -23,12 +30,16 @@ import { convertTableToCSV } from '../../helpers/csvAdapter';
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
+import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+
 const TABLE_COMPONENTS = {
   body: {
     row: EditableRow,
     cell: EditableCell
   }
 };
+
+var metadataOptionMap = getMetadataOptions();
 
 // Suggestions
 // EH: input to this component should be an object with the following properties:
@@ -48,8 +59,6 @@ const TABLE_COMPONENTS = {
 //  - What is the difference between selected, selectedRowKeys, and selRows and selectedRows? - simplify...
 
 
-
-
 // Todo: move to separate file for managing tables.
 var selRows = [];
 
@@ -62,11 +71,11 @@ export function MetadataTable(props) {
   // user: the user object
   // children
 
-
   var nextTableName = props.nextTableName; // rename to newTableName?
   var history = [];
   // this is weird, how should it be done?
 
+  const [customOptionList, setCustomOptionList] = useState({})
   const [currentTableName, setCurrentTableName] = useState(nextTableName);
   const [currentProjectName, setCurrentProjectName] = useState(props.project);
 
@@ -79,16 +88,18 @@ export function MetadataTable(props) {
   const tables = props.projectDataTable;
 
   // These are used when new metadata instances are added to column dropdowns.
+  // Todo: Replace with columnOptions, where columnOptions are updated if new SubjectGroups or TissueSampleCollections are added.
   const [statefulmetadata, setstatefulmetadata] = useState(metadata);
-  const [statefulmetadataDefinitions, setstatefulmetadataDefinitions] = useState(metadataDefinitions);
-
+  
+  // remove spaces from table name
+  nextTableName = nextTableName.replace(/\s/g, '');
   const currentTable = props.projectDataTable[nextTableName];
+
   const [statefulColumns, setStatefulColumns] = useState(currentTable.columnProps);
 
   if (currentTable.data === null) {
     currentTable.data = [createBlankRow()];
   }
-
 
   const [
     DataSource, {
@@ -99,8 +110,6 @@ export function MetadataTable(props) {
   const { present: presentDS } = DataSource;
   let count = presentDS.length;
 
-  console.log("currentProjectName:", currentProjectName)
-  console.log("nextProjectName:", props.project)
   if (currentTableName !== nextTableName || currentProjectName !== props.project) {
     // save current (will be previous) state
     props.projectDataTable[currentTableName].columnProps = statefulColumns;
@@ -110,9 +119,7 @@ export function MetadataTable(props) {
 
     // save current state??
     setCurrentProjectName(props.project)
-    console.log("setCurrentTableName")
     setCurrentTableName(nextTableName);
-    console.log("setStatefulColumns")
     setStatefulColumns([...currentTable.columnProps]);
   }
 
@@ -191,7 +198,6 @@ export function MetadataTable(props) {
     let useCheckpoint = true;
     updateTableData(newDS, useCheckpoint);
     postTableData();
-
   };
 
   /**
@@ -216,7 +222,6 @@ export function MetadataTable(props) {
 
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
-    console.log('reg_project: ', props.project);
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
     if (process.env.NODE_ENV === "development") {
       var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
@@ -280,11 +285,9 @@ export function MetadataTable(props) {
         // convert to JSON
         let newData = JSON.parse(content);
 
-        console.log('loaded:', newData);
-
         // Loop through all keys in the tables object and create an array of the data from each table
         Object.keys(props.projectDataTable).forEach((key, index) => {
-          console.log('key:', key, 'index:', index);
+          // console.log('key:', key, 'index:', index);
           if (key !== 'ActiveTableName') {
             props.projectDataTable[key].data = newData[index];
           }
@@ -335,6 +338,7 @@ export function MetadataTable(props) {
     updateTableData(temp_);
   };
 
+
   const OptionsBar = () => (
     <div>
       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
@@ -365,6 +369,7 @@ export function MetadataTable(props) {
 
   const [selected, setSelected] = useState([]); // selected rows
   const rowSelection = {
+
     selectedRowKeys: selected,
     onChange: (selectedRowKeys, selectedRows) => {
       setSelected(selectedRows.map((row) => row.key));
@@ -384,19 +389,24 @@ export function MetadataTable(props) {
    *
    */
   const handleSave = (row, event, dataIndex) => {
-    const OldData = [...presentDS];
-    const index = OldData.findIndex((item) => row.key === item.key);
-    const item = OldData[index];
+
+    // Todo: Rename row to PreviousRowRecord
+
+    const OldData = [...presentDS]; // Why is this called old data???
+    const index = OldData.findIndex((item) => row.key === item.key); // Rename to rowIndex
+    
+    const item = OldData[index]; // Rename to currentRowRecord
 
     const originalData = { ...row };
 
-    const columns = Object.keys(row);
-
+    const columnNames = Object.keys(row);
+    var matchCol=null
     // regex for newline,  any number of spaces, newline
     for (const key in Object.keys(row)) {
-      const id = columns[key];
+      const id = columnNames[key];
       if (row[id] !== item[id]) {
-        var matchCol = id;
+        console.log('id', id)
+        matchCol = id;
         var matchValue = row[id];
         originalData[matchCol] = item[id];
         OldData.splice(index, 1, { ...item, ...row });
@@ -405,6 +415,23 @@ export function MetadataTable(props) {
         // return
       }
     }
+
+    // console.log('columnName', matchCol)
+    // console.log('dataIndex', dataIndex)
+
+
+    // for (const columnName of columnNames) {
+    //   if (row[columnName] !== item[columnName]) {
+    //     var matchCol = columnName;
+    //     var matchValue = row[columnName];
+    //     originalData[matchCol] = item[columnName];
+    //     OldData.splice(index, 1, { ...item, ...row });
+    //   } else {
+    //     // No values have changed, so do nothing. Todo: Confirm with Harry.
+    //     // return
+    //   }
+    // }
+
 
     if (typeof event !== 'undefined') {
       matchCol = dataIndex;
@@ -426,45 +453,12 @@ export function MetadataTable(props) {
 
     if (matchCol === undefined) {
       return
-    }
+    }    
 
-    // Adjust width of column if necessary
-    let matchColIndex = columns.indexOf(matchCol);
-    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
-
-    const matchValueType = typeof matchValue;
-
-    console.log("matchColIndex", matchColIndex)
-    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
-
-    if (matchValueType === 'number') {
-      matchValue = metadata[matchCol][matchValue];
-
-      if (matchValue.length > maxColumnWidth) {
-        maxColumnWidth = matchValue.length;
-        statefulColumns[matchColIndex].width = widthCalcDropdown(
-          matchValue,
-          '0.82'
-        );
-      }
-
-    } else {
-      if (matchValue.length > maxColumnWidth) {
-        maxColumnWidth = matchValue.length;
-        statefulColumns[matchColIndex].width = widthCalc(
-          matchValue,
-          '1.25'
-        );
-      }
-    }
-
-    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
-
-    console.log("setStatefulColumns")
+    updateMaxColumnWidth(columnNames, matchValue, matchCol)
     setStatefulColumns([...statefulColumns]);
 
     SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
-
 
     // Ask Harry: What happens here? Related to updating many rows at once?
     DataSource.present = { ...OldData };
@@ -490,37 +484,75 @@ export function MetadataTable(props) {
     DataSource.past = [...DataSource.past, [...tempDataObj]];
 
     props.projectDataTable[currentTableName].data = [...OldData];
+
+    // Todo: Add this when a good solution is in place to take care of IsPartOf which
+    // is a dependent variable of Subject and TissueSample. Right now, each property is 
+    // assumed to be the same across all tables, but IsPartOf is not.
+    //metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
+
     postTableData();
   };
   // updateTableData(currentTable.data);
 
+  const updateMaxColumnWidth = (columnNames, dataValue, matchCol) => {
+    
+    // Adjust width of column if necessary
+    let matchColIndex = columnNames.indexOf(matchCol);
+    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
 
+    const matchValueType = typeof dataValue;
 
-  
+    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
+
+    if (matchValueType === 'number') {
+      dataValue = metadata[matchCol][dataValue];  // TODO: Why metadata? What if custom options were added?
+
+      if (dataValue.length > maxColumnWidth) {
+        maxColumnWidth = dataValue.length;
+        statefulColumns[matchColIndex].width = widthCalcDropdown(
+          dataValue,
+          '0.82'
+        );
+      }
+
+    } else {
+      if (dataValue.length > maxColumnWidth) {
+        maxColumnWidth = dataValue.length;
+        statefulColumns[matchColIndex].width = widthCalc(
+          dataValue,
+          '1.25'
+        );
+      }
+    }
+
+    // Todo: Why is this done here, when it is also done above?
+    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
+    return statefulColumns
+  }
+
   const columns = statefulColumns.map((col) => {
+
     if (!col.editable & !col.select) {
       return col;
     }
-    console.log('col.select:', col.select)
     return {
       ...col,
       onCell: (record) => ({
-        record,
-        editable: col.editable,
-        select: col.select,
-        dataIndex: col.dataIndex,
-        title: col.title,
+        rowRecord: record,
+        columnName: col.dataIndex,
+        columnTitle: col.title,
+        isEditable: col.editable,
+        isSelectable: col.select,
         handleSave,
-        statefulmetadata,
-        statefulmetadataDefinitions,
-        setstatefulmetadata,
-        setstatefulmetadataDefinitions,
+        metadataOptionMap,
+        customOptionList, 
+        setCustomOptionList,
         tables
       })
     };
   });
 
-  console.log('Rerender table with  data:', presentDS)
+  console.log('Rerender table with data:', presentDS)
   return (
     <div>
       <ConfigProvider
@@ -534,6 +566,20 @@ export function MetadataTable(props) {
           rowSelection={{
             type: 'checkbox',
             ...rowSelection
+          }}
+          onRow={() => {
+            return {
+              onMouseEnter: (event) => {
+                // No need to rerender row if mouse enters row (?)
+                event.stopPropagation();
+                event.preventDefault();
+              },
+              onMouseLeave: (event) => {
+                // No need to rerender row if mouse leaves row (?)
+                event.stopPropagation();
+                event.preventDefault();
+              },
+            }
           }}
           components={TABLE_COMPONENTS}
           columns={columns}
