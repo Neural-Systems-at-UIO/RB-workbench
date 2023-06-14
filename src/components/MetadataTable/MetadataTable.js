@@ -198,7 +198,6 @@ export function MetadataTable(props) {
     let useCheckpoint = true;
     updateTableData(newDS, useCheckpoint);
     postTableData();
-
   };
 
   /**
@@ -339,6 +338,7 @@ export function MetadataTable(props) {
     updateTableData(temp_);
   };
 
+
   const OptionsBar = () => (
     <div>
       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
@@ -369,6 +369,7 @@ export function MetadataTable(props) {
 
   const [selected, setSelected] = useState([]); // selected rows
   const rowSelection = {
+
     selectedRowKeys: selected,
     onChange: (selectedRowKeys, selectedRows) => {
       setSelected(selectedRows.map((row) => row.key));
@@ -392,11 +393,9 @@ export function MetadataTable(props) {
     // Todo: Rename row to PreviousRowRecord
 
     const OldData = [...presentDS]; // Why is this called old data???
-    const index = OldData.findIndex((item) => row.key === item.key);
+    const index = OldData.findIndex((item) => row.key === item.key); // Rename to rowIndex
     
     const item = OldData[index]; // Rename to currentRowRecord
-    console.log('item', item)
-    console.log('row', row)
 
     const originalData = { ...row };
 
@@ -532,6 +531,7 @@ export function MetadataTable(props) {
   }
 
   const columns = statefulColumns.map((col) => {
+
     if (!col.editable & !col.select) {
       return col;
     }
@@ -566,6 +566,20 @@ export function MetadataTable(props) {
           rowSelection={{
             type: 'checkbox',
             ...rowSelection
+          }}
+          onRow={() => {
+            return {
+              onMouseEnter: (event) => {
+                // No need to rerender row if mouse enters row (?)
+                event.stopPropagation();
+                event.preventDefault();
+              },
+              onMouseLeave: (event) => {
+                // No need to rerender row if mouse leaves row (?)
+                event.stopPropagation();
+                event.preventDefault();
+              },
+            }
           }}
           components={TABLE_COMPONENTS}
           columns={columns}

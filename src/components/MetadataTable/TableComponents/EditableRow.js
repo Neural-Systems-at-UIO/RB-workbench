@@ -7,7 +7,6 @@ export const EditableContext = React.createContext(null)
 
 export const EditableRow = ({index, ...props}) => {
   const [form] = Form.useForm()
-  //console.log("Editable row:", props)
 
   return (
       <Form form={form} component={false}>
