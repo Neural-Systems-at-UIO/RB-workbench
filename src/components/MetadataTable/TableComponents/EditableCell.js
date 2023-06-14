@@ -9,6 +9,7 @@ import { EditableContext } from './EditableRow.js';
 //    [ ] Dependent variables (dropdown options) should not be updated here.
 //    [ ] The dropdown options should be updated in the parent component (MetadataTable.js)
 //    [ ] Create more subcomponents
+//    [ ] Is the isEditing logic needed for the dropdown. It appears not to be.
 
 // Questions:
 //    - What is the purpose of EditableContext? How does it work?
@@ -84,6 +85,9 @@ export function EditableCell({
   };
 
   const saveDropDown = async (event) => {
+    // This function is different from finishEditCell by design.
+    // We don't know why, but found through observation that it is needed.
+    
     toggleIsEditing();
     try {
       const cellRecord = await form.validateFields();
@@ -133,8 +137,12 @@ export function EditableCell({
 
   if (isSelectable) {
 
+    // Todo: Update this on table rerender. (It does not have to be done for every row, just once per table)
     metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
+    // Todo: Update this on table rerender.
     const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
+
+    const selectStyle = {width: '100%', cursor: 'pointer'}
 
     childNode = isEditing ?
       (
@@ -145,39 +153,23 @@ export function EditableCell({
             options={dropdownOptions}
             optionFilterProp="label"
             filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-            placeholder="Select a option..."
+            placeholder="Select an option..."
             id="selectmain"
-            style={{
-              width: '100%',
-              cursor: 'pointer'
-            }}
+            style={selectStyle}
             ref={inputRef}
             onChange={saveDropDown}
             value={children[1]}
-            size={'large'}
-            dropdownMatchSelectWidth={false}
+            //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
             dropdownRender={(menu) => (
               <>
                 {menu}
-                <Divider
-                  style={{
-                    margin: '8px 0'
-                  }} />
-                <Space
-                  width="10px"
-                  style={{
-                    padding: '0 8px 4px'
-                  }}
-                >
-                  <Input
-                    placeholder="Please enter item"
-                    ref={inputRef}
-                    value={customOptionName}
-                    onChange={handleCustomOptionNameChanged} />
-                  <Button type="text" icon={<PlusOutlined />} onClick={handleAddNewMetadataOption}>
-                    Add item
-                  </Button>
-                </Space>
+                <Divider style={{margin: '8px 0'}} />
+                <CustomOptionInput 
+                  inputRef={inputRef} 
+                  value={customOptionName} 
+                  onChange={handleCustomOptionNameChanged}
+                  onAddItemClick={handleAddNewMetadataOption} 
+                />
               </>
             )}
           >
@@ -189,24 +181,18 @@ export function EditableCell({
           showSearch
           options={dropdownOptions}
           optionFilterProp="label"
+          filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
           placeholder="Select an option..."
           id="select"
           onChange={saveDropDown}
           value={children[1]}
-          size={'large'}
-          dropdownMatchSelectWidth={false}
-          style={{
-            width: '100%',
-            cursor: 'pointer',
-          }}
-          filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+          //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
+          style={selectStyle}
+          dropdownStyle={{width: '500px', minWidth:"500px"}}
           dropdownRender={(menu) => (
             <>
               {menu}
-              <Divider
-                style={{
-                  margin: '8px 0'
-                }} />
+              <Divider style={{margin: '8px 0'}} />
               <CustomOptionInput 
                 inputRef={inputRef} 
                 value={customOptionName} 
