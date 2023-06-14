@@ -23,10 +23,10 @@ const backgroundColor = '#f8fafb'; // Todo: Get from context provider
 
 // Define menu items for the specimen tables
 const items = [
-  getItem('Subject', '1', <UserOutlined />),
-  getItem('Tissue Sample', '2', <HeartOutlined/>),
-  getItem('Subject Group', '3', <TeamOutlined />),
-  getItem('Tissue Sample Collection', '4', <HeartOutlined/>)]
+  getItem('Subject', 'Subject', <UserOutlined />),
+  getItem('Tissue Sample', 'TissueSample', <HeartOutlined/>),
+  getItem('Subject Group', 'SubjectGroup', <TeamOutlined />),
+  getItem('Tissue Sample Collection', 'TissueSampleCollection', <HeartOutlined/>)]
 
 // Define menu groups to group tables for individual specimen and specimen sets
 const itemGroups = [
@@ -64,10 +64,18 @@ function HomeButton ({ isCollapsed, onHomeButtonClick }) {
   )
 }
 
+/**
+ * SpecimenMenu for selecting a specimen table.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.selectedPageName - The name of the table to show, i.e Subject or TissueSample (note, should match the key, not the label).
+ * @param {string} props.onMenuItemClick - Callback function to execute on menu selection.
+*/
+
 function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
   
-  const handleMenuItemClick = (item) => { onMenuItemClick(items[item.key - 1].label) }
-  const selectedPageIndex = items.findIndex((item) => item.label === selectedPageName);
+  const handleMenuItemClick = (item) => { onMenuItemClick(item.key) }
+  const selectedPageIndex = items.findIndex((item) => item.key === selectedPageName);
   const selectedPageKey = items[selectedPageIndex].key;
 
   const menuStyle = {
@@ -82,7 +90,7 @@ function SpecimenMenu ({ selectedPageName, onMenuItemClick }) {
   return (
     <Menu
       style={menuStyle}
-      defaultSelectedKeys={['1']}
+      defaultSelectedKeys={['Subject']}
       selectedKeys={[selectedPageKey]}
       multiple={false}
       mode={'inline'}
