@@ -31,6 +31,7 @@ import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
 import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+import STRAIN_INSTANCES from '../../metadata/strainInstances'; // Global variable
 
 const TABLE_COMPONENTS = {
   body: {
@@ -109,6 +110,8 @@ export function MetadataTable(props) {
 
   const { present: presentDS } = DataSource;
   let count = presentDS.length;
+
+  console.log('presentDS', presentDS);
 
   if (currentTableName !== nextTableName || currentProjectName !== props.project) {
     // save current (will be previous) state
@@ -383,87 +386,80 @@ export function MetadataTable(props) {
 
   /**
    * Callback for saving the changes made in the table to memory.
-   * @param {Object} row - The data for the row that was changed.
-   * @param {Object} event - The new value which is being set. Should be renamed to newValue. This is only relevant for dropdowns.
-   * @param {String} dataIndex - The name of the column that was changed.
+   * @param {Object} rowRecord - The data for the row that was changed.
+   * @param {Object} newValue - The new value which is being set. Should be renamed to newValue. This is only relevant for dropdowns.
+   * @param {String} columnName - The name of the column that was changed.
    *
    */
-  const handleSave = (row, event, dataIndex) => {
+  const handleSave = (rowRecord, newValue, columnName, fieldType) => {
 
-    // Todo: Rename row to PreviousRowRecord
+    // Not understood: How does oldData / presentDs already contain the updated
+    // dropdown selection? Howeverm for text fields, it does not contain the
+    // updated value.
 
-    const OldData = [...presentDS]; // Why is this called old data???
-    const index = OldData.findIndex((item) => row.key === item.key); // Rename to rowIndex
-    
-    const item = OldData[index]; // Rename to currentRowRecord
+    // What is the purpose of oldData/originalData
 
-    const originalData = { ...row };
+    const oldData = [...presentDS]; // Why is this called old data???
+    const originalData = { ...rowRecord };
 
-    const columnNames = Object.keys(row);
-    var matchCol=null
+    const rowIndex = oldData.findIndex((item) => rowRecord.key === item.key);
+    const oldRowRecord = oldData[rowIndex]; // Rename to currentRowRecord
+
+    const columnNames = Object.keys(rowRecord);
+    var matchCol = null;
     // regex for newline,  any number of spaces, newline
-    for (const key in Object.keys(row)) {
+
+    for (const key in Object.keys(rowRecord)) {
       const id = columnNames[key];
-      if (row[id] !== item[id]) {
-        console.log('id', id)
-        matchCol = id;
-        var matchValue = row[id];
-        originalData[matchCol] = item[id];
-        OldData.splice(index, 1, { ...item, ...row });
+      if (rowRecord[id] !== oldRowRecord[id]) {        
+        matchCol = id; // Just columnName??
+        var matchValue = rowRecord[id]; // Just updatedValue
+        originalData[matchCol] = oldRowRecord[id];
+        oldData.splice(rowIndex, 1, { ...oldRowRecord, ...rowRecord }); // replace row data with new data? why not just {...rowRecord}?
       } else {
         // No values have changed, so do nothing. Todo: Confirm with Harry.
+        // This does 
         // return
       }
     }
 
-    // console.log('columnName', matchCol)
-    // console.log('dataIndex', dataIndex)
-
-
-    // for (const columnName of columnNames) {
-    //   if (row[columnName] !== item[columnName]) {
-    //     var matchCol = columnName;
-    //     var matchValue = row[columnName];
-    //     originalData[matchCol] = item[columnName];
-    //     OldData.splice(index, 1, { ...item, ...row });
-    //   } else {
-    //     // No values have changed, so do nothing. Todo: Confirm with Harry.
-    //     // return
-    //   }
-    // }
-
-
-    if (typeof event !== 'undefined') {
-      matchCol = dataIndex;
-      matchValue = event;
-      var tempRow = OldData[index];
+    // If dropdown value was changed, update the oldData...
+    if (typeof newValue !== 'undefined') {
+    //if (fieldType === 'dropdown') {
+      matchCol = columnName; // Just columnName
+      matchValue = newValue; // Just updatedValue
+      var tempRow = oldData[rowIndex];
       tempRow[matchCol] = matchValue;
+      tempRow = updateDependentColumns(tempRow, matchCol, matchValue)
 
-      OldData.splice(index, 1, { ...tempRow });
+      oldData.splice(rowIndex, 1, { ...tempRow });
     }
 
-    if (selRows.includes(row.key)) {
+    // If multiple rows are selected, update all of them.
+    if (selRows.includes(rowRecord.key)) {
       for (const i in selRows) {
-        tempRow = OldData[selRows[i] - 1];
+        tempRow = oldData[selRows[i] - 1]; // Key is 1-indexed, but array is 0-indexed.
         tempRow[matchCol] = matchValue;
+        tempRow = updateDependentColumns(tempRow, matchCol, matchValue)
 
-        OldData.splice(selRows[i] - 1, 1, { ...tempRow });
+        oldData.splice(selRows[i] - 1, 1, { ...tempRow });
       }
     }
 
-    if (matchCol === undefined) {
+    console.log('matchCol', matchCol)
+    if (!matchCol) {
       return
-    }    
+    }
 
     updateMaxColumnWidth(columnNames, matchValue, matchCol)
     setStatefulColumns([...statefulColumns]);
 
-    SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
+    SetDataSource([...oldData], false); // Todo: Rename oldData to newData?
 
     // Ask Harry: What happens here? Related to updating many rows at once?
-    DataSource.present = { ...OldData };
-    const tempData = [...OldData];
-    tempData[index] = { ...originalData };
+    DataSource.present = { ...oldData };
+    const tempData = [...oldData];
+    tempData[rowIndex] = { ...originalData };
 
     const tempDataValues = [];
     const tempDataKeys = [];
@@ -483,7 +479,7 @@ export function MetadataTable(props) {
     history = [...history, tempDataObj];
     DataSource.past = [...DataSource.past, [...tempDataObj]];
 
-    props.projectDataTable[currentTableName].data = [...OldData];
+    props.projectDataTable[currentTableName].data = [...oldData];
 
     // Todo: Add this when a good solution is in place to take care of IsPartOf which
     // is a dependent variable of Subject and TissueSample. Right now, each property is 
@@ -493,6 +489,27 @@ export function MetadataTable(props) {
     postTableData();
   };
   // updateTableData(currentTable.data);
+
+  const updateDependentColumns = (tempRow, matchCol, matchValue) => {
+    // Update dependent columns
+
+    if (matchCol === "Strain") {
+      // Potentially need to update the species column as well
+      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === matchValue)
+      tempRow['Species'] = selectedInstance[0].species
+    }
+
+    if (matchCol === "Species") {
+      const currentStrain = tempRow['Strain']
+      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === currentStrain)
+      if (selectedInstance.length > 0) {
+        if (selectedInstance[0].species !== matchValue) {
+          tempRow['Strain'] = null
+        }
+      }
+    }
+    return tempRow;
+  }
 
   const updateMaxColumnWidth = (columnNames, dataValue, matchCol) => {
     
