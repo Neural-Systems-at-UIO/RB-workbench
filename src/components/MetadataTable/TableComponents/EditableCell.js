@@ -18,7 +18,7 @@ import STRAIN_INSTANCES from '../../../metadata/strainInstances'; // Global vari
 //    - What is the purpose of EditableContext? How does it work?
 //    - Should user be allowed to add new dependent variables from a cell dropdown?
 //    - Should user be allowed to add new independent variables from a cell dropdown?
-//    - Can we combine finishEditCell and saveDropDown?
+//    - Can we combine finishEditCell and onDropdownValueChanged?
 //    - Why does the select component seem to be inversed with regards to the isEditing state?
 //        i.e when isEditing is true, the custom renderer with "add item" is not needed
 //        Possible answer: When a dropdown is folded, it needs a render method, but when 
@@ -87,14 +87,15 @@ export function EditableCell({
     }
   };
 
-  const saveDropDown = async (event) => {
+  const onDropdownValueChanged = async (newValue) => {
     // This function is different from finishEditCell by design.
     // We don't know why, but found through observation that it is needed.
-    
     toggleIsEditing();
     try {
-      const cellRecord = await form.validateFields();
-      handleSave({ ...rowRecord, ...cellRecord }, event, columnName);
+      const cellRecord = await form.validateFields(); // This is empty, why is it needed?
+      // Also, why not do this:
+      // const cellRecord = { [columnName]: newValue } ??
+      handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName);
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -164,7 +165,7 @@ export function EditableCell({
             id="selectmain"
             style={selectStyle}
             ref={inputRef}
-            onChange={saveDropDown}
+            onChange={onDropdownValueChanged}
             value={dropdownValue}
             //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
             dropdownRender={(menu) => (
@@ -191,7 +192,7 @@ export function EditableCell({
           filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
           placeholder="Select an option..."
           id="select"
-          onChange={saveDropDown}
+          onChange={onDropdownValueChanged}
           value={dropdownValue}
           //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
           style={selectStyle}
