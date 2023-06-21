@@ -1,0 +1,607 @@
+[
+  {
+    "name": "BXD44 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD44 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Vip<tm1(cre)Zjh>/J × B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to Vip-expressing cells bred with mice containing loxP-flanked sequences. This offspring has vasoactive intestinal polypeptide (VIP) postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "B6.129-Nlgn3<tm1Sud>/J",
+    "species": "Mus musculus",
+    "description": "These mice carry an R451C mutation in exon 7 of the gene. Mutant mice exhibit enhancements in inhibitory synaptic transmission as well as spacial learning and memory, but show deficits in social interaction. This mutant mouse strain may be useful in studies of the pathophysiology of autism."
+  },
+  {
+    "name": "F1: B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax X DBA/2J",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the B6-5XFAD parent following the cross of B6-5XFAD strain  and DBA/2J strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "PV-iRES-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A strain with Cre recombinase expression directed to cells expressing parvalbumin (PV)."
+  },
+  {
+    "name": "Tg-GlyT-2GFP (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": "GlyT-2GFP transgenic mice, which express green fluorescence protein in glycine transporter 2 positive cells"
+  },
+  {
+    "name": "B6.FVB(Cg)-Tg(Drd2-cre)ER44Gsat/Mmucd x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to dopamine receptor 2-expressing cells bred with mice containing loxP-flanked sequences. This offspring has dopamine-receptor 2 postive cells that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "Tg-PV (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing cell-type-specific fluorescent markers to target specific connections, here parvalbumin-expressing cells."
+  },
+  {
+    "name": "BAC-vGluT2/iCre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A strain with optimized Cre recombinase (iCre) with mutations within the BAC transgene. VGLUT2 is a vesicular glutamate transporter. iCre-mediated recombination results in deletion of the flanked sequence in VGLUT2 positive cells."
+  },
+  {
+    "name": "BXD68x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax (WT)",
+    "species": "Mus musculus",
+    "description": "Mice that lost the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD68 strain, and thus display wild-type traits."
+  },
+  {
+    "name": "Long-Evans",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "Lister Hooded",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "Tg-delta2-188-EGFP (Wistar background)",
+    "species": "Rattus norvegicus",
+    "description": "A transgenic strain produced by calcium phosphate transfection with N-terminal truncated gephyrin  polypeptide where amino acids 2–188 were removed (gephyrin (delta2-188)) fused to enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "C57BL/6J-Tg(Thy1-GCaMP6f)GP5.5Dkim/J",
+    "species": "Mus musculus",
+    "description": "These transgenic mice, made by the Genetically-Encoded Neuronal Indicator and Effector (GENIE) Project, express the green fluorescent calcium indicator, GCaMP6f, in subsets of excitatory neurons in the brain and possibly other cell types and tissues. The GCaMP6f indicator is an ultrasensitive detector of single neuronal action potentials and has fast response kinetics.\nThe transgene contains a mouse Thy1 promoter, GCaMP6f, woodchuck hepatitis virus posttranscriptional regulatory element (WPRE), and bovine growth hormone (bGH) polyadenylation sequence."
+  },
+  {
+    "name": "SST-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to somatostatin-expressing cells."
+  },
+  {
+    "name": "Tg-APV-cre-tdTomato (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "BXD100 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD100 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "5XFAD transgenic mice rapidly recapitulate major features of Alzheimer's Disease amyloid pathology. They overexpress both mutant human amyloid beta (A4) precursor protein 695 (APP)) with the Swedish (K670N, M671L), Florida (I716V), and London (V717I) Familial Alzheimer's Disease (FAD) mutations and human PS1 harboring two FAD mutations, M146L and L286V."
+  },
+  {
+    "name": "Tg-Thy1-GFP-M (unknown background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing GFP in Thy1-expressing cells."
+  },
+  {
+    "name": "Sprague-Dawley",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "CR-iRES-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A strain with Cre recombinase expression directed to cells expressing calretinin (CR)."
+  },
+  {
+    "name": "Chrna2-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A strain with Cre recombinase expression directed to cells expressing nicotinic acetylcholine receptor alpha 2 subunit (Chrna2)."
+  },
+  {
+    "name": "Wistar Han",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "B6N.Cg-Sst<tm2.1(cre)Zjh>/J × B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to somatostatin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has somatostatin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "Tg-Drd2-EGFP (Arc:Arc(S) background)",
+    "species": "Mus musculus",
+    "description": "Drd2-EGFP mice were originally generated at the Gene Expression Nervous System Atlas (GENSAT) program at the Rockefeller University, New York,USA, and were bred on an outbred Arc:Arc(S) Swiss background at the Florey Institute of Neuroscienceand Mental Health, Melbourne, Australia.Described in Gong et al. (2003; doi:10.1038/nature02033)."
+  },
+  {
+    "name": "PV-Cre (unknown background) x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to parvalbumin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has parvalbumin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "BXD65x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD65 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "BXD68 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD68 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "HAZ (AB background)",
+    "species": "Danio rerio",
+    "description": "A zebrafish line that was bred by selectively mating animals displaying high mirror aggression behavior for four generations, each generation selecting the most aggressive animals to produce the next generation offspring."
+  },
+  {
+    "name": "Tg-L7-GFP (unknown background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing GFP in Purkinje cells."
+  },
+  {
+    "name": "BXD66x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax (WT)",
+    "species": "Mus musculus",
+    "description": "Mice that lost the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD66 strain, and thus display wild-type traits."
+  },
+  {
+    "name": "Tg-scFv-NLG2-645-EGFP (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic strain produced by transfection with lentivirus driving the expression of the single chain Fv fragments (scFv) intrabody against the cytoplasmic domain of NLG2 (scFvNLG2-645) in combination with enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "vGAT-iRES-Cre (Bl6Fx background)",
+    "species": "Mus musculus",
+    "description": "A strain with Cre recombinase expression directed to inhibitory GABAergic neuron cell bodies, without disrupting endogenous vesicular inhibitory amino acid transporter expression."
+  },
+  {
+    "name": "Cyclin D2 KO (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A strain where cyclin D2, a FSH-responsive gene involved in gonadal cell proliferation and oncogenesis, has been knocked out. Cyclin D2 KO mice are backcrossed into the C57BL/6J background for more than six generations.They have been shown to be almost completely devoid of adult hippocampal neurogenesis. \nDescribed in Sicinski et al. (1996; doi:10.1038/384470a0)."
+  },
+  {
+    "name": "C57BL/6N",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "SWR",
+    "species": "Mus musculus",
+    "description": "SWR' is the strain family name."
+  },
+  {
+    "name": "Tg(Rbp4-cre)KL100Gsat",
+    "species": "Mus musculus",
+    "description": "Rbp4-Cre mice express Cre recombinase in retinol binding protein 4 (Rbp4)-expressing neurons of cortical layer 5 and will express GCaMP6f when the viral construct is recombined."
+  },
+  {
+    "name": "BXD32 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD32 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "BXD44 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax (WT)",
+    "species": "Mus musculus",
+    "description": "Mice that lost the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD44 strain, and thus display wild-type traits."
+  },
+  {
+    "name": "B6.129P2-Pvalb<tm1(cre)Arbr>/J x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to parvalbumin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has parvalbumin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "Scnn1a-Tg3-Cre (unknown background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "B6.Cg-Pvalb<tm1.1(cre)Aibs>/J × B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to parvalbumin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has parvalbumin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "Sim1-Cre_KJ18 (unknown background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "B6/129S/SvEv",
+    "species": "Mus musculus",
+    "description": "A hybrid strain (F1 or F2) by crossing C57BL/6 mice and 129S/SvEv mice."
+  },
+  {
+    "name": "CD-1",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "BXD62x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD62 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Tg-scFv-gephcyto-EGFP (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic strain produced by transfection with lentivirus driving the expression of the single chain Fv fragments (scFv)  intrabody against aminoacids 153-348 of gephyrin protein (scFv-geph) which binds  gephyrin at its normal subcellular location in combination with enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "B6.FVB(Cg)-Tg(Drd1-cre)EY262Gsat/Mmucd x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to dopamine receptor 1a-expressing cells bred with mice containing loxP-flanked sequences. This offspring has dopamine receptor 1a postive cells that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "B6.129-Del(5Gtf2i-Fkbp6)1Vcam",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Tg(Pdgfrb-EGFP)JN169Gsat",
+    "species": "Mus musculus",
+    "description": "Pdgfrb-EGFP mice were originally generated at the Gene Expression Nervous System Atlas (GENSAT) program at the Rockefeller University, New York,USA.  An EGFP reporter gene, followed by a polyadenylation sequence, was inserted into BAC clone RP23-10L16 at the initiating ATG codon of the first coding exon of the Pdgfrb gene so that EGFP expression is driven by the regulatory sequences of the BAC gene. The resulting modified BAC (BX1944) was used to generate this transgene. This transgenic mouse strain expresses EGFP in cells expressing platelet-derived growth factor receptor beta (PDGRFRB or PDGRFRbeta)."
+  },
+  {
+    "name": "IB2 KO (129/Sv background)",
+    "species": "Mus musculus",
+    "description": "A strain where IB2, Islet-Brain-2 gene, has been knocked out."
+  },
+  {
+    "name": "Tg-ArcSwe (unknown background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse model carrying human Amyloid beta precursor protein (AbetaPP) cDNA with the Arctic (p. E693G) and Swedish (p. KM670/671NL) mutations."
+  },
+  {
+    "name": "Wistar-TgN(CAG-GFP)184ys",
+    "species": "Rattus norvegicus",
+    "description": "A transgenic rat strain that expresses enhanced green fluorescent protein (EGFP). Also described in Hakamata et al. (2001; doi:10.1006/bbrc.2001.545)."
+  },
+  {
+    "name": "BXD69x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD69 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "B6.Cg-Tg(Camk2a-tTA)1Mmay/DboJ x Luc-tetO-lacZ (unknown background)",
+    "species": "Mus musculus",
+    "description": "Hybrid generated by crossing Camk2a promoter line with responder line transgenic for bidirectional reporter gene construct containing E.coli derived LacZ reporter gene encoding beta-galactosidase and Luciferase gene from Photinus pyralis (Lus-tetO-lacZ).\nDescribed in Lillehaug et al. (2019; doi:10.1038/sdata.2019.28)."
+  },
+  {
+    "name": "Tg-scFv-geph-NLS-EGFP (Wistar background)",
+    "species": "Rattus norvegicus",
+    "description": "A transgenic strain produced by calcium phosphate transfection with single chain Fv fragments (scFv) intrabody against aminoacids 153-348 of gephyrin protein (scFv-geph) fused with a nuclear localization signal (scFv-geph NLS) in combination with enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "SST-Cre (C57BL/6J background) x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to somatostatin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has somatostatin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "PV-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to parvalbumin-expressing cells."
+  },
+  {
+    "name": "B6;C3-Tg(Scnn1a-cre)3Aibs/J",
+    "species": "Mus musculus",
+    "description": "These Scnn1a-Tg3-Cre mice express Cre recombinase under the control of the Scnn1a (sodium channel, nonvoltage-gated 1 alpha) promoter/enhancer regions, and may be useful for generating conditional mutations for studying gain or loss of function and/or fate mapping in subgroups of brain tissues (including cortex, thalamus, midbrain, and cerebellum).\nFollowing injection of a modified BAC carrying the mutation into embryos from B6C3 mice, transgenic males were bred to C57BL/6J females. In total, backcrossed to C57BL/6J for four or more generations."
+  },
+  {
+    "name": "B6.Cg-Gt(ROSA)26Sor<tm27.1(CAG-COP4*H134R/tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Ai27D mice express an improved channelrhodopsin-2/tdTomato fusion protein following exposure to Cre recombinase. These mice can be used in optogenetic studies for rapid in vivo activation of excitable cells by illumination with blue light (450-490 nm)."
+  },
+  {
+    "name": "B6;129S6-Chat<tm2(cre)Lowl>/J x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to ChAT-expressing cells bred with mice containing loxP-flanked sequences. This offspring has ChAT postive cells that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "B6.Cg-Tg(Camk2a-tTA)1Mmay/DboJ",
+    "species": "Mus musculus",
+    "description": "When these Camk2a-tTA transgenic mice are mated to strain carrying a gene of interest under the regulatory control of a tetracycline-responsive promoter element (TRE; tetO), expression of the target gene can be blocked by administration of the tetracycline analog, doxycycline. These mice are a \"Tet-Off\" tool that allow the inducible expression of genes in forebrain neurons, and may be useful in studying brain disorders such as Alzheimer's, Parkinson's disease, or other neurodegenerative diseases.\r\n\r\nThe CaMK2a-tTA transgene integrated into chromosome 12 causing a 508 Kb deletion that spans the 3' half of Vipr2, the entire Wdr60, Esyt2, D430020J02Rik and Ncapg2 loci and the first two exons of Ptprn2. Homozygous mice will therefore have a functional knock-out of the deleted loci, and altered or null expression of Vipr2 and Ptprn2."
+  },
+  {
+    "name": "BXD61x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD61 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "C57BL/6NTac",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "LAZ (AB background)",
+    "species": "Danio rerio",
+    "description": "A zebrafish line that was bred by selectively mating animals displaying low mirror aggression behavior for four generations, each generation selecting the least aggressive animals to produce the following offspring."
+  },
+  {
+    "name": "ATJ/FVB.129P2-FMR1-mix",
+    "species": "Mus musculus",
+    "description": "A knockout strain carrying disruptions in the Fmr1 gene and resembles the neuropathology of the Fragile X Syndrome (FXS)."
+  },
+  {
+    "name": "Rbp4-Cre_KL100 (unknown background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "BAC-vGluT3/iCre (Bl6Fx background)",
+    "species": "Mus musculus",
+    "description": "A strain with optimized Cre recombinase (iCre) with mutations within the BAC transgene. VGLUT3 is a vesicular glutamate transporter that mediates synaptic transmission by transporting the neurotransmitter, glutamate, into secretory vesicles. iCre-mediated recombination results in deletion of the flanked sequence in VGLUT3 positive cells."
+  },
+  {
+    "name": "Wistar",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "129/Sv",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Tg-Arc-dVenus (unknown background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing the fluorescent protein dVenus in cells expressing the immediate early gene Arc."
+  },
+  {
+    "name": "APPPS1",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse model on a C57BL/6J genetic background that coexpresses KM670/671NL mutated amyloid precursor protein and L166P mutated presenilin 1 under the control of a neuron-specific Thy1 promoter element (APPPS1 mice).\nDescribed in Radde et al. (2006; doi:10.1038/sj.embor.7400784)."
+  },
+  {
+    "name": "Tg-Thy1-GFP-M (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing GFP in Thy1-expressing cells."
+  },
+  {
+    "name": "Alzheimer's disease model strain (CD-1 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Tg-CCK (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing cell-type-specific fluorescent markers to target specific connections, here cholecystokinin-expressing cells."
+  },
+  {
+    "name": "B6;129P2-Pvalb<tm1(cre)Arbr>/J x B6.Cg-Gt(ROSA)26Sor<tm3(CAG-EYFP)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to parvalbumin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has parvalbumin postive interneurons that express the fluorescent protein enhanced yellow fluorescent protein (EYFG)."
+  },
+  {
+    "name": "B6.Cg-Tg(Klk8-tTA)QMmay/MullMmmh x tetO-nls-lac-CMK (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Nr2f1<fl/fl>:Emx1-Cre x Thy1-eYFP-H (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "An additional cross of a knockout strain with inactivated Nr2f1/COUP-TFI expression (exclusively in cortical progenitors and their progeny) to also expresses eYFP specifically in layer V cortical neurons."
+  },
+  {
+    "name": "BXD75x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD75 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Prnp-tTA (unknown background) x Luc-tetO-lacZ (unknown background)",
+    "species": "Mus musculus",
+    "description": "Hybrid generated by crossing Prnp promoter line Prnp-tTA, line F959) with responder line transgenic for bidirectional reporter gene construct containing E.coli derived LacZ reporter gene encoding beta-galactosidase and Luciferase gene from Photinus pyralis (Lus-tetO-lacZ).\nDescribed in Lillehaug et al. (2019; doi:10.1038/sdata.2019.28)."
+  },
+  {
+    "name": "C57BL/6",
+    "species": "Mus musculus",
+    "description": "'C57BL/6' is the strain family name."
+  },
+  {
+    "name": "B6.129-Nlgn3<tm4Sud>/J",
+    "species": "Mus musculus",
+    "description": "The strain constitutively expresses an X-linked mutant of Nlgn3 (neuroligin 3) carrying the equivalent Nlgn1 (neuroligin 1) gene mutations that have been identified to inhibit binding to alpha and beta neurexins. LoxP sites enable conditional knockout of Nlgn3 through cre-mediated excision. The strain has been backcrossed to C57BL/6 for 5 generations."
+  },
+  {
+    "name": "Lewis",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "Nr2f1/COUP-TFI (C57BL/6J background) x Nex-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A conditional knockout strain that was crossed with a Nex-1 Cre recombinase strain to abolish Nr2f1/COUP-TFI expression from postmitotic neurons. Described in Alfano et al. (2014; doi: 10.1038/ncomms6632)."
+  },
+  {
+    "name": "PV-Cre (unknown background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to parvalbumin-expressing cells."
+  },
+  {
+    "name": "Nxnl2R (C57BL/6N background)",
+    "species": "Mus musculus",
+    "description": "The nucleoredoxin-like 2 (Nxnl2) gene reporter stain (Nxnl2R) was created using Velocigene stem cells.\r\nThose cells carry a beta-galactosidase reporter knock-in in the Nxnl2 locus replacing the coding sequence\r\nof the gene for the two proteins, rod-derived cone viability factor (RdCVF2) and the thioredoxin like\r\nprotein RdCVF2L. They were bred on a C57BL/6N background."
+  },
+  {
+    "name": "PV-Cre (C57BL/6J background) x B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to parvalbumin-expressing cells bred with mice containing loxP-flanked sequences. This offspring has parvalbumin postive interneurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "B6.129(Cg)-Fos<tm1.1(cre/ERT2)Luo>/J × B6.Cg-Gt(ROSA)26Sor<tm9(CAG-tdTomato)Hze>/J",
+    "species": "Mus musculus",
+    "description": "A strain for targeted recombination in active populations (TRAP), to obtain genetic access to neurons that were activated by defined stimuli. This method utilizes mice in which the tamoxifen-dependent recombinase CreER(T2) is expressed in an activity-dependent manner from the loci of the immediate early genes Arc and Fos. Active cells that express CreER(T2) can only undergo recombination when tamoxifen is present, allowing genetic access to neurons that are active during a time window of less than 12 hr.\nDescribed in Guenthner et al. (2013; doi:10.1016/j.neuron.2013.03.025)."
+  },
+  {
+    "name": "Pitx3-tTA (C57BL/6J background) x tetO-nls-lac-CMK (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "VIP-Cre (unknown background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to vasoactive intestinal polypeptide-expressing cells."
+  },
+  {
+    "name": "Trib2-F2A-CreERT2 (unknown background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "VIP-Cre (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to vasoactive intestinal polypeptide-expressing cells."
+  },
+  {
+    "name": "Tg-scFv-geph-NLSC-EGFP (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic strain produced by transfection with lentivirus driving the expression of the single chain Fv fragments (scFv) intrabody against aminoacids 153-348 of gephyrin protein (scFv-geph) fused with a specific nuclear localization signal (scFv-geph NLSC) in combination with enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "ER-alpha-Cre (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Nr2f1<fl/fl>:Nex-Cre x Thy1-eYFP-H (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "An additional cross of a knockout strain with abolished Nr2f1/COUP-TFI expression from postmitotic neurons to also expresses eYFP specifically in layer V cortical neurons."
+  },
+  {
+    "name": "C57BL/6J-Tg(Thy1-GCaMP6f)GP5.17Dkim/J",
+    "species": "Mus musculus",
+    "description": "These transgenic mice, made by the Genetically-Encoded Neuronal Indicator and Effector (GENIE) Project, express the green fluorescent calcium indicator, GCaMP6f, in subsets of excitatory neurons in the brain and possibly other cell types and tissues. The GCaMP6f indicator is an ultrasensitive detector of single neuronal action potentials and has fast response kinetics.\nThe transgene contains a mouse Thy1 promoter, GCaMP6f, woodchuck hepatitis virus posttranscriptional regulatory element (WPRE), and bovine growth hormone (bGH) polyadenylation sequence."
+  },
+  {
+    "name": "Tg-PSD95-EGFP (unknown background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing EGFP in PSD95-expressing cells."
+  },
+  {
+    "name": "BXD77x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD77 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "BXD51 x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD51 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Nr2f1/COUP-TFI (C57BL/6J background) x Thy1-eYFP-H (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A conditional knockout ready strain for Nr2f1/COUP-TFI that was crossed to also expresses eYFP specifically in layer V cortical neurons."
+  },
+  {
+    "name": "LEW/Ztm",
+    "species": "Rattus norvegicus",
+    "description": ""
+  },
+  {
+    "name": "C57BL/6J",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "B6;CBA-Tg(Cyp19a1-cre)1Dlc/J",
+    "species": "Mus musculus",
+    "description": "Cyp19a1-Cre BAC transgenic mice express cre recombinase from the mouse Cyp19a1 (aromatase) promoter, faithfully recapitulating brain expression patterns of the endogenous mouse gene."
+  },
+  {
+    "name": "BXD66x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD66 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Nr2f1/COUP-TFI (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A conditional knockout ready strain that, when crossed with a Cre recombinase expressing line, presents with an inactivation of Nr2f1/COUP-TFI (Nuclear Receptor subfamily 2, group F, member 1/ COUP Transcription Factor 1)."
+  },
+  {
+    "name": "Tg-GAD67-EGPF (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": "GAD67-EGPF transgenic mice, which express green fluorescence protein in GABAergic interneurons"
+  },
+  {
+    "name": "B6;SJL-Tg(APPSWE)2576Kha",
+    "species": "Mus musculus",
+    "description": "The Tg2576 model is one of the most well characterized, and widely used, mouse models of Alzheimer's disease. It overexpresses a mutant form of APP (isoform 695) with the Swedish mutation (KM670/671NL), resulting in elevated levels of Aβ and ultimately amyloid plaques."
+  },
+  {
+    "name": "Tlx3-Cre_PL56 (unknown background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "B6;CBA-Tg(Cyp19a1-cre)1Dlc/J x B6.Cg-Gt(ROSA)26Sortm9(CAG-tdTomato)Hze/J",
+    "species": "Mus musculus",
+    "description": "Offspring from mice expressing Cre recombinase directed to aromatase-expressing cells bred with mice containing loxP-flanked sequences. This offspring has aromatase postive neurons that express the fluorescent protein tdTomato."
+  },
+  {
+    "name": "Tg-Cx3cr1-GFP (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic mouse strain expressing GFP in microglia cells."
+  },
+  {
+    "name": "Tg-EGFP (C57BL/6J background)",
+    "species": "Mus musculus",
+    "description": "A transgenic strain produced by transfection with lentivirus driving the expression of enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "Tg-EGFP (Wistar background)",
+    "species": "Rattus norvegicus",
+    "description": "A transgenic strain produced by calcium phosphate transfection with enhanced green fluorescent protein (EGFP)."
+  },
+  {
+    "name": "SST-Cre (unknown background)",
+    "species": "Mus musculus",
+    "description": "Mice with this strain express Cre recombinase directed to somatostatin-expressing cells."
+  },
+  {
+    "name": "B6;129-Tg(Drd1-cre)120Mxu/Mmjax",
+    "species": "Mus musculus",
+    "description": "These mice express Cre recombinase under the control of the mouse Drd1a (dopamine receptor D1A) promoter. DRD1A is s a G-protein coupled receptor involved in the regulation of neuronal growth and development. The D1 subtype is the most abundant dopamine receptor in the central nervous system. Defects in dopaminergic neurons are associated with Parkinson's disease, schizophrenia, attention-deficit and hyperactivity disorder, and compulsive drug abuse."
+  },
+  {
+    "name": "Tg-Drd1a-EGFP (Arc:Arc(S) background)",
+    "species": "Mus musculus",
+    "description": "Drd1a-EGFP mice were originally generated at the Gene Expression Nervous System Atlas (GENSAT) program at the Rockefeller University, New York,USA, and were bred on an outbred Arc:Arc(S) Swiss background at the Florey Institute of Neuroscienceand Mental Health, Melbourne, Australia.Described in Gong et al. (2003; doi:10.1038/nature02033)."
+  },
+  {
+    "name": "FVB-Tg(Pcp2-tTA)3Horr/J x tetO-nls-lac-CMK (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "Alzheimer's disease model strain (C57BL/6 background)",
+    "species": "Mus musculus",
+    "description": ""
+  },
+  {
+    "name": "BXD87x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD87 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "B6/SJL",
+    "species": "Mus musculus",
+    "description": "A hybrid strain (F1 or F2) by crossing C57BL/6 mice and SJL mice."
+  },
+  {
+    "name": "BXD60x B6.Cg-Tg(APPSwFlLon,PSEN1*M146L*L286V)6799Vas/Mmjax",
+    "species": "Mus musculus",
+    "description": "Transgenic mice that retained the transgenes from the 5XFAD parent following the cross of 5XFAD strain and BXD60 strain, and thus display Alzheimer’s disease-like pathology"
+  },
+  {
+    "name": "Tg(Grik4-cre)G35-3Stl x B6.Cg-Igs7tm148.1(tetO-GCaMP6f,CAG-tTA2)Hze/J",
+    "species": "Mus musculus",
+    "description": "Offspring of G35-3 mice, expressing cre recombinase and cre-dependent Ai148D mice. Cre and GCaMP6f expresses especially in cortical pyramidal cells, layer 2/3."
+  }
+]
