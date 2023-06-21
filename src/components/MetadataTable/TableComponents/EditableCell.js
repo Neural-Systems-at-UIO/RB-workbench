@@ -81,7 +81,8 @@ export function EditableCell({
     try {
       const cellRecord = await form.validateFields();
       toggleIsEditing(); // Why is this happening after validating fields???
-      handleSave({ ...rowRecord, ...cellRecord });
+      handleSave({ ...rowRecord, ...cellRecord })
+      //handleSave({ ...rowRecord, ...cellRecord }, cellRecord[columnName], columnName, 'input')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -95,7 +96,8 @@ export function EditableCell({
       const cellRecord = await form.validateFields(); // This is empty, why is it needed?
       // Also, why not do this:
       // const cellRecord = { [columnName]: newValue } ??
-      handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName);
+      handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName)
+      //handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName, 'dropdown')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
