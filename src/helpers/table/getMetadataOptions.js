@@ -1,5 +1,6 @@
 import controlledInstanceNames from '../../metadata/controlledInstances';
 import controlledInstanceDefinitions from '../../metadata/controlledInstancesDefinitions';
+import strainInstances from '../../metadata/strainInstances';
 
 import instanceFilter from '../../metadata/columnDataFilter';
 
@@ -44,6 +45,9 @@ export function getMetadataOptions() {
     // Loop through all the unique column properties
     for (let i = 0; i < uniqueObjects.length; i++) {
       const thisObject = uniqueObjects[i];
+
+      // Todo: Handle strain independently
+      
 
       // Initialize the column options for the current column
       columnOptions[thisObject['key']] = []
