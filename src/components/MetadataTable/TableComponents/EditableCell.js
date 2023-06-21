@@ -3,6 +3,9 @@ import { Button, Form, Input, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
+import STRAIN_INSTANCES from '../../../metadata/strainInstances'; // Global variable
+
+
 // Todo: 
 //    [ ] isEditable and isSelectable could be combined into one prop
 //    [ ] Dropdowns for dependent variables should not have the grouping of options
@@ -139,8 +142,11 @@ export function EditableCell({
 
     // Todo: Update this on table rerender. (It does not have to be done for every row, just once per table)
     metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
+    
+    const filteredOptionMap = filterMetadataOptions(columnName, metadataOptionMap, rowRecord)
+
     // Todo: Update this on table rerender.
-    const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
+    const dropdownOptions = getColumnDropdownOptions(columnName, filteredOptionMap, customOptionList)
     const dropdownValue = children[1] || ''
 
     const selectStyle = {width: '100%', cursor: 'pointer'}
@@ -353,4 +359,45 @@ function updateMetadataOptions(metadataOptionMap, tables, columnName) {
     }
   }
   return metadataOptionMap
+}
+
+function filterMetadataOptions(columnName, metadataOptionMap, rowRecord) {
+  // This function filters the metadata options for the strain column so that only
+  // strains that are compatible with the selected species are shown
+
+  if (columnName === 'Strain') {
+    
+    // Get the selected species
+    const species = rowRecord['Species']
+    
+    if (species) { // Only update if a species is selected
+
+      // Reduce the strain instance list to only include strains that are compatible with the selected species
+      const strainsKeep = STRAIN_INSTANCES.reduce((acc, strain) => {
+        if (strain['species'] === species) {
+          acc.push(strain)
+        }
+        return acc
+      }, [])
+
+      // Update the strain dropdown options in the ant-design group format
+      let filteredOptionMap = {...metadataOptionMap}
+      filteredOptionMap['Strain'] = [{
+        label: 'Strain',
+        options: strainsKeep.map((strain) => {
+          return {
+            value: strain['name'],
+            label: strain['name'],
+            title: strain['definition']
+          }
+        })
+      }] 
+      return filteredOptionMap;
+    } else {
+      return metadataOptionMap;
+    }
+  } else {
+    // If it is not species or strain, just use the metadata options
+    return metadataOptionMap;
+  }
 }

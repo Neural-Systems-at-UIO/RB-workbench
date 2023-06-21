@@ -10,6 +10,11 @@ import subjectGroupTableColumns from '../../metadata_new/defaultTableColumns/sub
 import tscTableColumns from '../../metadata_new/defaultTableColumns/tissueSampleCollectionColumns'
 
 
+// Append strainInstances to controlledInstanceNames
+controlledInstanceNames['Strain'] = strainInstances.map( instance => instance.name );
+controlledInstanceDefinitions['Strain'] = strainInstances.map( instance => instance.definition );
+
+
 // Questions:
 //  - Should instances be sorted by name?
 
@@ -45,9 +50,6 @@ export function getMetadataOptions() {
     // Loop through all the unique column properties
     for (let i = 0; i < uniqueObjects.length; i++) {
       const thisObject = uniqueObjects[i];
-
-      // Todo: Handle strain independently
-      
 
       // Initialize the column options for the current column
       columnOptions[thisObject['key']] = []
