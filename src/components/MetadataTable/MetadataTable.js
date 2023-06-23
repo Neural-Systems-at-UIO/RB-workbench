@@ -154,7 +154,6 @@ export function MetadataTable(props) {
   function handleUndoDS(e) {
     e.preventDefault();
     undoDataSource();
-
     DataSource.past = DataSource.past.slice(-15);
   }
 
@@ -324,7 +323,6 @@ export function MetadataTable(props) {
     updateTableData(temp_);
     setSelected([]);
     postTableData();
-
   };
 
   const makeSubjects = () => {
@@ -394,8 +392,6 @@ export function MetadataTable(props) {
    */
   const handleSave = (rowKey, columnName, newValue, oldValue, fieldType) => {
 
-    // Todo: Consider whether oldValue is needed here.
-    
     // Initialize the previous and updated version of the table data
     const updatedTableData = [...presentDS];
     const previousTableData = JSON.parse(JSON.stringify(presentDS)); // deep copy
@@ -416,6 +412,8 @@ export function MetadataTable(props) {
       updatedTableData[iRowIndex][columnName] = newValue;
       if (fieldType === 'dropdown') {
         updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
+      } else if (fieldType === 'inputfield') {
+        updateLinkedColumnValues(columnName, newValue, oldValue)
       }
     }
 
@@ -455,8 +453,64 @@ export function MetadataTable(props) {
           tableData[rowIndex]['Strain'] = null
         }
       }
-    }
+    }     
     return tableData;
+  }
+
+  const updateLinkedColumnValues = (columnName, newValue, oldValue) => {
+    // This function updates the values in columns that are linked to the column that was changed.
+    // For example, if a row in the column "SubjectGroupID" is changed, then all the values in 
+    // the column "IsPartOf in the Subject table that matched the old value of "SubjectGroupID"
+    // will be changed to the new value of "SubjectGroupID".
+
+    // Note: Relies on the global variable tables.
+    const linkedColumnInfo = getLinkedColumnInfo(tables);
+
+    if (linkedColumnInfo.map((item) => item.columnName).includes(columnName)) {
+      const linkedColumns = linkedColumnInfo.filter((item) => item.columnName === columnName);
+
+      linkedColumns.forEach((linkedColumn) => {
+        let tableData = tables[linkedColumn.dependentTableName].data
+
+        let columnValues = tableData.map(rowRecord => rowRecord[linkedColumn.dependentColumnName])
+        columnValues.forEach((columnValue, index) => {
+          if (columnValue === oldValue) {
+            tableData[index][linkedColumn.dependentColumnName] = newValue
+          }
+        })
+      })
+    }
+  }
+
+  const getLinkedColumnInfo = (tables) => {
+    // This function returns a list of objects that contain information about columns 
+    // that are linked. Each object contains the name of the table, the name of the column
+    // that is linked, and the name of the column that is dependent on the linked column.
+    //
+    // For example, if the column "SubjectGroupID" in the SubjectGroup table is linked to the
+    // column "IsPartOf" in the Subject table, then the object would be:
+    // {columnName: "SubjectGroupID", dependentTableName: "Subject", dependentColumnName: "IsPartOf"}
+
+    // Todo: this function could be moved to a utiliy/helper file.
+    // It also only needs to run on initialization.
+
+    const linkedColumnInfo = [];
+    
+    for (let [tableName, tableObject] of Object.entries(tables)) {
+      if (tableObject.dependentVariables) {
+        for (let [propertyName, linkInfo] of Object.entries(tableObject.dependentVariables)) {
+
+          linkedColumnInfo.push(
+            {
+              columnName: Object.values(linkInfo)[0],
+              dependentTableName: tableName, 
+              dependentColumnName: propertyName
+            }
+          )
+        }
+      }
+    }
+    return linkedColumnInfo;
   }
 
   const updateMaxColumnWidth = (dataValue, matchCol, fieldType) => {
