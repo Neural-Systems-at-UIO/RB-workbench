@@ -27,6 +27,7 @@ import metadata from '../../metadata/controlledInstances';
 import metadataDefinitions from '../../metadata/controlledInstancesDefinitions';
 import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
 import { convertTableToCSV } from '../../helpers/csvAdapter';
+
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
@@ -73,7 +74,6 @@ export function MetadataTable(props) {
   // children
 
   var nextTableName = props.nextTableName; // rename to newTableName?
-  var history = [];
   // this is weird, how should it be done?
 
   const [customOptionList, setCustomOptionList] = useState({})
@@ -111,7 +111,7 @@ export function MetadataTable(props) {
   const { present: presentDS } = DataSource;
   let count = presentDS.length;
 
-  console.log('presentDS', presentDS);
+  //console.log('presentDS', presentDS);
 
   if (currentTableName !== nextTableName || currentProjectName !== props.project) {
     // save current (will be previous) state
@@ -150,8 +150,6 @@ export function MetadataTable(props) {
 
     currentTable.data = newData;
   }
-
-
 
   // Following are callback functions for the options bar
   function handleUndoDS(e) {
@@ -386,136 +384,84 @@ export function MetadataTable(props) {
 
   /**
    * Callback for saving the changes made in the table to memory.
-   * @param {Object} rowRecord - The data for the row that was changed.
-   * @param {Object} newValue - The new value which is being set. Should be renamed to newValue. This is only relevant for dropdowns.
-   * @param {String} columnName - The name of the column that was changed.
-   *
+   * @param {Object} rowKey - The key of the row which that was changed. Note: rowKey is 1-indexed.
+   * @param {Object} columnName - The name of the column that was changed.
+   * @param {Object} newValue - The new value of the cell that was changed.
+   * @param {String} oldValue - The old value of the cell that was changed.
+   * @param {String} fieldType - The type of the field that was changed.
    */
-  const handleSave = (rowRecord, newValue, columnName, fieldType) => {
+  const handleSave = (rowKey, columnName, newValue, oldValue, fieldType) => {
 
-    // Not understood: How does oldData / presentDs already contain the updated
-    // dropdown selection? Howeverm for text fields, it does not contain the
-    // updated value.
+    // Todo: Consider whether oldValue is needed here.
+    
+    // Initialize the previous and updated version of the table data
+    const updatedTableData = [...presentDS];
+    const previousTableData = JSON.parse(JSON.stringify(presentDS)); // deep copy
 
-    // What is the purpose of oldData/originalData
+    // Find the index of the row that was changed
+    const rowIndex = updatedTableData.findIndex((item) => rowKey === item.key);
+    
+    // Define the indices of rows to update.
+    let rowIndexList = []
+    if (selRows && selRows.includes(rowKey)) {
+      rowIndexList = selRows.map((rowKey) => rowKey - 1) // Key is 1-indexed, but array is 0-indexed.
+    }  else {
+      rowIndexList = [rowIndex]
+    }
 
-    const oldData = [...presentDS]; // Why is this called old data???
-    const originalData = { ...rowRecord };
-
-    const rowIndex = oldData.findIndex((item) => rowRecord.key === item.key);
-    const oldRowRecord = oldData[rowIndex]; // Rename to currentRowRecord
-
-    const columnNames = Object.keys(rowRecord);
-    var matchCol = null;
-    // regex for newline,  any number of spaces, newline
-
-    for (const key in Object.keys(rowRecord)) {
-      const id = columnNames[key];
-      if (rowRecord[id] !== oldRowRecord[id]) {        
-        matchCol = id; // Just columnName??
-        var matchValue = rowRecord[id]; // Just updatedValue
-        originalData[matchCol] = oldRowRecord[id];
-        oldData.splice(rowIndex, 1, { ...oldRowRecord, ...rowRecord }); // replace row data with new data? why not just {...rowRecord}?
-      } else {
-        // No values have changed, so do nothing. Todo: Confirm with Harry.
-        // This does 
-        // return
+    // Update the table data for the rows that should be updated
+    for (const iRowIndex of rowIndexList) {
+      updatedTableData[iRowIndex][columnName] = newValue;
+      if (fieldType == 'dropdown') {
+        updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
       }
     }
 
-    // If dropdown value was changed, update the oldData...
-    if (typeof newValue !== 'undefined') {
-    //if (fieldType === 'dropdown') {
-      matchCol = columnName; // Just columnName
-      matchValue = newValue; // Just updatedValue
-      var tempRow = oldData[rowIndex];
-      tempRow[matchCol] = matchValue;
-      tempRow = updateDependentColumns(tempRow, matchCol, matchValue)
-
-      oldData.splice(rowIndex, 1, { ...tempRow });
-    }
-
-    // If multiple rows are selected, update all of them.
-    if (selRows.includes(rowRecord.key)) {
-      for (const i in selRows) {
-        tempRow = oldData[selRows[i] - 1]; // Key is 1-indexed, but array is 0-indexed.
-        tempRow[matchCol] = matchValue;
-        tempRow = updateDependentColumns(tempRow, matchCol, matchValue)
-
-        oldData.splice(selRows[i] - 1, 1, { ...tempRow });
-      }
-    }
-
-    console.log('matchCol', matchCol)
-    if (!matchCol) {
-      return
-    }
-
-    updateMaxColumnWidth(columnNames, matchValue, matchCol)
+    updateMaxColumnWidth(newValue, columnName)
     setStatefulColumns([...statefulColumns]);
 
-    SetDataSource([...oldData], false); // Todo: Rename oldData to newData?
-
-    // Ask Harry: What happens here? Related to updating many rows at once?
-    DataSource.present = { ...oldData };
-    const tempData = [...oldData];
-    tempData[rowIndex] = { ...originalData };
-
-    const tempDataValues = [];
-    const tempDataKeys = [];
-    for (const i in tempData) {
-      tempDataValues.push([...Object.values(tempData[i])]);
-      tempDataKeys.push([...Object.keys(tempData[i])]);
-    }
-
-    const tempDataObj = [];
-    for (const i in tempDataValues) {
-      const tempObj = {};
-      for (const j in tempDataValues[i]) {
-        tempObj[tempDataKeys[i][j]] = tempDataValues[i][j];
-      }
-      tempDataObj.push(tempObj);
-    }
-    history = [...history, tempDataObj];
-    DataSource.past = [...DataSource.past, [...tempDataObj]];
-
-    props.projectDataTable[currentTableName].data = [...oldData];
-
+    //SetDataSource([...updatedTableData], false);
+    // DataSource.present = { ...updatedTableData }; 
+    
+    // Update the undo history
+    DataSource.past = [...DataSource.past, [...previousTableData]];
+    
+    props.projectDataTable[currentTableName].data = [...updatedTableData];
+    
     // Todo: Add this when a good solution is in place to take care of IsPartOf which
     // is a dependent variable of Subject and TissueSample. Right now, each property is 
     // assumed to be the same across all tables, but IsPartOf is not.
     //metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
-
+    
     postTableData();
   };
   // updateTableData(currentTable.data);
 
-  const updateDependentColumns = (tempRow, matchCol, matchValue) => {
-    // Update dependent columns
+  const updateDependentColumnValues = (tableData, rowIndex, columnName, value) => {
 
-    if (matchCol === "Strain") {
-      // Potentially need to update the species column as well
-      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === matchValue)
-      tempRow['Species'] = selectedInstance[0].species
-    }
-
-    if (matchCol === "Species") {
-      const currentStrain = tempRow['Strain']
+    if (columnName === "Strain") {
+      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === value)
+      tableData[rowIndex]['Species'] = selectedInstance[0].species
+    
+    } else if (columnName === "Species") {
+      const currentStrain = tableData[rowIndex]['Strain']
       const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === currentStrain)
       if (selectedInstance.length > 0) {
-        if (selectedInstance[0].species !== matchValue) {
-          tempRow['Strain'] = null
+        if (selectedInstance[0].species !== value) {
+          tableData[rowIndex]['Strain'] = null
         }
       }
     }
-    return tempRow;
+    return tableData;
   }
 
-  const updateMaxColumnWidth = (columnNames, dataValue, matchCol) => {
+  const updateMaxColumnWidth = (dataValue, matchCol) => {
     
     // Adjust width of column if necessary
-    let matchColIndex = columnNames.indexOf(matchCol);
-    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
+    //let matchColIndex = columnNames.indexOf(matchCol);
+    //matchColIndex = matchColIndex - 1; // subtract 1 for the key column
+
+    let matchColIndex = statefulColumns.findIndex((item) => item.dataIndex === matchCol);
 
     const matchValueType = typeof dataValue;
 

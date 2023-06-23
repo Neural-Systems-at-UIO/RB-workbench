@@ -81,8 +81,14 @@ export function EditableCell({
     try {
       const cellRecord = await form.validateFields();
       toggleIsEditing(); // Why is this happening after validating fields???
-      handleSave({ ...rowRecord, ...cellRecord })
-      //handleSave({ ...rowRecord, ...cellRecord }, cellRecord[columnName], columnName, 'input')
+      
+      const rowKey = rowRecord.key;
+      const newValue = cellRecord[columnName];
+      const oldValue = rowRecord[columnName];
+      
+      if (newValue === oldValue) {return;} // Do nothing if the value has not changed
+
+      handleSave(rowKey, columnName, newValue, oldValue, 'inputfield')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -93,11 +99,12 @@ export function EditableCell({
     // We don't know why, but found through observation that it is needed.
     toggleIsEditing();
     try {
-      const cellRecord = await form.validateFields(); // This is empty, why is it needed?
-      // Also, why not do this:
-      // const cellRecord = { [columnName]: newValue } ??
-      handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName)
-      //handleSave({ ...rowRecord, ...cellRecord }, newValue, columnName, 'dropdown')
+      //const cellRecord = await form.validateFields(); // This is empty, why is it needed?
+      
+      const rowKey = rowRecord.key;
+      const oldValue = rowRecord[columnName];
+
+      handleSave(rowKey, columnName, newValue, oldValue, 'dropdown')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -386,7 +393,7 @@ function filterMetadataOptions(columnName, metadataOptionMap, rowRecord) {
       // Update the strain dropdown options in the ant-design group format
       let filteredOptionMap = {...metadataOptionMap}
       filteredOptionMap['Strain'] = [{
-        label: 'Strain',
+        label: `Strain (${species})`,
         options: strainsKeep.map((strain) => {
           return {
             value: strain['name'],
