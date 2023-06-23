@@ -1,5 +1,6 @@
 import controlledInstanceNames from '../../metadata/controlledInstances';
 import controlledInstanceDefinitions from '../../metadata/controlledInstancesDefinitions';
+import strainInstances from '../../metadata/strainInstances';
 
 import instanceFilter from '../../metadata/columnDataFilter';
 
@@ -7,6 +8,11 @@ import subjectTableColumns from '../../metadata_new/defaultTableColumns/subjectC
 import tissueTableColumns from '../../metadata_new/defaultTableColumns/tissueSampleColumns'
 import subjectGroupTableColumns from '../../metadata_new/defaultTableColumns/subjectGroupColumns'
 import tscTableColumns from '../../metadata_new/defaultTableColumns/tissueSampleCollectionColumns'
+
+
+// Append strainInstances to controlledInstanceNames
+controlledInstanceNames['Strain'] = strainInstances.map( instance => instance.name );
+controlledInstanceDefinitions['Strain'] = strainInstances.map( instance => instance.definition );
 
 
 // Questions:

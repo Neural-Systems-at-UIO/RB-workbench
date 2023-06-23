@@ -3,6 +3,9 @@ import { Button, Form, Input, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
+import STRAIN_INSTANCES from '../../../metadata/strainInstances'; // Global variable
+
+
 // Todo: 
 //    [ ] isEditable and isSelectable could be combined into one prop
 //    [ ] Dropdowns for dependent variables should not have the grouping of options
@@ -15,7 +18,7 @@ import { EditableContext } from './EditableRow.js';
 //    - What is the purpose of EditableContext? How does it work?
 //    - Should user be allowed to add new dependent variables from a cell dropdown?
 //    - Should user be allowed to add new independent variables from a cell dropdown?
-//    - Can we combine finishEditCell and saveDropDown?
+//    - Can we combine finishEditCell and onDropdownValueChanged?
 //    - Why does the select component seem to be inversed with regards to the isEditing state?
 //        i.e when isEditing is true, the custom renderer with "add item" is not needed
 //        Possible answer: When a dropdown is folded, it needs a render method, but when 
@@ -78,20 +81,30 @@ export function EditableCell({
     try {
       const cellRecord = await form.validateFields();
       toggleIsEditing(); // Why is this happening after validating fields???
-      handleSave({ ...rowRecord, ...cellRecord });
+      
+      const rowKey = rowRecord.key;
+      const newValue = cellRecord[columnName];
+      const oldValue = rowRecord[columnName];
+      
+      if (newValue === oldValue) {return;} // Do nothing if the value has not changed
+
+      handleSave(rowKey, columnName, newValue, oldValue, 'inputfield')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
   };
 
-  const saveDropDown = async (event) => {
+  const onDropdownValueChanged = async (newValue) => {
     // This function is different from finishEditCell by design.
     // We don't know why, but found through observation that it is needed.
-    
     toggleIsEditing();
     try {
-      const cellRecord = await form.validateFields();
-      handleSave({ ...rowRecord, ...cellRecord }, event, columnName);
+      //const cellRecord = await form.validateFields(); // This is empty, why is it needed?
+      
+      const rowKey = rowRecord.key;
+      const oldValue = rowRecord[columnName];
+
+      handleSave(rowKey, columnName, newValue, oldValue, 'dropdown')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
     }
@@ -139,8 +152,11 @@ export function EditableCell({
 
     // Todo: Update this on table rerender. (It does not have to be done for every row, just once per table)
     metadataOptionMap = updateMetadataOptions(metadataOptionMap, tables, columnName)
+    
+    const filteredOptionMap = filterMetadataOptions(columnName, metadataOptionMap, rowRecord)
+
     // Todo: Update this on table rerender.
-    const dropdownOptions = getColumnDropdownOptions(columnName, metadataOptionMap, customOptionList)
+    const dropdownOptions = getColumnDropdownOptions(columnName, filteredOptionMap, customOptionList)
     const dropdownValue = children[1] || ''
 
     const selectStyle = {width: '100%', cursor: 'pointer'}
@@ -158,7 +174,7 @@ export function EditableCell({
             id="selectmain"
             style={selectStyle}
             ref={inputRef}
-            onChange={saveDropDown}
+            onChange={onDropdownValueChanged}
             value={dropdownValue}
             //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
             dropdownRender={(menu) => (
@@ -185,7 +201,7 @@ export function EditableCell({
           filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
           placeholder="Select an option..."
           id="select"
-          onChange={saveDropDown}
+          onChange={onDropdownValueChanged}
           value={dropdownValue}
           //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
           style={selectStyle}
@@ -353,4 +369,45 @@ function updateMetadataOptions(metadataOptionMap, tables, columnName) {
     }
   }
   return metadataOptionMap
+}
+
+function filterMetadataOptions(columnName, metadataOptionMap, rowRecord) {
+  // This function filters the metadata options for the strain column so that only
+  // strains that are compatible with the selected species are shown
+
+  if (columnName === 'Strain') {
+    
+    // Get the selected species
+    const species = rowRecord['Species']
+    
+    if (species) { // Only update if a species is selected
+
+      // Reduce the strain instance list to only include strains that are compatible with the selected species
+      const strainsKeep = STRAIN_INSTANCES.reduce((acc, strain) => {
+        if (strain['species'] === species) {
+          acc.push(strain)
+        }
+        return acc
+      }, [])
+
+      // Update the strain dropdown options in the ant-design group format
+      let filteredOptionMap = {...metadataOptionMap}
+      filteredOptionMap['Strain'] = [{
+        label: `Strain (${species})`,
+        options: strainsKeep.map((strain) => {
+          return {
+            value: strain['name'],
+            label: strain['name'],
+            title: strain['definition']
+          }
+        })
+      }] 
+      return filteredOptionMap;
+    } else {
+      return metadataOptionMap;
+    }
+  } else {
+    // If it is not species or strain, just use the metadata options
+    return metadataOptionMap;
+  }
 }

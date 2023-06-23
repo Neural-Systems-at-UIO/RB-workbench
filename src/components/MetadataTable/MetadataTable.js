@@ -24,13 +24,16 @@ import ConfigProvider from '../ConfigProvider';
 //import metadata from '../../metadata/metadata';
 //import metadataDefinitions from '../../metadata/metadata-definitions';
 import metadata from '../../metadata/controlledInstances';
-import metadataDefinitions from '../../metadata/controlledInstancesDefinitions';
 import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
-import { convertTableToCSV } from '../../helpers/csvAdapter';
+//import { convertTableToCSV } from '../../helpers/csvAdapter';
+
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
-import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+import { getMetadataOptions } from '../../helpers/table/getMetadataOptions';
+// Todo: import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+
+import STRAIN_INSTANCES from '../../metadata/strainInstances'; // Global variable
 
 const TABLE_COMPONENTS = {
   body: {
@@ -72,7 +75,6 @@ export function MetadataTable(props) {
   // children
 
   var nextTableName = props.nextTableName; // rename to newTableName?
-  var history = [];
   // this is weird, how should it be done?
 
   const [customOptionList, setCustomOptionList] = useState({})
@@ -89,7 +91,7 @@ export function MetadataTable(props) {
 
   // These are used when new metadata instances are added to column dropdowns.
   // Todo: Replace with columnOptions, where columnOptions are updated if new SubjectGroups or TissueSampleCollections are added.
-  const [statefulmetadata, setstatefulmetadata] = useState(metadata);
+  // const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   
   // remove spaces from table name
   nextTableName = nextTableName.replace(/\s/g, '');
@@ -148,8 +150,6 @@ export function MetadataTable(props) {
     currentTable.data = newData;
   }
 
-
-
   // Following are callback functions for the options bar
   function handleUndoDS(e) {
     e.preventDefault();
@@ -203,34 +203,39 @@ export function MetadataTable(props) {
   /**
    * Callback for downloading the table as a CSV file.
    */
-  const DownloadCSV = () => {
-    // todo: should infer the variable names from the table
-    const csvString = convertTableToCSV(presentDS);
+  // const DownloadCSV = () => {
+  //   // todo: should infer the variable names from the table
+  //   const csvString = convertTableToCSV(presentDS);
 
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `metadata_${currentTableName.toLowerCase()}_table.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+  //   const blob = new Blob([csvString], { type: 'text/csv' });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.setAttribute('hidden', '');
+  //   a.setAttribute('href', url);
+  //   a.setAttribute('download', `metadata_${currentTableName.toLowerCase()}_table.csv`);
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // };
 
   const postTableData = () => {
+
+    const SERVER_PATH = 'writeTable';
 
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
+    
+    let serverUrl = ''
     if (process.env.NODE_ENV === "development") {
-      var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
-      var target = `${target_url}/writeTable`
+      serverUrl = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+    } else {
+      serverUrl = ''
     }
-    else {
-      var target = '/writeTable'
-    }
-    fetch(target, {
+
+    const serverTarget = `${serverUrl}/${SERVER_PATH}`
+
+    fetch(serverTarget, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -302,9 +307,7 @@ export function MetadataTable(props) {
 
   const handleDelete = () => {
     let temp_ = presentDS;
-    for (let i = 0; i < selRows.length; i++) {
-      temp_ = temp_.filter((item) => item.key !== selRows[i]);
-    }
+    temp_ = temp_.filter((item) => !selRows.includes(item.key));
 
     for (let i = 0; i < temp_.length; i++) {
       temp_[i].key = (i + 1).toString();
@@ -383,122 +386,84 @@ export function MetadataTable(props) {
 
   /**
    * Callback for saving the changes made in the table to memory.
-   * @param {Object} row - The data for the row that was changed.
-   * @param {Object} event - The new value which is being set. Should be renamed to newValue. This is only relevant for dropdowns.
-   * @param {String} dataIndex - The name of the column that was changed.
-   *
+   * @param {Object} rowKey - The key of the row which that was changed. Note: rowKey is 1-indexed.
+   * @param {Object} columnName - The name of the column that was changed.
+   * @param {Object} newValue - The new value of the cell that was changed.
+   * @param {String} oldValue - The old value of the cell that was changed.
+   * @param {String} fieldType - The type of the field that was changed.
    */
-  const handleSave = (row, event, dataIndex) => {
+  const handleSave = (rowKey, columnName, newValue, oldValue, fieldType) => {
 
-    // Todo: Rename row to PreviousRowRecord
-
-    const OldData = [...presentDS]; // Why is this called old data???
-    const index = OldData.findIndex((item) => row.key === item.key); // Rename to rowIndex
+    // Todo: Consider whether oldValue is needed here.
     
-    const item = OldData[index]; // Rename to currentRowRecord
+    // Initialize the previous and updated version of the table data
+    const updatedTableData = [...presentDS];
+    const previousTableData = JSON.parse(JSON.stringify(presentDS)); // deep copy
 
-    const originalData = { ...row };
+    // Find the index of the row that was changed
+    const rowIndex = updatedTableData.findIndex((item) => rowKey === item.key);
+    
+    // Define the indices of rows to update.
+    let rowIndexList = []
+    if (selRows && selRows.includes(rowKey)) {
+      rowIndexList = selRows.map((rowKey) => rowKey - 1) // Key is 1-indexed, but array is 0-indexed.
+    }  else {
+      rowIndexList = [rowIndex]
+    }
 
-    const columnNames = Object.keys(row);
-    var matchCol=null
-    // regex for newline,  any number of spaces, newline
-    for (const key in Object.keys(row)) {
-      const id = columnNames[key];
-      if (row[id] !== item[id]) {
-        console.log('id', id)
-        matchCol = id;
-        var matchValue = row[id];
-        originalData[matchCol] = item[id];
-        OldData.splice(index, 1, { ...item, ...row });
-      } else {
-        // No values have changed, so do nothing. Todo: Confirm with Harry.
-        // return
+    // Update the table data for the rows that should be updated
+    for (const iRowIndex of rowIndexList) {
+      updatedTableData[iRowIndex][columnName] = newValue;
+      if (fieldType === 'dropdown') {
+        updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
       }
     }
 
-    // console.log('columnName', matchCol)
-    // console.log('dataIndex', dataIndex)
-
-
-    // for (const columnName of columnNames) {
-    //   if (row[columnName] !== item[columnName]) {
-    //     var matchCol = columnName;
-    //     var matchValue = row[columnName];
-    //     originalData[matchCol] = item[columnName];
-    //     OldData.splice(index, 1, { ...item, ...row });
-    //   } else {
-    //     // No values have changed, so do nothing. Todo: Confirm with Harry.
-    //     // return
-    //   }
-    // }
-
-
-    if (typeof event !== 'undefined') {
-      matchCol = dataIndex;
-      matchValue = event;
-      var tempRow = OldData[index];
-      tempRow[matchCol] = matchValue;
-
-      OldData.splice(index, 1, { ...tempRow });
-    }
-
-    if (selRows.includes(row.key)) {
-      for (const i in selRows) {
-        tempRow = OldData[selRows[i] - 1];
-        tempRow[matchCol] = matchValue;
-
-        OldData.splice(selRows[i] - 1, 1, { ...tempRow });
-      }
-    }
-
-    if (matchCol === undefined) {
-      return
-    }    
-
-    updateMaxColumnWidth(columnNames, matchValue, matchCol)
+    updateMaxColumnWidth(newValue, columnName)
     setStatefulColumns([...statefulColumns]);
 
-    SetDataSource([...OldData], false); // Todo: Rename oldData to newData?
-
-    // Ask Harry: What happens here? Related to updating many rows at once?
-    DataSource.present = { ...OldData };
-    const tempData = [...OldData];
-    tempData[index] = { ...originalData };
-
-    const tempDataValues = [];
-    const tempDataKeys = [];
-    for (const i in tempData) {
-      tempDataValues.push([...Object.values(tempData[i])]);
-      tempDataKeys.push([...Object.keys(tempData[i])]);
-    }
-
-    const tempDataObj = [];
-    for (const i in tempDataValues) {
-      const tempObj = {};
-      for (const j in tempDataValues[i]) {
-        tempObj[tempDataKeys[i][j]] = tempDataValues[i][j];
-      }
-      tempDataObj.push(tempObj);
-    }
-    history = [...history, tempDataObj];
-    DataSource.past = [...DataSource.past, [...tempDataObj]];
-
-    props.projectDataTable[currentTableName].data = [...OldData];
-
+    //SetDataSource([...updatedTableData], false);
+    // DataSource.present = { ...updatedTableData }; 
+    
+    // Update the undo history
+    DataSource.past = [...DataSource.past, [...previousTableData]];
+    
+    props.projectDataTable[currentTableName].data = [...updatedTableData];
+    
     // Todo: Add this when a good solution is in place to take care of IsPartOf which
     // is a dependent variable of Subject and TissueSample. Right now, each property is 
     // assumed to be the same across all tables, but IsPartOf is not.
     //metadataOptionMap = updateDependentVariableOptions(tables, currentTableName, matchCol, metadataOptionMap)
-
+    
     postTableData();
   };
   // updateTableData(currentTable.data);
 
-  const updateMaxColumnWidth = (columnNames, dataValue, matchCol) => {
+  const updateDependentColumnValues = (tableData, rowIndex, columnName, value) => {
+
+    if (columnName === "Strain") {
+      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === value)
+      tableData[rowIndex]['Species'] = selectedInstance[0].species
+    
+    } else if (columnName === "Species") {
+      const currentStrain = tableData[rowIndex]['Strain']
+      const selectedInstance = STRAIN_INSTANCES.filter((item) => item.name === currentStrain)
+      if (selectedInstance.length > 0) {
+        if (selectedInstance[0].species !== value) {
+          tableData[rowIndex]['Strain'] = null
+        }
+      }
+    }
+    return tableData;
+  }
+
+  const updateMaxColumnWidth = (dataValue, matchCol) => {
     
     // Adjust width of column if necessary
-    let matchColIndex = columnNames.indexOf(matchCol);
-    matchColIndex = matchColIndex - 1; // subtract 1 for the key column
+    //let matchColIndex = columnNames.indexOf(matchCol);
+    //matchColIndex = matchColIndex - 1; // subtract 1 for the key column
+
+    let matchColIndex = statefulColumns.findIndex((item) => item.dataIndex === matchCol);
 
     const matchValueType = typeof dataValue;
 
