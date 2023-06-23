@@ -24,14 +24,15 @@ import ConfigProvider from '../ConfigProvider';
 //import metadata from '../../metadata/metadata';
 //import metadataDefinitions from '../../metadata/metadata-definitions';
 import metadata from '../../metadata/controlledInstances';
-import metadataDefinitions from '../../metadata/controlledInstancesDefinitions';
 import { widthCalc, widthCalcDropdown } from '../../helpers/widthCalc';
-import { convertTableToCSV } from '../../helpers/csvAdapter';
+//import { convertTableToCSV } from '../../helpers/csvAdapter';
 
 import { EditableRow } from './TableComponents/EditableRow';
 import { EditableCell } from './TableComponents/EditableCell';
 
-import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+import { getMetadataOptions } from '../../helpers/table/getMetadataOptions';
+// Todo: import { getMetadataOptions, updateDependentVariableOptions } from '../../helpers/table/getMetadataOptions';
+
 import STRAIN_INSTANCES from '../../metadata/strainInstances'; // Global variable
 
 const TABLE_COMPONENTS = {
@@ -90,7 +91,7 @@ export function MetadataTable(props) {
 
   // These are used when new metadata instances are added to column dropdowns.
   // Todo: Replace with columnOptions, where columnOptions are updated if new SubjectGroups or TissueSampleCollections are added.
-  const [statefulmetadata, setstatefulmetadata] = useState(metadata);
+  // const [statefulmetadata, setstatefulmetadata] = useState(metadata);
   
   // remove spaces from table name
   nextTableName = nextTableName.replace(/\s/g, '');
@@ -204,33 +205,35 @@ export function MetadataTable(props) {
   /**
    * Callback for downloading the table as a CSV file.
    */
-  const DownloadCSV = () => {
-    // todo: should infer the variable names from the table
-    const csvString = convertTableToCSV(presentDS);
+  // const DownloadCSV = () => {
+  //   // todo: should infer the variable names from the table
+  //   const csvString = convertTableToCSV(presentDS);
 
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `metadata_${currentTableName.toLowerCase()}_table.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+  //   const blob = new Blob([csvString], { type: 'text/csv' });
+  //   const url = URL.createObjectURL(blob);
+  //   const a = document.createElement('a');
+  //   a.setAttribute('hidden', '');
+  //   a.setAttribute('href', url);
+  //   a.setAttribute('download', `metadata_${currentTableName.toLowerCase()}_table.csv`);
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // };
 
   const postTableData = () => {
+
 
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
+    
+    var target = '/writeTable'
+
     if (process.env.NODE_ENV === "development") {
       var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
-      var target = `${target_url}/writeTable`
+      target = `${target_url}/writeTable`
     }
-    else {
-      var target = '/writeTable'
-    }
+
     fetch(target, {
       method: 'POST',
       headers: {
@@ -303,9 +306,7 @@ export function MetadataTable(props) {
 
   const handleDelete = () => {
     let temp_ = presentDS;
-    for (let i = 0; i < selRows.length; i++) {
-      temp_ = temp_.filter((item) => item.key !== selRows[i]);
-    }
+    temp_ = temp_.filter((item) => !selRows.includes(item.key));
 
     for (let i = 0; i < temp_.length; i++) {
       temp_[i].key = (i + 1).toString();
@@ -412,7 +413,7 @@ export function MetadataTable(props) {
     // Update the table data for the rows that should be updated
     for (const iRowIndex of rowIndexList) {
       updatedTableData[iRowIndex][columnName] = newValue;
-      if (fieldType == 'dropdown') {
+      if (fieldType === 'dropdown') {
         updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
       }
     }
