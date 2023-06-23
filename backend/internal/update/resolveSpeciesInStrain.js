@@ -1,6 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+
 const strainInstances = require('../../data/kg-instances/strain.json');
 const speciesInstances = require('../../data/kg-instances/Species.json');
-const fs = require('fs');
 
 // Loop through all the strain instances
 strainInstances.forEach((strainInstance) => {
@@ -22,8 +24,7 @@ strainInstances.forEach((strainInstance) => {
     
 });
 
-
 // Write the strain instances to a file
-savePath = process.cwd() + "/src" + "/metadata";
-fs.writeFileSync(savePath+"/strainInstances.json", JSON.stringify(strainInstances, null, 2));
+savePath = path.join(process.cwd(), "src", "metadata", "strainInstances.json")
+fs.writeFileSync(savePath, JSON.stringify(strainInstances, null, 2));
 

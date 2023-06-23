@@ -112,8 +112,6 @@ export function MetadataTable(props) {
   const { present: presentDS } = DataSource;
   let count = presentDS.length;
 
-  //console.log('presentDS', presentDS);
-
   if (currentTableName !== nextTableName || currentProjectName !== props.project) {
     // save current (will be previous) state
     props.projectDataTable[currentTableName].columnProps = statefulColumns;
@@ -222,19 +220,22 @@ export function MetadataTable(props) {
 
   const postTableData = () => {
 
+    const SERVER_PATH = 'writeTable';
 
     // this will be rewritten as a web socket eventually as its nice to have two way communication
     // also it is insane to post the entire table every time a single value is changed but YOLO
     let data = { 'table': tables, 'user': props.user["http://schema.org/alternateName"], 'project': props.project };
     
-    var target = '/writeTable'
-
+    let serverUrl = ''
     if (process.env.NODE_ENV === "development") {
-      var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
-      target = `${target_url}/writeTable`
+      serverUrl = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+    } else {
+      serverUrl = ''
     }
 
-    fetch(target, {
+    const serverTarget = `${serverUrl}/${SERVER_PATH}`
+
+    fetch(serverTarget, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -23,7 +23,7 @@ async function getTokenFromServiceAccount() {
     let endpointURL = "https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/token";
     let secret = process.env.OIDC_CLIENT_SECRET;
     
-    let body = "grant_type=client_credentials&client_id=ebrains-wizard-dev&client_secret=" + secret + "&scope=email%20profile%20team%20group";
+    let body = `grant_type=client_credentials&client_id=ebrains-wizard-dev&client_secret=${secret}&scope=email%20profile%20team%20group`;
     
     let requestOptions = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
