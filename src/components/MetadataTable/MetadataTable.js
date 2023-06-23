@@ -419,7 +419,9 @@ export function MetadataTable(props) {
       }
     }
 
-    updateMaxColumnWidth(newValue, columnName)
+    // Get values in column to update max column width
+    const valuesInColumn = updatedTableData.map((item) => item[columnName]);
+    updateMaxColumnWidth(valuesInColumn, columnName, fieldType)
     setStatefulColumns([...statefulColumns]);
 
     //SetDataSource([...updatedTableData], false);
@@ -457,41 +459,62 @@ export function MetadataTable(props) {
     return tableData;
   }
 
-  const updateMaxColumnWidth = (dataValue, matchCol) => {
+  const updateMaxColumnWidth = (dataValue, matchCol, fieldType) => {
     
-    // Adjust width of column if necessary
-    //let matchColIndex = columnNames.indexOf(matchCol);
-    //matchColIndex = matchColIndex - 1; // subtract 1 for the key column
+    const MIN_WIDTH = 150;
+    const MAX_WIDTH = 500;
 
-    let matchColIndex = statefulColumns.findIndex((item) => item.dataIndex === matchCol);
+    function getTextWidth(textList) {
+      const offscreenElement = document.createElement('span');
+      offscreenElement.style.position = 'absolute';
+      offscreenElement.style.visibility = 'hidden';
+      offscreenElement.style.whiteSpace = 'nowrap';
+      const computedStyle = getComputedStyle(document.body);
+      offscreenElement.style.font = computedStyle.font;
+      document.body.appendChild(offscreenElement);
 
-    const matchValueType = typeof dataValue;
-
-    let maxColumnWidth = statefulColumns[matchColIndex].maxWidth;
-
-    if (matchValueType === 'number') {
-      dataValue = metadata[matchCol][dataValue];  // TODO: Why metadata? What if custom options were added?
-
-      if (dataValue.length > maxColumnWidth) {
-        maxColumnWidth = dataValue.length;
-        statefulColumns[matchColIndex].width = widthCalcDropdown(
-          dataValue,
-          '0.82'
-        );
+      // Get the maximum width of the items in textList
+      let maxWidth = 0;
+      for (const text of textList) {
+        offscreenElement.textContent = text;
+        const thisWidth = offscreenElement.offsetWidth;
+        if (thisWidth > maxWidth) {
+          maxWidth = thisWidth;
+        }
       }
 
-    } else {
-      if (dataValue.length > maxColumnWidth) {
-        maxColumnWidth = dataValue.length;
-        statefulColumns[matchColIndex].width = widthCalc(
-          dataValue,
-          '1.25'
-        );
-      }
+      document.body.removeChild(offscreenElement);
+      
+      return maxWidth;
     }
 
-    // Todo: Why is this done here, when it is also done above?
-    statefulColumns[matchColIndex].maxWidth = maxColumnWidth;
+    let width = getTextWidth(dataValue);
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    if (width > MAX_WIDTH) {
+      width = MAX_WIDTH;
+    }
+
+    let columnName = statefulColumns.findIndex((item) => item.dataIndex === matchCol);
+    let maxColumnWidth = statefulColumns[columnName].maxWidth;
+
+    const tableCellPadding = 30;
+    const dropdownPadding = 40;
+    const textfieldPadding = 20;
+
+    if (fieldType === 'dropdown') {
+      maxColumnWidth = width+tableCellPadding+dropdownPadding;
+    } else if (fieldType === 'inputfield') {
+      maxColumnWidth = width+tableCellPadding+textfieldPadding;
+    } else {
+      //pass
+    }
+
+    statefulColumns[columnName].width = maxColumnWidth;
+    statefulColumns[columnName].maxWidth = maxColumnWidth;
     return statefulColumns
   }
 
@@ -517,7 +540,6 @@ export function MetadataTable(props) {
     };
   });
 
-  console.log('Rerender table with data:', presentDS)
   return (
     <div>
       <ConfigProvider
