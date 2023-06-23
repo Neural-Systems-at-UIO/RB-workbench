@@ -459,6 +459,9 @@ export function MetadataTable(props) {
   }
 
   const updateMaxColumnWidth = (dataValue, matchCol, fieldType) => {
+    
+    const MIN_WIDTH = 150;
+    const MAX_WIDTH = 500;
 
     function getTextWidth(textList) {
       const offscreenElement = document.createElement('span');
@@ -484,8 +487,15 @@ export function MetadataTable(props) {
       return maxWidth;
     }
 
-    const width = getTextWidth(dataValue);
-    console.log(`The text width is: ${width}px`);
+    let width = getTextWidth(dataValue);
+
+    if (width < MIN_WIDTH) {
+      width = MIN_WIDTH;
+    }
+
+    if (width > MAX_WIDTH) {
+      width = MAX_WIDTH;
+    }
 
     let columnName = statefulColumns.findIndex((item) => item.dataIndex === matchCol);
     let maxColumnWidth = statefulColumns[columnName].maxWidth;
@@ -529,7 +539,6 @@ export function MetadataTable(props) {
     };
   });
 
-  console.log('Rerender table with data:', presentDS)
   return (
     <div>
       <ConfigProvider
