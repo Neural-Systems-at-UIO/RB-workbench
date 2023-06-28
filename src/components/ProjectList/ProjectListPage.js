@@ -126,7 +126,8 @@ const ProjectList = (props) => {
                 fetch(target, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'authorization': props.token,
 
                     },
                     body: JSON.stringify({

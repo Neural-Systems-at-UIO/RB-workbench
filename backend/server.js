@@ -183,7 +183,7 @@ function get_projects(user) {
 
 }
 
-function set_project(user, project, description, key) {
+function set_project(user, project, description, key, token) {
   console.log(user, project)
   return new Promise((resolve, reject) => {
     // read from local storage
@@ -363,7 +363,9 @@ app.post('/set_project', function (req, res) {
   let project = req.body.project
   let description = req.body.description
   let key = req.body.key
-  set_project(user, project, description, key).then(function (result) {
+  let token = req.headers.authorization
+  console.log('set project token is ', token)
+  set_project(user, project, description, key, token).then(function (result) {
     res.send(result)
   })
 })
