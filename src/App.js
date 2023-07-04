@@ -34,17 +34,30 @@ const ProfileAvatar = ({user}) => {
     position: 'absolute',
     zIndex:1,
     float: 'left',
-    right: '8vw',
-    paddingTop: '0.7rem',
+    right: '14vw',
+    marginTop: '0.7rem',
+    paddingRight: '1rem',
+    borderRadius: '2rem',
+    backgroundColor: '#12192f',
     cursor: 'pointer'
   }
 
   return (
+    <>
+    {/* <EbrainsLogo style={{height:'5vh',     position: 'absolute', right:'4vw', paddingTop:'0.7rem'}}></EbrainsLogo> */}
     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
       <div zIndex={9} onClick={() => {console.log('clicked')}} style={containerStyle}>
-        <Avatar size={60} icon={<UserOutlined />}  />
+        
+        <Avatar size={60} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' }} />
+
+        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem', color:'white'}}>User</span>
+
+      </div>
+      <div style={{    position: 'absolute', position: 'absolute', right:'4vw', marginTop:'-3.2rem'}}>
+      <Avatar size={180} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent' }} />
       </div>
     </Popover>
+    </>
   )
 }
 
