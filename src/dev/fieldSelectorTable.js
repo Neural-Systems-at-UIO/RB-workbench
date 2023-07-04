@@ -359,14 +359,14 @@ const EditableCell = ({
               {menu}
               <Divider
                 style={{
-                  margin: '8px 0'
+                  margin: '.5rem 0'
                 }}
               />
               <Space
-                width='10px'
+                width='.625rem'
 
                 style={{
-                  padding: '0 8px 4px'
+                  padding: '0 .5rem .25rem'
 
                 }}
               >
@@ -411,12 +411,12 @@ const EditableCell = ({
               {menu}
               <Divider
                 style={{
-                  margin: '8px 0'
+                  margin: '.5rem 0'
                 }}
               />
               <Space
                 style={{
-                  padding: '0 8px 4px'
+                  padding: '0 .5rem .25rem'
                 }}
               >
                 <Input

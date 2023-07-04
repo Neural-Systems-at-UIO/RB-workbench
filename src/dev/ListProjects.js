@@ -77,22 +77,22 @@ const ListProjects = () => (
         className='MainPanel'
         style={{
           backgroundColor: '#f8fafb',
-          borderRadius: '25px 0   0 25px',
+          borderRadius: '1.5625rem 0   0 1.5625rem',
           // padding: '2% 1% 1% 1%',
           // margin: '1% 1% 2% 1%'
           margin: '-0.7% 0 0 0',
-          boxShadow: '7px 25px 28px 6px rgba(1, 1, 2, 0.6)',
+          boxShadow: '.4375rem 1.5625rem 1.75rem .375rem rgba(1, 1, 2, 0.6)',
 
-          clipPath: 'inset(-250px -250px -250px -250px)'
+          clipPath: 'inset(-15.625rem -15.625rem -15.625rem -15.625rem)'
         }}
       >
         <div
           style={{
-            // outline: '5px solid black',
+            // outline: '.3125rem solid black',
             padding: '2% 0% 2% 0%',
             margin: '1% 1% 2% 1%',
-            borderRadius: '25px',
-            boxShadow: '5px 8px 24px 5px rgba(208, 216, 243, 0.6)'
+            borderRadius: '1.5625rem',
+            boxShadow: '.3125rem .5rem 1.5rem .3125rem rgba(208, 216, 243, 0.6)'
           }}
         >
           <OptionsBar />
@@ -123,7 +123,7 @@ const ListProjects = () => (
           <div
             style={{
               'overflow-y': 'scroll',
-              height: '300px',
+              height: '18.75rem',
               // fontSize: '1.4em'
             }}
           >

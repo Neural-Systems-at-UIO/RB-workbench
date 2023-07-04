@@ -126,7 +126,8 @@ const ProjectList = (props) => {
                 fetch(target, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'authorization': props.token,
 
                     },
                     body: JSON.stringify({
@@ -223,7 +224,7 @@ const ProjectList = (props) => {
         renderItem={(item) => 
             (
 
-            <ProjectListElement deleteProject={deleteProject} itemkey={item.key} ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} setProjectDataTable={props.setProjectDataTable} user={props.user["http://schema.org/alternateName"]} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ProjectListElement>
+            <ProjectListElement deleteProject={deleteProject} itemkey={item.key} setKey={props.setKey} ModalTitle='Edit Title and Description' setPage={props.setPage} itemTitle={item.title} itemDescription={item.description} setProject={props.setProject} setProjectDataTable={props.setProjectDataTable} user={props.user["http://schema.org/alternateName"]} ModalContent={<ModalContent></ModalContent>} ButtonText='Edit Title & Description'></ProjectListElement>
 
 
 

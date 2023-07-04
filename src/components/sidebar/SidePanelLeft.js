@@ -51,18 +51,6 @@ function getItem (label, key, icon, children) {
   return item
 }
 
-function HomeButton ({ isCollapsed, onHomeButtonClick }) {
-
-  const homeButtonStyle = {marginTop:'5vh', 'alignItems':'center', height:'4.5rem'};
-  const iconStyle = {fontSize:32};
-  
-  return (
-    <Button style={homeButtonStyle} onClick={onHomeButtonClick}  >
-      <HomeOutlined style={iconStyle}/>
-      {!isCollapsed?<p>Return to projects</p>:null}
-    </Button>
-  )
-}
 
 /**
  * SpecimenMenu for selecting a specimen table.
@@ -110,7 +98,6 @@ function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, 
     <Sider className="my-sider-class" style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
       <ConfigProvider>
         <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em', textAlign: 'center' }}>{projectName}</h1>
-        <HomeButton isCollapsed={collapsed} onHomeButtonClick={onHomeButtonClick} />
         <SpecimenMenu selectedPageName={selectedPageName} onMenuItemClick={onMenuItemClick} />
       </ConfigProvider>
     </Sider>

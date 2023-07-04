@@ -76,6 +76,8 @@ const handleSubmit = (values) => {
     //props.setPage('workbench');
     getProjectMetadata(project, user).then((data) => {
       props.setProject(formValues.title);
+      console.log('setting key', props.itemkey)
+      props.setKey(props.itemkey);
       props.setPage('workbench');
       if (data != 'no table') {
         props.setProjectDataTable(data);

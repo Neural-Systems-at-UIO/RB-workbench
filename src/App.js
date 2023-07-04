@@ -1,9 +1,9 @@
 import React from 'react'
 import { ReactComponent as EbrainsLogo } from './resources/ebrains-ai-cropped.svg'
 
-import { Layout, Tabs, Spin, Avatar, Popover} from 'antd'
+import { Layout, Tabs, Spin, Avatar, Popover, Button} from 'antd'
 import { Header } from 'antd/lib/layout/layout'
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, HomeOutlined} from '@ant-design/icons';
 
 import './styles/App.css'
 import './styles/index.css'
@@ -36,6 +36,7 @@ const ProfileAvatar = ({user}) => {
     float: 'left',
     right: '8vw',
     paddingTop: '0.7rem',
+    cursor: 'pointer'
   }
 
   return (
@@ -47,11 +48,40 @@ const ProfileAvatar = ({user}) => {
   )
 }
 
+const HomeButton = ({setPage}) => {
+  //console.log('pfa user',  user)
+  const handleHomeButtonClick = () => {
+    setPage('projectList')
+  }
+  // Todo: What is the purpose of the container that gets this style??
+  const containerStyle = {
+    position: 'absolute',
+    zIndex:1,
+    float: 'left',
+    left: '5vw',
+    marginTop: '0.7rem',
+    paddingRight: '1rem',
+    borderRadius: '2rem',
+    backgroundColor: '#12192f',
+    cursor: 'pointer'
+
+  }
+
+  return (
+    <div zIndex={9} onClick={() => {handleHomeButtonClick()}} style={containerStyle}>
+      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+        <Avatar size={60} icon={<HomeOutlined />} style={{ backgroundColor: 'transparent' }} />
+        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem', color:'white'}}>Return to Projects</span>
+      </div>
+    </div>
+  )
+}
 const App = () => {
 
   const [loading, setLoading] = React.useState(true)
   const [token, setToken] = React.useState(null)
   const [user, setUser] = React.useState(null)
+  const [page, setPage] = React.useState('projectList')
 
   function handleTokenReceived(token) {
     window.history.pushState({}, document.title, "/") // clear url 
@@ -95,14 +125,14 @@ const App = () => {
       <div className='App' style = {AppStyle}>
         <Layout style={LayoutStyle}>
         <useHookTest></useHookTest>
+        {page !== 'projectList' && <HomeButton setPage={setPage}></HomeButton>}
         <ProfileAvatar user={user}></ProfileAvatar>
 
         {/* </Header> */}
-        <PageSwitcher token={token} user={user} />
+        <PageSwitcher token={token} user={user} page={page} setPage={setPage} />
         </Layout>
       </div>
     )
   }
 }
-
 export default App

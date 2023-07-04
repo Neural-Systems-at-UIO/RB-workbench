@@ -6,14 +6,16 @@ import Icon from '@ant-design/icons'
 import MetaDataPage from './MetaDataPage.js'
 import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
-
+import AppsAndAnalysisPage from './AppsAndAnalysis.js'
 const { Content } = Layout
 const { TabPane } = Tabs
 
 
 const Workbench = (props) => {
   const token = props.token
-
+  console.log('workbench received key', props.keyValue)
+  console.log(props)
+  // document.domain = "https://ebrains-workbench.apps-dev.hbp.eu"
   return (
 
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >
@@ -31,12 +33,19 @@ const Workbench = (props) => {
                 <TabPane tab='Metadata' key='2'>
                   <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
                 </TabPane>
-                <TabPane tab='Analysis' key='3'>
+                <TabPane tab='File Creator' key='3' style={{"height":"100%"}}>
                   {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
               
-                  <iframe src="https://quint-ebrainsworkbench.apps.hbp.eu/" width="100%" height="100%" frameBorder="0"></iframe>
-                    
+                 <div  style={{"background":"white", "height":"100vh", "width":"100%"}}>
+                <iframe title="File Creator" src={`https://tif-dzi-tar-svc-test.apps.hbp.eu/?clb-collab-id=${props.keyValue}`} style={{"background":"white", "height":"100%", "width":"100%", border:"0"}}></iframe>                    
 
+                  </div>                    
+
+                </TabPane>
+                <TabPane tab='Apps & Analysis' key='4' style={{"height":"100%"}}>
+                  <AppsAndAnalysisPage keyValue={props.keyValue}/>
+                </TabPane>
+                <TabPane tab='Share Data' key='5' style={{"height":"100%"}}>
                 </TabPane>
               </Tabs>
             </div>
