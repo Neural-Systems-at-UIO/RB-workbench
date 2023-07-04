@@ -180,7 +180,7 @@ export function EditableCell({
             dropdownRender={(menu) => (
               <>
                 {menu}
-                <Divider style={{margin: '8px 0'}} />
+                <Divider style={{margin: '.5rem 0'}} />
                 <CustomOptionInput 
                   inputRef={inputRef} 
                   value={customOptionName} 
@@ -205,11 +205,11 @@ export function EditableCell({
           value={dropdownValue}
           //dropdownMatchSelectWidth={false} // This is causing dropdown with many options to be very slow
           style={selectStyle}
-          dropdownStyle={{width: '500px', minWidth:"500px"}}
+          dropdownStyle={{width: '31.25rem', minWidth:"31.25rem"}}
           dropdownRender={(menu) => (
             <>
               {menu}
-              <Divider style={{margin: '8px 0'}} />
+              <Divider style={{margin: '.5rem 0'}} />
               <CustomOptionInput 
                 inputRef={inputRef} 
                 value={customOptionName} 
@@ -289,7 +289,7 @@ const CustomOptionInput = ({inputRef, value, onChange, onAddItemClick}) => {
   return (
     <Space
     style={{
-      padding: '0 8px 4px'
+      padding: '0 .5rem .25rem'
     }}
     >
     <Input

@@ -49,7 +49,7 @@ CMD node backend/server.js
 # docker push docker-registry.ebrains.eu/<project_name>/<repository_name>:<tag>
 
 # Example:
-# docker image tag 5636942fc2ed docker-registry.ebrains.eu/ebrains_wizard_test/labbok-web-app:0.1.4
+# docker image tag 5636942fc2ed docker-registry.ebrains.eu/ebrains_wizard_test/labbok-web-app:0.1.25
 # docker push docker-registry.ebrains.eu/ebrains_wizard_test/labbok-web-app:0.1.4
 
 

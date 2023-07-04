@@ -13,6 +13,8 @@ const { TabPane } = Tabs
 
 const Workbench = (props) => {
   const token = props.token
+  console.log('workbench received key', props.keyValue)
+  console.log(props)
   // document.domain = "https://ebrains-workbench.apps-dev.hbp.eu"
   return (
 
@@ -35,13 +37,13 @@ const Workbench = (props) => {
                   {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
               
                  <div  style={{"background":"white", "height":"100vh", "width":"100%"}}>
-                 <iframe title="File Creator" src="https://tif-dzi-tar-svc-test.apps.hbp.eu/?clb-collab-id=space-for-testing-the-nutil-web-applicat" style={{"background":"white", "height":"100%", "width":"100%", border:"0"}}></iframe>                    
+                <iframe title="File Creator" src={`https://tif-dzi-tar-svc-test.apps.hbp.eu/?clb-collab-id=${props.keyValue}`} style={{"background":"white", "height":"100%", "width":"100%", border:"0"}}></iframe>                    
 
                   </div>                    
 
                 </TabPane>
                 <TabPane tab='Apps & Analysis' key='4' style={{"height":"100%"}}>
-                  <AppsAndAnalysisPage />
+                  <AppsAndAnalysisPage keyValue={props.keyValue}/>
                 </TabPane>
                 <TabPane tab='Share Data' key='5' style={{"height":"100%"}}>
                 </TabPane>
