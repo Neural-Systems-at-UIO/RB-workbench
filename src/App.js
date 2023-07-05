@@ -34,30 +34,34 @@ const ProfileAvatar = ({user}) => {
     position: 'absolute',
     zIndex:1,
     float: 'left',
-    right: '14vw',
-    marginTop: '0.7rem',
-    paddingRight: '1rem',
-    borderRadius: '2rem',
-    backgroundColor: '#12192f',
-    cursor: 'pointer'
+    right: '11vw',
+    
+    // set flex
+    display: 'flex',
+
   }
 
   return (
-    <>
-    {/* <EbrainsLogo style={{height:'5vh',     position: 'absolute', right:'4vw', paddingTop:'0.7rem'}}></EbrainsLogo> */}
+    <div style={containerStyle}>
     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
-      <div zIndex={9} onClick={() => {console.log('clicked')}} style={containerStyle}>
+      <div zIndex={9} onClick={() => {console.log('clicked')}} style={{    paddingRight: '1rem',
+                          borderRadius: '2rem',
+                          backgroundColor: '#12192f',
+                          marginTop: '0.7rem',
+                          height:'3.75rem',
+                          cursor: 'pointer'}}>
         
         <Avatar size={60} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' }} />
 
         <span style={{fontSize: '0.8rem', marginLeft: '0.5rem', color:'white'}}>User</span>
 
       </div>
-      <div style={{    position: 'absolute', position: 'absolute', right:'4vw', marginTop:'-3.2rem'}}>
-      <Avatar size={180} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent' }} />
-      </div>
+ 
     </Popover>
-    </>
+    <div style={{    marginTop:'-3.2rem',marginLeft:'2rem'}}>
+      <Avatar size={180} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent'}} />
+    </div>
+    </div>
   )
 }
 
