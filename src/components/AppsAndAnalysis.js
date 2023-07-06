@@ -128,7 +128,7 @@ function AppsAndAnalysisPage(props) {
     </div>
     <div id="iframeContainer" style={{ width: '90vw', height: '100vh', float: 'right' }}>
       {(disableCreatedBrains & (selectedApp!=="")) ? (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '94vh', width: '100%', border: '0' , overflow:'auto'}}></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: 'calc(100vh - 3.875rem)', width: '100%', border: '0' , overflow:'auto'}}></iframe>
 ) :(menuItems.length == 0) ?(
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background:"white"}}>
   <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>  You havent created any brains,<br></br> start by creating a brain in the file creator tab
@@ -145,7 +145,7 @@ function AppsAndAnalysisPage(props) {
     <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>Please select a brain to view in the app.</span>    
   </div>
 ) : (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100%', width: '100%', border: '0' }}></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100vh', width: '100%', border: '0' }} sandbox="allow-scripts allow-same-origin"></iframe>
 )}
     </div>
     </div>
