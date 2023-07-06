@@ -44,8 +44,8 @@
 }
 
 /* .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    height: 4rem;
-    width: 5rem;
+    height: 64px;
+    width: 80px;
 } */
 
 .button-container {
@@ -59,7 +59,7 @@
 }
 
 /* {
-    background-color: #18213e;
+    background-color: #120338;
 
 } */
 
@@ -76,7 +76,7 @@
     font-weight: bold;
     margin-bottom: -5%;
     margin-left: 5%;
-    background-color: #18213e;
+    background-color: #120338;
     box-shadow: 0rem 0rem 0.875rem 0.125rem rgba(255, 120, 117, 0.6);
 
 }
@@ -91,7 +91,7 @@
 
 .ant-tabs>.ant-tabs-nav .ant-tabs-nav-wrap,
 .ant-tabs>div>.ant-tabs-nav .ant-tabs-nav-wrap {
-    margin-left: 20pc;
+    margin-left: 14rem;
 }
 
 /* center checkbox in line */

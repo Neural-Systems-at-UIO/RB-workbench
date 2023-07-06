@@ -59,7 +59,7 @@ function AppsAndAnalysisPage(props) {
   };
 
   let menuStyle = {
-    backgroundColor:'white'
+    backgroundColor:'#fbf8fc',
   };
 
   const [menuItems, setMenuItems] = useState([]);
@@ -83,8 +83,8 @@ function AppsAndAnalysisPage(props) {
     <div style={{ display: "flex", flexDirection: "row"}}>
         <div id="sideBar" style={{ ...menuStyle ,display: "flex", flexDirection: "row"}}>
       <div id="sideBarApps" style={{ ...menuStyle, width: "10vw"}}>
-        <div style={{ fontWeight: 'bold' }}>Apps</div>
-        <Menu style={{ justifyContent: "center" }}>
+        <div style={{ fontWeight: 'bold', marginTop:'3rem', marginBottom:'1rem', fontSize: '1.5em'}}>Apps</div>
+        <Menu style={{ justifyContent: "center" , backgroundColor:'#fbf8fc'}}>
           <Menu.Item onClick={() => handleAppSelect(`https://webalign.apps-dev.hbp.eu/?clb-collab-id=${props.keyValue}`)}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebAlign</span>
             <Tooltip title="Launch WebAlign">
@@ -118,10 +118,9 @@ function AppsAndAnalysisPage(props) {
             </Tooltip>
           </Menu.Item>
         </Menu>
-        <Button type='primary' onClick={handleFullScreen}>Full Screen the Application</Button>
-      </div>
+<Button type='primary' onClick={handleFullScreen} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} disabled={!selectedApp}>Full Screen the Application</Button> </div>
       <div id="sideBarBrains" style={{ ...menuStyle, 'white-space': 'nowrap',  maxWidth: disableCreatedBrains ? 0 : '10vw', width:'10vw', overflow: 'hidden', transition: 'max-width 0.5s ease-in-out' }}>
-        <div style={{ fontWeight: 'bold' }}>{BrainMenuHeader}</div>
+        <div style={{ fontWeight: 'bold' ,marginTop:'3rem'}}>{BrainMenuHeader}</div>
         <Menu disabled={disableCreatedBrains} onSelect={handleMenuSelect} selectedKeys={selectedKeys}>
           {menuItems}
         </Menu>
@@ -130,7 +129,14 @@ function AppsAndAnalysisPage(props) {
     <div id="iframeContainer" style={{ width: '90vw', height: '100vh', float: 'right' }}>
       {(disableCreatedBrains & (selectedApp!=="")) ? (
   <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '94vh', width: '100%', border: '0' , overflow:'auto'}}></iframe>
-) : !unsetSelectedApp ? (
+) :(menuItems.length == 0) ?(
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background:"white"}}>
+  <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>  You havent created any brains,<br></br> start by creating a brain in the file creator tab
+  </span>    
+</div>
+)
+
+  : !unsetSelectedApp ? (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background:"white"}}>
     <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>Please start by selecting an app</span>    
   </div>

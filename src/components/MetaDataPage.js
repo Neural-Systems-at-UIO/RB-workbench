@@ -37,7 +37,6 @@ const MetadataPage = (props) => {
   const handleSelectTable = (selectedTableName) => {
     setCurrentTableName(selectedTableName)
   }
-
   const handleHomeButtonClick = () => {
     props.setPage('projectList')
   }

@@ -336,7 +336,7 @@ function initialise_collab(token, key) {
     req.then((response) => {
       let dataproxyURL = "https://data-proxy.ebrains.eu/api/v1/buckets"
       let body = {
-        "bucket_name": key
+        "bucket_name": key,
       }
       let headers = {
         'Content-Type': 'application/json',
@@ -348,7 +348,11 @@ function initialise_collab(token, key) {
       setTimeout(() => {
         let req = axios.post(dataproxyURL, body, { headers: headers })
         req.then((response) => {
-          console.log(response)
+          dataproxyURL = `https://data-proxy.ebrains.eu/api/v1/buckets/${key}`
+          body = {
+            is_public: true
+          }
+          let req = axios.put(dataproxyURL, body, { headers: headers })
         })
         req.catch((err) => {
           console.log(err)

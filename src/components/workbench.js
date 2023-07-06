@@ -4,7 +4,6 @@ import { UserOutlined } from '@ant-design/icons';
 import Icon from '@ant-design/icons'
 
 import MetaDataPage from './MetaDataPage.js'
-import { ReactComponent as EbrainsLogo } from '../resources/ebrains-ai-cropped.svg'
 import { Header } from 'antd/lib/layout/layout'
 import AppsAndAnalysisPage from './AppsAndAnalysis.js'
 const { Content } = Layout
@@ -29,7 +28,7 @@ const Workbench = (props) => {
               }}
             >
       
-              <Tabs type='card' className='TabWrapper' size='large'>
+              <Tabs type='card' className='TabWrapper' size='large' destroyInactiveTabPane={true}>
                 <TabPane tab='Metadata' key='2'>
                   <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
                 </TabPane>
