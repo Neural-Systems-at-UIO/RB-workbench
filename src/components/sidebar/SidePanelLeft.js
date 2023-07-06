@@ -97,7 +97,7 @@ function SidePanelLeft ({ selectedPageName, onMenuItemClick, onHomeButtonClick, 
   return (
     <Sider className="my-sider-class" style={sidebarStyle} collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
       <ConfigProvider>
-        <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em', textAlign: 'center' }}>{projectName}</h1>
+        <h1 style={{ color: '#1a1a1a', fontSize: '1.5em', fontWeight: 'bold', margin: '0.5em 0 0 0.5em', textAlign: 'center',marginTop:'3rem' }}>{projectName}</h1>
         <SpecimenMenu selectedPageName={selectedPageName} onMenuItemClick={onMenuItemClick} />
       </ConfigProvider>
     </Sider>

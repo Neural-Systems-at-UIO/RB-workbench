@@ -44,22 +44,25 @@ const ProfileAvatar = ({user}) => {
   return (
     <div style={containerStyle}>
     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
-      <div zIndex={9} onClick={() => {console.log('clicked')}} style={{    paddingRight: '1rem',
-                          borderRadius: '2rem',
-                          backgroundColor: '#12192f',
-                          marginTop: '0.7rem',
-                          height:'3.75rem',
-                          cursor: 'pointer'}}>
+      <div zIndex={9} onClick={() => {console.log('clicked')}} style={{    
+        paddingRight: '1rem',
+        paddingTop: '0.1rem',
+        borderRadius: '1.5rem',
+        backgroundColor: '#d3adf7',
+        marginTop: '0.7rem',
+        height:'2.75rem',
+        cursor: 'pointer'
+        }}>
         
-        <Avatar size={60} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' }} />
+        <Avatar size={40} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
 
-        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem', color:'white'}}>User</span>
+        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem',color:'black', paddingTop: '0.1rem'}}>User</span>
 
       </div>
  
     </Popover>
-    <div style={{    marginTop:'-3.2rem',marginLeft:'2rem'}}>
-      <Avatar size={180} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent'}} />
+    <div style={{    marginTop:'-1.8rem',marginLeft:'2rem'}}>
+      <Avatar size={120} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent'}} />
     </div>
     </div>
   )
@@ -75,11 +78,13 @@ const HomeButton = ({setPage}) => {
     position: 'absolute',
     zIndex:1,
     float: 'left',
-    left: '5vw',
+    left: '4vw',
+    height:'2.75rem',
+    paddingTop: '0.1rem',
     marginTop: '0.7rem',
     paddingRight: '1rem',
     borderRadius: '2rem',
-    backgroundColor: '#12192f',
+    backgroundColor: '#d3adf7',
     cursor: 'pointer'
 
   }
@@ -87,8 +92,8 @@ const HomeButton = ({setPage}) => {
   return (
     <div zIndex={9} onClick={() => {handleHomeButtonClick()}} style={containerStyle}>
       <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-        <Avatar size={60} icon={<HomeOutlined />} style={{ backgroundColor: 'transparent' }} />
-        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem', color:'white'}}>Return to Projects</span>
+        <Avatar size={40} icon={<HomeOutlined />} style={{ backgroundColor: 'transparent', color:'black' }} />
+        <span style={{fontSize: '0.8rem',paddingTop:'0.2rem', marginLeft: '0.5rem', color:'black'}}>Return to Projects</span>
       </div>
     </div>
   )

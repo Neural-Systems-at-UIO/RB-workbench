@@ -6,7 +6,6 @@
 
 
 
-    
 .App-logo {
   height: 35vmin;
   pointer-events: none;
@@ -23,7 +22,7 @@
 }
 
 #rc-tabs-1-tab-2 {
-  color: #18213e;
+  color: #120338;
 }
 
 /* make sinewave position absolute */
@@ -77,9 +76,9 @@
   color: #f8fafb;
 }
 
-.ant-layout-header>span:nth-child(1)>svg:nth-child(1) {
+/* .ant-layout-header>span:nth-child(1)>svg:nth-child(1) {
   width: 10rem;
-}
+} */
 
 @keyframes App-logo-spin {
   from {
@@ -98,15 +97,10 @@
 
 
 /* increase size of ant tab */
-.ant-tabs-large>.ant-tabs-nav .ant-tabs-tab {
-  font-size: 2em;
-  /* min-width: 2vw;
-  max-width: 20vw; */
-}
 
 /* make ant design webpage red */
 .ant-layout {
-  background: #18213e;
+  background: #120338;
 }
 
 
