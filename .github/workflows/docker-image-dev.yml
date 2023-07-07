@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Dev Image
 
 on:
   push:
@@ -14,5 +14,5 @@ jobs:
       - name: Build and push Docker image to dev
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker-registry.ebrains.eu
-          docker build -t docker-registry.ebrains.eu/ebrains_wizard_test/labbok-web-app:latest .
-          docker push docker-registry.ebrains.eu/ebrains_wizard_test/labbok-web-app:latest
+          docker build -t docker-registry.ebrains.eu/workbench/workbench-dev:latest .
+          docker push docker-registry.ebrains.eu/workbench/workbench-dev:latest
