@@ -54,6 +54,8 @@ export function EditableCell({
   // If mode is edit, it returns a form item with an input field, otherwise it returns the cell value
   //console.log(tables)
 
+  //console.log(columnName, '(value)', children)
+
   const form = useContext(EditableContext);
 
   const [isEditing, setIsEditing] = useState(false);

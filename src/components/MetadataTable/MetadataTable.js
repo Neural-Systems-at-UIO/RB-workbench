@@ -132,7 +132,17 @@ export function MetadataTable(props) {
     }
     //const newRow = { key: rowNumber.toString(), 'uuid': crypto.randomUUID() };
     const newRow = { key: rowNumber.toString(), 'uuid': crypto.randomUUID() };
-    currentTable.variableNames.forEach((name) => { newRow[name] = null; });
+    currentTable.variableNames.forEach((name) => {
+      if (currentTable.dependentVariables) {
+        if (name in currentTable.dependentVariables) {
+          newRow[name] = {'uuid': null, 'label': ''};
+        } else {
+          newRow[name] = null;
+        }
+      } else {
+        newRow[name] = null;
+      }
+    });
 
     return newRow;
   }
@@ -406,6 +416,15 @@ export function MetadataTable(props) {
       rowIndexList = selRows.map((rowKey) => rowKey - 1) // Key is 1-indexed, but array is 0-indexed.
     }  else {
       rowIndexList = [rowIndex]
+    }
+
+    oldValue = previousTableData[rowIndex][columnName];
+
+    if (typeof oldValue === 'object' && oldValue !== null && 'uuid' in oldValue) {
+      
+      console.log('old is object', oldValue)
+    } else {
+      console.log('old is not object', oldValue)
     }
 
     // Update the table data for the rows that should be updated
