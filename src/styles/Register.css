@@ -147,11 +147,11 @@
 .editable-cell-value-wrap {
     padding: 0.3125rem 0.75rem;
     cursor: pointer;
-    min-height: 2.9rem;
+    min-height: 2rem;
 }
 
 .editable-cell-value-wrap:hover {
-    padding: 0.25rem 0.6875rem;
+    /* padding: 0.25rem 0.6875rem; */
     border: 0.0625rem solid #8b8181;
     border-radius: 0.125rem;
 }
