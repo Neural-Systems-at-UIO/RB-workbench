@@ -11,7 +11,7 @@ export default function expandColumnProperties (columnProperties) {
   
   columnProperties.forEach( (item, iCol) => {
     const isColumnFixed = (iCol === 0)
-    const isColumnEditable = (columnType[iCol] === 'input')
+    const isColumnEditable = (columnType[iCol] === 'input' || columnType[iCol] === 'inputNumber')
     const isColumnSelectable = (columnType[iCol] === 'dropdown')
     
     item.title = columnTitles[iCol];
