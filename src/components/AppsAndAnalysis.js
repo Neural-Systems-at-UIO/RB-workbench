@@ -125,7 +125,7 @@ function AppsAndAnalysisPage(props) {
             </Tooltip>
           </Menu.Item>
         </Menu>
-    <Button type='primary' onClick={handleFullScreen} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} disabled={!selectedApp}>Full Screen the Application</Button> 
+    <Button type='primary' onClick={handleFullScreen} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} disabled={!currentlySelectedBrain}>Full Screen the Application</Button> 
     <br></br>
     <Button type='primary' onClick={launchProgressWidget} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} >View Progress Widget</Button> 
     <Modal title="Progress Widget" visible={progressWidgetOpen} onOk={() => setProgressWidgetOpen(false)} onCancel={() => setProgressWidgetOpen(false)}>

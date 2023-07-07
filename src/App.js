@@ -56,7 +56,7 @@ const ProfileAvatar = ({user}) => {
         
         <Avatar size={40} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
 
-        <span style={{fontSize: '0.8rem', marginLeft: '0.5rem',color:'black', paddingTop: '0.1rem'}}>User</span>
+        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>User</span>
 
       </div>
  
@@ -78,7 +78,7 @@ const HomeButton = ({setPage}) => {
     position: 'absolute',
     zIndex:1,
     float: 'left',
-    left: '4vw',
+    left: '3vw',
     height:'2.75rem',
     paddingTop: '0.1rem',
     marginTop: '0.7rem',
@@ -93,7 +93,7 @@ const HomeButton = ({setPage}) => {
     <div zIndex={9} onClick={() => {handleHomeButtonClick()}} style={containerStyle}>
       <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
         <Avatar size={40} icon={<HomeOutlined />} style={{ backgroundColor: 'transparent', color:'black' }} />
-        <span style={{fontSize: '0.8rem',paddingTop:'0.2rem', marginLeft: '0.5rem', color:'black'}}>Return to Projects</span>
+        <span style={{fontSize: '1rem',paddingTop:'0.2rem', marginLeft: '0.4rem', color:'black'}}>Return to Projects</span>
       </div>
     </div>
   )
