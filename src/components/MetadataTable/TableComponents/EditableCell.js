@@ -52,6 +52,12 @@ export function EditableCell({
   // This component allows cell editing in the MetadataTable component
   // It has an internal state that keeps track of whether the cell is being edited or not
   // If mode is edit, it returns a form item with an input field, otherwise it returns the cell value
+  //console.log(tables)
+
+  if (tables) {
+    // Get the column properties for the current column
+    const columnProperties = tables[tables.ActiveTableName].columnProps.filter((column) => column.dataIndex === columnName)[0]
+  }
 
   const form = useContext(EditableContext);
 
