@@ -107,6 +107,14 @@ export function EditableCell({
       const rowKey = rowRecord.key;
       const oldValue = rowRecord[columnName];
 
+      // This is a hack to make sure that the value is not an object 
+      // with a label and value property unless it is a dependent variable
+      if (newValue['value'] === newValue['label']) {
+        newValue = newValue['value'];
+      } else {
+        newValue = {'value': newValue['value'], 'label': newValue['label']};
+      }
+
       handleSave(rowKey, columnName, newValue, oldValue, 'dropdown')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
@@ -160,8 +168,8 @@ export function EditableCell({
 
     // Todo: Update this on table rerender.
     const dropdownOptions = getColumnDropdownOptions(columnName, filteredOptionMap, customOptionList)
-    const dropdownValue = children[1] || ''
-
+    //const dropdownValue = children[1] || '' // This did not work for cells with an object, i.e {value: '...', label: '...'}
+    const dropdownValue = rowRecord[columnName] || ''
     const selectStyle = {width: '100%', cursor: 'pointer'}
 
     childNode = isEditing ?
@@ -169,6 +177,7 @@ export function EditableCell({
         // Allow the user to add new options to a select if missing
         <FormItem name={columnName} title={columnTitle} isRequired={false}>
           <Select
+            labelInValue // This is needed to get both the value and label from the selected option on change
             showSearch
             options={dropdownOptions}
             optionFilterProp="label"
@@ -198,6 +207,7 @@ export function EditableCell({
         </FormItem>
       ) : (
         <Select
+          labelInValue // This is needed to get both the value and label from the selected option on change
           showSearch
           options={dropdownOptions}
           optionFilterProp="label"
@@ -357,14 +367,18 @@ function updateMetadataOptions(metadataOptionMap, tables, columnName) {
     const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
     if (tables[dependentTableName].data !== null) {
       let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
+      let uuid = tables[dependentTableName].data.map((row) => row['uuid']);
+
       metadataOptionMap[columnName] = [
         {
           label: dependentTableName, 
-          options: value.map((name) => {
+          //use map with index to get the uuid
+          options: value.map((item, index) => {
+            // if name is an object, get the value property
             return {
-              value: name,
-              label: name,
-            };
+              value: uuid[index],
+              label: item,
+            }
           })
         }
       ];

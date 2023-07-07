@@ -117,6 +117,12 @@ export function MetadataTable(props) {
     props.projectDataTable[currentTableName].columnProps = statefulColumns;
     props.projectDataTable.ActiveTableName = nextTableName;
 
+    if (currentTable.data !== null) {
+      // For linked columns, update the labels based on the row uuids in the linked table.
+      // This update is necessary to ensure consistency if linked values changed or were removed.
+      updateLinkedColumnLabels(currentTable, nextTableName);
+    }
+
     resetDataSource(currentTable.data);
 
     // save current state??
@@ -135,7 +141,7 @@ export function MetadataTable(props) {
     currentTable.variableNames.forEach((name) => {
       if (currentTable.dependentVariables) {
         if (name in currentTable.dependentVariables) {
-          newRow[name] = {'uuid': null, 'label': ''};
+          newRow[name] = {'value': null, 'label': ''};
         } else {
           newRow[name] = null;
         }
@@ -302,7 +308,6 @@ export function MetadataTable(props) {
 
         // Loop through all keys in the tables object and create an array of the data from each table
         Object.keys(props.projectDataTable).forEach((key, index) => {
-          // console.log('key:', key, 'index:', index);
           if (key !== 'ActiveTableName') {
             props.projectDataTable[key].data = newData[index];
           }
@@ -420,21 +425,13 @@ export function MetadataTable(props) {
 
     oldValue = previousTableData[rowIndex][columnName];
 
-    if (typeof oldValue === 'object' && oldValue !== null && 'uuid' in oldValue) {
-      
-      console.log('old is object', oldValue)
-    } else {
-      console.log('old is not object', oldValue)
-    }
-
     // Update the table data for the rows that should be updated
     for (const iRowIndex of rowIndexList) {
       updatedTableData[iRowIndex][columnName] = newValue;
       if (fieldType === 'dropdown') {
         updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
       } else if (fieldType === 'inputfield') {
-
-        updateLinkedColumnValues(columnName, newValue, oldValue)
+        //updateLinkedColumnValues(columnName, newValue, oldValue)
       }
     }
 
@@ -478,11 +475,13 @@ export function MetadataTable(props) {
     return tableData;
   }
 
-  const updateLinkedColumnValues = (columnName, newValue, oldValue) => {
+  function updateLinkedColumnValues (columnName, newValue, oldValue) {
     // This function updates the values in columns that are linked to the column that was changed.
     // For example, if a row in the column "SubjectGroupID" is changed, then all the values in 
     // the column "IsPartOf in the Subject table that matched the old value of "SubjectGroupID"
     // will be changed to the new value of "SubjectGroupID".
+
+    // Deprecated: Replaced by updateDependentColumnLabels
 
     // Note: Relies on the global variable tables.
     const linkedColumnInfo = getLinkedColumnInfo(tables);
@@ -505,6 +504,59 @@ export function MetadataTable(props) {
           }
         })
       })
+    }
+  }
+
+
+  function updateLinkedColumnLabels (tableObject, tableName) {
+    // This function updates the labels of columns that are linked to items in other tables.
+    //
+    // For example, if a row in the column "SubjectGroupID" is changed, then all the values in
+    // the column "IsPartOf in the Subject table that matched the old value of "SubjectGroupID"
+    // will be changed to the new value of "SubjectGroupID".
+    //
+    // Also, if a subject group is deleted, then all the values in the column "IsPartOf" in the
+    // Subject table that matched the deleted subject group will be changed to null.
+    //
+    // Note: Relies on the global variable tables.
+
+    // Check in table definitions if this table has linked columns.
+    if (tables[tableName].dependentVariables) {
+      
+      // Loop through each linked column
+      for (let [columnName, linkInfo] of Object.entries(tables[tableName].dependentVariables)) {
+
+        // Get dependent table name and column name
+        const dependentTableName = Object.keys(linkInfo)[0];
+        const dependentColumnName = linkInfo[dependentTableName];
+
+        if (tables[dependentTableName].data===null) {
+          continue
+        }
+
+        // Get values of dependent column and uuids for each of the rows.
+        const dependentColumnValues = tables[dependentTableName].data.map((rowRecord) => rowRecord[dependentColumnName])
+        const dependentColumnUuids = tables[dependentTableName].data.map((rowRecord) => rowRecord['uuid'])
+
+        // Loop through each row in the table and update labels of linked column
+        tableObject.data.forEach((rowRecord, rowIndex) => {
+          // Get the value of the linked column
+          const linkedColumnValue = rowRecord[columnName]
+          const linkedColumnUuid = linkedColumnValue['value'];
+          // Get the index of the linked column value in the dependent column
+          const dependentColumnIndex = dependentColumnUuids.indexOf(linkedColumnUuid)
+          
+          if (dependentColumnIndex === -1) {
+            // Reset the label and value of the linked column
+            tableObject.data[rowIndex][columnName]['label'] = ''
+            tableObject.data[rowIndex][columnName]['value'] = null
+          } else {
+            // Update the label of the linked column
+            const dependentColumnLabel = dependentColumnValues[dependentColumnIndex]
+            tableObject.data[rowIndex][columnName]['label'] = dependentColumnLabel
+          }
+        })
+      }
     }
   }
 
