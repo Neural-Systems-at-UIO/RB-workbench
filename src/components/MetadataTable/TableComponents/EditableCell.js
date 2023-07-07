@@ -229,6 +229,7 @@ export function EditableCell({
 // SUBCOMPONENTS
 
 const FormItem = ({children, name, title, isRequired}) => {
+  //&&&to do:add extra field for isnumeric
   // FormItem is a wrapper component for a form item that is used for cell input field componenets
   const formItemStyle = { margin: 0 };
   const formItemRules = [
