@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Select, Divider, Space } from 'antd';
+import { Button, Form, Input, InputNumber, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
@@ -47,7 +47,7 @@ import STRAIN_INSTANCES from '../../../metadata/strainInstances'; // Global vari
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  rowRecord, columnName, columnTitle, isEditable, isSelectable, dataType, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, type, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
   // This component allows cell editing in the MetadataTable component
   // It has an internal state that keeps track of whether the cell is being edited or not
@@ -146,7 +146,7 @@ export function EditableCell({
   let childNode = children;
 
   if (isEditable) {
-    childNode = isEditing ? CellInputField(columnName, columnTitle, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
+    childNode = isEditing ? CellInputField(columnName, columnTitle, type, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
   }
 
   if (isSelectable) {
@@ -234,11 +234,12 @@ const FormItem = ({children, name, title, isRequired}) => {
   // FormItem is a wrapper component for a form item that is used for cell input field componenets
   const formItemStyle = { margin: 0 };
   const formItemRules = [
-    {
-      required: isRequired,
-      message: `${title} is required.`
-    }
-  ];
+      {
+        required: isRequired,
+        message: `${title} is required.`
+      }
+    ];
+
 
   return (
     <Form.Item name={name} style={formItemStyle} rules={formItemRules}>
@@ -256,13 +257,22 @@ const FormItem = ({children, name, title, isRequired}) => {
  * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
  * @returns {JSX.Element} The rendered component.
  */
-const CellInputField = (columnName, columnTitle, inputRef, handleFinishEditCell) => {
+const CellInputField = (columnName, columnTitle, type, inputRef, handleFinishEditCell) => {
   /// This function returns the (editable) input field for a cell
-  return (
+  if (type=='input'){
+    return (
     <FormItem name={columnName} title={columnTitle} isRequired={false}>
       <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
-    </FormItem>
-  )
+      </FormItem>
+      )
+    }
+  else if (type=='inputNumber'){
+    return (
+    <FormItem name={columnName} title={columnTitle} isRequired={false}>
+      <InputNumber ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
+      </FormItem>
+      )
+    }
 }
 
 const CellValueDisplay = (children, toggleIsEditing) => {
