@@ -1,4 +1,4 @@
-import { Menu, Button, Tooltip } from 'antd';
+import { Menu, Button, Tooltip, Modal , Table} from 'antd';
 import React, { useState, useEffect } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
@@ -7,15 +7,15 @@ function AppsAndAnalysisPage(props) {
   const [unsetSelectedApp, setUnsetSelectedApp] = useState("");
   const [disableCreatedBrains, setDisableCreatedBrains] = useState(true);
   const [currentlySelectedBrain, setCurrentlySelectedBrain] = useState("");
-  const [selectedKeys, setSelectedKeys] = useState(['0']);
+  const [selectedKeys, setSelectedKeys] = useState(['']);
   const [BrainMenuHeader, setBrainMenuHeader] = useState("Created Brains");
   const handleAppSelect = (appUrl) => {
-    setSelectedKeys([])
+    // setSelectedKeys([])
     setUnsetSelectedApp(appUrl);
     setSelectedApp("")
-    setCurrentlySelectedBrain(""); // reset currentlySelectedBrain to empty string
+    // setCurrentlySelectedBrain(""); // reset currentlySelectedBrain to empty string
     // set classname of all menu items to "ant-menu-item ant-menu-item-only-child"
-    setMenuItems(menuItems.map(item => ({ ...item, props: { ...item.props} })));
+    // setMenuItems(menuItems.map(item => ({ ...item, props: { ...item.props} })));
     
     const iframe = document.getElementById("apps-iframe");
     // if iframe exists change the style
@@ -38,8 +38,15 @@ function AppsAndAnalysisPage(props) {
 
       setDisableCreatedBrains(false);
     }
+    console.log('currentlySelectedBrain', currentlySelectedBrain)
+    setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
+  }
+  const [progressWidgetOpen, setProgressWidgetOpen] = useState(false);
+  const launchProgressWidget = () => {
+    setProgressWidgetOpen(true);
   }
   
+
   const handleFullScreen = () => {
     const iframe = document.getElementById("apps-iframe");
     if (iframe.requestFullscreen) {
@@ -93,7 +100,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect(`https://lz-nl.apps.hbp.eu/webwarp.html?clb-collab-id=${props.keyValue}`)}>
+          <Menu.Item onClick={() => handleAppSelect(`https://lz-nl.apps.hbp.eu/webwarp.php?clb-collab-id=${props.keyValue}`)}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebWarp</span>
             <Tooltip title="Launch WebWarp">
               <Button shape="circle" size="small" style={{ marginLeft: "1rem", marginRight: ".3125rem" }}>
@@ -118,17 +125,72 @@ function AppsAndAnalysisPage(props) {
             </Tooltip>
           </Menu.Item>
         </Menu>
-<Button type='primary' onClick={handleFullScreen} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} disabled={!selectedApp}>Full Screen the Application</Button> </div>
+    <Button type='primary' onClick={handleFullScreen} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} disabled={!selectedApp}>Full Screen the Application</Button> 
+    <br></br>
+    <Button type='primary' onClick={launchProgressWidget} style={{ width: "8rem", height:"4rem", whiteSpace: "normal", marginTop:'1rem' }} >View Progress Widget</Button> 
+    <Modal title="Progress Widget" visible={progressWidgetOpen} onOk={() => setProgressWidgetOpen(false)} onCancel={() => setProgressWidgetOpen(false)}>
+    <Table columns={[
+  {
+    title: 'Brain ID',
+    dataIndex: 'BrainID',
+  },
+  {
+    title: 'WebAlign',
+    dataIndex: 'WebAlign',
+  },
+  {
+    title: 'WebWarp',
+    dataIndex: 'WebWarp',
+  },
+  {
+    title: 'WebIlastik',
+    dataIndex: 'WebIlastik',
+  },
+  {
+    title: 'NutilWeb',
+    dataIndex: 'NutilWeb',
+  },
+]} dataSource={[
+  {
+    key: '1',
+    BrainID: '71717640',
+    // tick emoji
+    WebAlign:'✔️',
+    WebWarp: '❌',
+    WebIlastik: '❌',
+    NutilWeb: '❌',
+  },
+  {
+    key: '2',
+    BrainID: '71717641',
+    // tick emoji
+    WebAlign:'✔️',
+    WebWarp: '❌',
+    WebIlastik: '❌',
+    NutilWeb: '❌',
+  },
+  {
+    key: '3',
+    BrainID: '71717642',
+    // tick emoji
+    WebAlign:'✔️',
+    WebWarp: '❌',
+    WebIlastik: '❌',
+    NutilWeb: '❌',
+  },
+]} size="small" />
+    </Modal>
+    </div>
       <div id="sideBarBrains" style={{ ...menuStyle, 'white-space': 'nowrap',  maxWidth: disableCreatedBrains ? 0 : '10vw', width:'10vw', overflow: 'hidden', transition: 'max-width 0.5s ease-in-out' }}>
-        <div style={{ fontWeight: 'bold' ,marginTop:'3rem'}}>{BrainMenuHeader}</div>
-        <Menu disabled={disableCreatedBrains} onSelect={handleMenuSelect} selectedKeys={selectedKeys}>
+        <div style={{ fontWeight: 'bold' ,marginTop:'3rem', fontSize: '1.5em',marginBottom:'1rem'}}>{BrainMenuHeader}</div>
+        <Menu disabled={disableCreatedBrains} onSelect={handleMenuSelect} selectedKeys={selectedKeys} style={{backgroundColor:'#fbf8fc'}}>
           {menuItems}
         </Menu>
       </div>
     </div>
     <div id="iframeContainer" style={{ width: '90vw', height: '100vh', float: 'right' }}>
       {(disableCreatedBrains & (selectedApp!=="")) ? (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '94vh', width: '100%', border: '0' , overflow:'auto'}}></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: 'calc(100vh - 3.875rem)', width: '100%', border: '0' , overflow:'auto'}}></iframe>
 ) :(menuItems.length == 0) ?(
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background:"white"}}>
   <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>  You havent created any brains,<br></br> start by creating a brain in the file creator tab
@@ -145,7 +207,7 @@ function AppsAndAnalysisPage(props) {
     <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>Please select a brain to view in the app.</span>    
   </div>
 ) : (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100%', width: '100%', border: '0' }}></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100vh', width: '100%', border: '0' }} sandbox="allow-scripts allow-same-origin"></iframe>
 )}
     </div>
     </div>
