@@ -56,3 +56,37 @@ const tables = {
 
 
 export default tables
+
+
+
+// Alternative way to define dependent variables:
+
+// TissueSampleNew: {
+//   columnProps: tissueTableColumns,
+//   variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
+//   data: null,
+//   dependentVariables: [
+//     {
+//       'PropertyName': 'IsPartOf',
+//       'LinkedProperty': [
+//         {
+//           'TableName': 'TissueSampleCollection',
+//           'ColumnName': 'TissueSampleCollectionID'
+//         }
+//       ]
+//     }, 
+//     {
+//       'PropertyName': 'IsPartOf',
+//       'LinkedProperty': [
+//         {
+//           'TableName': 'TissueSample',
+//           'ColumnName': 'TissueSampleID'
+//         }, 
+//         {
+//           'TableName': 'Subject',
+//           'ColumnName': 'SubjectID'
+//         }
+//       ]
+//     },
+//   ]  
+// },
