@@ -130,7 +130,8 @@ export function MetadataTable(props) {
     if (rowNumber === undefined) {
       rowNumber = 1;
     }
-    const newRow = { key: rowNumber.toString() };
+    //const newRow = { key: rowNumber.toString(), 'uuid': crypto.randomUUID() };
+    const newRow = { key: rowNumber.toString(), 'uuid': crypto.randomUUID() };
     currentTable.variableNames.forEach((name) => { newRow[name] = null; });
 
     return newRow;
@@ -413,6 +414,7 @@ export function MetadataTable(props) {
       if (fieldType === 'dropdown') {
         updateDependentColumnValues(updatedTableData, iRowIndex, columnName, newValue)
       } else if (fieldType === 'inputfield') {
+
         updateLinkedColumnValues(columnName, newValue, oldValue)
       }
     }
@@ -471,7 +473,12 @@ export function MetadataTable(props) {
 
       linkedColumns.forEach((linkedColumn) => {
         let tableData = tables[linkedColumn.dependentTableName].data
-
+        
+        // Skip if linked table is empty
+        if (tableData === null) {
+          tableData = []
+        }
+        
         let columnValues = tableData.map(rowRecord => rowRecord[linkedColumn.dependentColumnName])
         columnValues.forEach((columnValue, index) => {
           if (columnValue === oldValue) {
