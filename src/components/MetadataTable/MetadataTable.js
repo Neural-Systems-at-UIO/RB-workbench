@@ -585,7 +585,7 @@ export function MetadataTable(props) {
         columnTitle: col.title,
         isEditable: col.editable,
         isSelectable: col.select,
-        dataType: col.dataType,
+        type: col.type,
         handleSave,
         metadataOptionMap,
         customOptionList, 
