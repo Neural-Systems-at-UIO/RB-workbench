@@ -17,9 +17,9 @@
   }
 }
 
-:root {
+/* :root {
   --font-size:3.75rem
-}
+} */
 
 #rc-tabs-1-tab-2 {
   color: #120338;
@@ -76,9 +76,11 @@
   color: #f8fafb;
 }
 
-/* .ant-layout-header>span:nth-child(1)>svg:nth-child(1) {
-  width: 10rem;
-} */
+.ant-tabs-large>.ant-tabs-nav .ant-tabs-tab {
+  font-size: 1.3em;
+  /* min-width: 2vw;
+  max-width: 20vw; */
+}
 
 @keyframes App-logo-spin {
   from {
