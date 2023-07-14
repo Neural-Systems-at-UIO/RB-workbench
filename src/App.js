@@ -111,8 +111,9 @@ const App = () => {
     return token
   }
   function authenticate() {
-    let URL = "https://127.00.0.1:8080";
-    let oidc_client_id = "LocalDevelopmentServer";
+    // get the environment variable
+    let URL = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+    let oidc_client_id = process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_ID;
     let oidc_redirect_uri = `${URL}/app`;
 
     let newURL = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${oidc_client_id}&redirect_uri=${oidc_redirect_uri}`;
