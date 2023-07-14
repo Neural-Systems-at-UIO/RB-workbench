@@ -113,7 +113,7 @@ const ProjectList = (props) => {
 
             onOk(title) {
 
-                let tempKey = `ewb_${crypto.randomUUID()}`
+                let tempKey = `ewb-${crypto.randomUUID()}`
                 let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
