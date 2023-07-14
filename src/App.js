@@ -110,6 +110,16 @@ const App = () => {
     setToken(token)
     return token
   }
+  function authenticate() {
+    let URL = "https://127.00.0.1:8080";
+    let oidc_client_id = "LocalDevelopmentServer";
+    let oidc_redirect_uri = `${URL}/app`;
+
+    let newURL = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${oidc_client_id}&redirect_uri=${oidc_redirect_uri}`;
+    console.log(newURL)
+    window.location.href = newURL;
+  }
+
 
   // Why does it not work to use this in the getUser.then() ??
   function handleUserReceived(user) {
@@ -119,6 +129,11 @@ const App = () => {
 
   React.useEffect(() => {
     // console.log('useEffect')
+    // only authenticate if we are not already authenticated
+    if (!window.location.href.includes('code=')) {
+    authenticate()
+    return
+    }
     getToken()
     .then( (token) => handleTokenReceived(token) )
       .then(function (token) {

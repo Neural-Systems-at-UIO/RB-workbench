@@ -29,6 +29,8 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "windows": "(set NODE_ENV=development & node backend/server.js --experimental-fetch)",
+    "windows__": "(set HTTPS=true && set PORT=3000 && react-scripts start && set NODE_ENV=development & node backend/server.js --experimental-fetch)",
     "dev": "(HTTPS=true PORT=3000 react-scripts start & NODE_ENV=development nodemon --ignore persistent_storage/ backend/server.js --experimental-fetch)"
   },
   "homepage": ".",

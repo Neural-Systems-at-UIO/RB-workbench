@@ -113,7 +113,7 @@ const ProjectList = (props) => {
 
             onOk(title) {
 
-                let tempKey = crypto.randomUUID()
+                let tempKey = `ebwb_${crypto.randomUUID()}`
                 let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
@@ -136,10 +136,16 @@ const ProjectList = (props) => {
                         description: tempDescription,
                         key:tempKey
                     })
-                })  
+                })
+                .then((response) => {
                 // add the new data to the projectData
                 setProjectData([...projectData, newData])
                 title()
+                })
+                .catch((error) => {
+                    console.log(error)
+                }
+                )
             },
             onCancel() {
                 console.log('Cancel');
