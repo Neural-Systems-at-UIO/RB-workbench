@@ -44,10 +44,15 @@ app.use(fileUpload({
 
 
 app.get('/', function (req, res) {
-  res.redirect('https://localhost:3000' + req.url)
-})
-// app cannot get the static files
+  if (process.env.NODE_ENV === 'development') {
+    // send user to localhost:3000
+    res.redirect('https://localhost:3000' + req.url)
+  }
+  else {
+    res.sendFile(path.resolve(__dirname, '../build/', 'index.html'), (err) => { console.log(err) }) 
+  }
 
+})
 app.get('/app', function (req, res) {
   if (process.env.NODE_ENV === 'development') {
     // send user to localhost:3000
