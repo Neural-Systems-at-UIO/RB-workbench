@@ -89,7 +89,7 @@ const ProjectList = (props) => {
         console.log('-------------------')
     }
     
-    const addData = (projectData, setProjectData) => {
+    const createProject = (projectData, setProjectData) => {
      
         var  tempTitle= ''
         var tempDescription = ''
@@ -113,7 +113,7 @@ const ProjectList = (props) => {
 
             onOk(title) {
 
-                let tempKey = `ebwb_${crypto.randomUUID()}`
+                let tempKey = `ewb_${crypto.randomUUID()}`
                 let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
@@ -209,7 +209,7 @@ const ProjectList = (props) => {
               >
                     <div>
       <div style={{ padding: '0 ', textAlign: 'left' }} className="OptionsBar">
-        <Button onClick={() => {addData(projectData, setProjectData)}}>Add new Project</Button>
+        <Button onClick={() => {createProject(projectData, setProjectData)}}>Add new Project</Button>
 
       </div>
       <hr
