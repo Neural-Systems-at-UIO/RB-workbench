@@ -11,8 +11,12 @@
 // Todo: rename and (slightly change behavior) to expand column properties
 //import createColumnProperties from '../helpers/table/createColumnProps'
 
-import subjectTableColumns from '../metadata/defaultTableColumns/subjectColumns'
-import tissueTableColumns from '../metadata/defaultTableColumns/tissueSampleColumns'
+import expandColumnProperties from '../helpers/table/expandColumnProps'
+
+//import subjectTableColumns from '../metadata/defaultTableColumns/subjectColumns'
+import subjectTableColumns from '../metadata_new/defaultTableColumns/subjectColumns'
+//import tissueTableColumns from '../metadata/defaultTableColumns/tissueSampleColumns'
+import tissueTableColumns from '../metadata_new/defaultTableColumns/tissueSampleColumns'
 import subjectGroupTableColumns from '../metadata/defaultTableColumns/subjectGroupColumns'
 import tscTableColumns from '../metadata/defaultTableColumns/tissueSampleCollectionColumns'
 
@@ -23,7 +27,7 @@ console.log(subjectTableColumns)
 const tables = {
 
     Subject: {
-      columnProps: subjectTableColumns,
+      columnProps: expandColumnProperties(subjectTableColumns),
       variableNames: subjectTableColumns.map((column) => column.key), // key or dataIndex?
       data: null,
       dependentVariables: {IsPartOf: {SubjectGroup: 'SubjectGroupID'}}
@@ -35,7 +39,7 @@ const tables = {
       dependentVariables: {}
     },
     TissueSample: {
-      columnProps: tissueTableColumns,
+      columnProps: expandColumnProperties(tissueTableColumns),
       variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
       data: null,
       dependentVariables: {IsPartOf: {TissueSampleCollection: 'TissueSampleCollectionID'}, DescendedFromSubjectID: {Subject: 'SubjectID'}}
@@ -52,3 +56,37 @@ const tables = {
 
 
 export default tables
+
+
+
+// Alternative way to define dependent variables:
+
+// TissueSampleNew: {
+//   columnProps: tissueTableColumns,
+//   variableNames: tissueTableColumns.map((column) => column.key), // key or dataIndex?
+//   data: null,
+//   dependentVariables: [
+//     {
+//       'PropertyName': 'IsPartOf',
+//       'LinkedProperty': [
+//         {
+//           'TableName': 'TissueSampleCollection',
+//           'ColumnName': 'TissueSampleCollectionID'
+//         }
+//       ]
+//     }, 
+//     {
+//       'PropertyName': 'IsPartOf',
+//       'LinkedProperty': [
+//         {
+//           'TableName': 'TissueSample',
+//           'ColumnName': 'TissueSampleID'
+//         }, 
+//         {
+//           'TableName': 'Subject',
+//           'ColumnName': 'SubjectID'
+//         }
+//       ]
+//     },
+//   ]  
+// },

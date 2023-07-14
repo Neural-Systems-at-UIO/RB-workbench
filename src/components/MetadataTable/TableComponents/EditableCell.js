@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Form, Input, Select, Divider, Space } from 'antd';
+import { Button, Form, Input, InputNumber, Select, Divider, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { EditableContext } from './EditableRow.js';
 
@@ -47,11 +47,14 @@ import STRAIN_INSTANCES from '../../../metadata/strainInstances'; // Global vari
  * @returns {JSX.Element} The rendered component.
  */
 export function EditableCell({
-  rowRecord, columnName, columnTitle, isEditable, isSelectable, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
+  rowRecord, columnName, columnTitle, isEditable, isSelectable, type, children, handleSave, metadataOptionMap, customOptionList, setCustomOptionList, tables, ...restProps
 }) {
   // This component allows cell editing in the MetadataTable component
   // It has an internal state that keeps track of whether the cell is being edited or not
   // If mode is edit, it returns a form item with an input field, otherwise it returns the cell value
+  //console.log(tables)
+
+  //console.log(columnName, '(value)', children)
 
   const form = useContext(EditableContext);
 
@@ -104,6 +107,14 @@ export function EditableCell({
       const rowKey = rowRecord.key;
       const oldValue = rowRecord[columnName];
 
+      // This is a hack to make sure that the value is not an object 
+      // with a label and value property unless it is a dependent variable
+      if (newValue['value'] === newValue['label']) {
+        newValue = newValue['value'];
+      } else {
+        newValue = {'value': newValue['value'], 'label': newValue['label']};
+      }
+
       handleSave(rowKey, columnName, newValue, oldValue, 'dropdown')
     } catch (errInfo) {
       console.log('Save failed:', errInfo);
@@ -145,7 +156,7 @@ export function EditableCell({
   let childNode = children;
 
   if (isEditable) {
-    childNode = isEditing ? CellInputField(columnName, columnTitle, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
+    childNode = isEditing ? CellInputField(columnName, columnTitle, type, inputRef, finishEditCell) : CellValueDisplay(children, toggleIsEditing)
   }
 
   if (isSelectable) {
@@ -157,8 +168,8 @@ export function EditableCell({
 
     // Todo: Update this on table rerender.
     const dropdownOptions = getColumnDropdownOptions(columnName, filteredOptionMap, customOptionList)
-    const dropdownValue = children[1] || ''
-
+    //const dropdownValue = children[1] || '' // This did not work for cells with an object, i.e {value: '...', label: '...'}
+    const dropdownValue = rowRecord[columnName] || ''
     const selectStyle = {width: '100%', cursor: 'pointer'}
 
     childNode = isEditing ?
@@ -166,6 +177,7 @@ export function EditableCell({
         // Allow the user to add new options to a select if missing
         <FormItem name={columnName} title={columnTitle} isRequired={false}>
           <Select
+            labelInValue // This is needed to get both the value and label from the selected option on change
             showSearch
             options={dropdownOptions}
             optionFilterProp="label"
@@ -195,6 +207,7 @@ export function EditableCell({
         </FormItem>
       ) : (
         <Select
+          labelInValue // This is needed to get both the value and label from the selected option on change
           showSearch
           options={dropdownOptions}
           optionFilterProp="label"
@@ -229,14 +242,16 @@ export function EditableCell({
 // SUBCOMPONENTS
 
 const FormItem = ({children, name, title, isRequired}) => {
+  //&&&to do:add extra field for isnumeric
   // FormItem is a wrapper component for a form item that is used for cell input field componenets
   const formItemStyle = { margin: 0 };
   const formItemRules = [
-    {
-      required: isRequired,
-      message: `${title} is required.`
-    }
-  ];
+      {
+        required: isRequired,
+        message: `${title} is required.`
+      }
+    ];
+
 
   return (
     <Form.Item name={name} style={formItemStyle} rules={formItemRules}>
@@ -254,13 +269,22 @@ const FormItem = ({children, name, title, isRequired}) => {
  * @param {Function} handleFinishEditCell - The function to handle finishing the cell editing.
  * @returns {JSX.Element} The rendered component.
  */
-const CellInputField = (columnName, columnTitle, inputRef, handleFinishEditCell) => {
+const CellInputField = (columnName, columnTitle, type, inputRef, handleFinishEditCell) => {
   /// This function returns the (editable) input field for a cell
-  return (
+  if (type=='input'){
+    return (
     <FormItem name={columnName} title={columnTitle} isRequired={false}>
       <Input ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
-    </FormItem>
-  )
+      </FormItem>
+      )
+    }
+  else if (type=='inputNumber'){
+    return (
+    <FormItem name={columnName} title={columnTitle} isRequired={false}>
+      <InputNumber ref={inputRef} onBlur={handleFinishEditCell} onPressEnter={handleFinishEditCell} />
+      </FormItem>
+      )
+    }
 }
 
 const CellValueDisplay = (children, toggleIsEditing) => {
@@ -353,14 +377,18 @@ function updateMetadataOptions(metadataOptionMap, tables, columnName) {
     const dependentVariableName = tables[currentTableName].dependentVariables[columnName][dependentTableName];
     if (tables[dependentTableName].data !== null) {
       let value = tables[dependentTableName].data.map((row) => row[dependentVariableName]);
+      let uuid = tables[dependentTableName].data.map((row) => row['uuid']);
+
       metadataOptionMap[columnName] = [
         {
           label: dependentTableName, 
-          options: value.map((name) => {
+          //use map with index to get the uuid
+          options: value.map((item, index) => {
+            // if name is an object, get the value property
             return {
-              value: name,
-              label: name,
-            };
+              value: uuid[index],
+              label: item,
+            }
           })
         }
       ];

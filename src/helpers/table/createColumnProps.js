@@ -7,7 +7,7 @@ export default function createColumnProperties (columnNames, columnType) {
 
   for (let iCol = 0; iCol < columnNames.length; iCol++) {
     const isColumnFixed = (iCol === 0)
-    const isColumnEditable = (columnType[iCol] === 'input')
+    const isColumnEditable = (columnType[iCol] === 'input' || columnType[iCol] === 'inputNumber')
     const isColumnSelectable = (columnType[iCol] === 'dropdown')
 
     const thisColumnProp = {

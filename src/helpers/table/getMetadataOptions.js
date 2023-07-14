@@ -114,6 +114,8 @@ export function getMetadataOptions() {
     // Todo: Fix so that these are specific to the table a column is part of.
     // I.e both Subject and TissueSample has the IsPartOf column, but they should have different options
 
+    // Apparently not being used.
+
     // Loop through all specimen tables
     for (const key in specimenTables) {
       const dependentVariable = specimenTables[key].dependentVariables;
@@ -129,11 +131,17 @@ export function getMetadataOptions() {
               columnOptions[propName] = [
                 {
                   label: dependentVariableName, 
-                  options: value.map((name) => {
-                    return {
-                      value: name,
-                      label: name,
-                    };
+                  options: value.map((item) => {
+                    let optionsItem = {};
+
+                    if (typeof item === 'object' && item !== null) {
+                      optionsItem.value = item.value;
+                      optionsItem.label = item.label;
+                    } else {
+                      optionsItem.value = item;
+                      optionsItem.label = item;
+                    }
+                    return optionsItem;
                   })
                 }
               ];
