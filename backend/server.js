@@ -323,7 +323,7 @@ function initialise_collab(token, collabId) {
       "title": collabId,
       "drive": false,
       "chat": false,
-      "public": true,
+      "public": false,
     };
     console.log(body)
     let headers = {
