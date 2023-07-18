@@ -112,13 +112,13 @@ const App = () => {
   }
   function authenticate() {
     // get the environment variable
+    console.log('process',process.env)
     let URL = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
     let oidc_client_id = process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_ID;
-    let oidc_redirect_uri = `${URL}/app`;
-
-    let newURL = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${oidc_client_id}&redirect_uri=${oidc_redirect_uri}`;
-    console.log(newURL)
-    window.location.href = newURL;
+    // let oidc_redirect_uri = `${URL}/app`;
+    // let newURL = `https://iam.ebrains.eu/auth/realms/hbp/protocol/openid-connect/auth?response_type=code&login=true&client_id=${oidc_client_id}&redirect_uri=${oidc_redirect_uri}`;
+    // console.log(newURL)
+    // window.location.href = newURL;
   }
 
 
