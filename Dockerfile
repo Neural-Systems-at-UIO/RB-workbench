@@ -16,8 +16,10 @@ COPY . /app
 # Install rpm packages from package.json
 RUN npm install --force
 
-# Build the react app
-RUN npm run build
+# Build the react app... 
+#I think we should do this once deployed to deal with env variables being 
+#different in multiple production environments
+# RUN npm run build
 
 # Reset node environment variable
 ENV NODE_ENV=""
