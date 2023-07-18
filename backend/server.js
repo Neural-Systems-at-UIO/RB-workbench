@@ -14,7 +14,25 @@ const axios = require('axios')
 const dotenv = require("dotenv")
 const fs = require('fs')
 
-console.log('env', process.env.NODE_ENV)
+const { exec } = require('child_process')
+
+if (process.env.NODE_ENV === 'production') {
+
+  exec('npm run build', function (err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+    if (err) {
+      console.log(err);
+    }
+  });
+  
+
+
+}
+
+
+
+
 if (process.env.NODE_ENV === 'development') {
   var app = require('https-localhost')()
 }
