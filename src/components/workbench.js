@@ -34,6 +34,9 @@ const Workbench = (props) => {
                     <MetaDataPage setPage={props.setPage} user={props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
                   </TabPane>
                 )}
+
+                {'EBworkbench' === process.env.REACT_APP_APPLICATION && (
+                  <>
                 <TabPane tab='File Creator' key='3' style={{"height":"100%"}}>
                   {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
               
@@ -46,10 +49,11 @@ const Workbench = (props) => {
                 <TabPane tab='Apps & Analysis' key='4' style={{"height":"100%"}}>
                   <AppsAndAnalysisPage keyValue={props.keyValue}/>
                 </TabPane>
-                {'EBworkbench' === process.env.REACT_APP_APPLICATION && (
+                
                   <TabPane tab='Metadata' key='2'>
                     <MetaDataPage setPage={props.setPage} user={props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
                   </TabPane>
+                  </>
                 )}
                 <TabPane tab='Share Data' key='5' style={{"height":"100%"}}>
                 </TabPane>
