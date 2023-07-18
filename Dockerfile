@@ -14,7 +14,7 @@ WORKDIR /app
 COPY . /app
 
 # Install rpm packages from package.json
-RUN sudo npm cache clean --force && sudo npm install --force
+RUN npm cache clean --force && npm install --force
 
 # Build the react app
 RUN npm run build
