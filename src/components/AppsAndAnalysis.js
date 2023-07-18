@@ -108,7 +108,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html#!{"layout":"xy"}?clb-collab-id=${props.keyValue}`)}>
+          <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?clb-collab-id=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}`)}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebIlastik</span>
             <Tooltip title="Launch WebIlastik">
               <Button shape="circle" size="small" style={{ marginLeft: "0.8rem", marginRight: ".3125rem" }} >
