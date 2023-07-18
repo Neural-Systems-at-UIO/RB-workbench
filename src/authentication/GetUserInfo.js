@@ -1,16 +1,16 @@
 function getUser(token) {
+
     return new Promise((resolve, reject) => {
       var xhr = new XMLHttpRequest();
       if (process.env.NODE_ENV === "development") {
-        var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+        var target_url = process.env.REACT_APP_BACKEND_URL;
         xhr.open("GET", `${target_url}/getuser`, true);
       }
       else {
-        // var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
         xhr.open("GET", `getuser`, true);
       }
 
-
+      console.log("Authorization", token);
       // add authorization header
       xhr.setRequestHeader("Authorization", token);
       xhr.send();

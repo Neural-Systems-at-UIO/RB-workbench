@@ -32,7 +32,7 @@ const ModalContent = () => {
 function getData(user) {
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV === "development") {
-      var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+      var target_url = process.env.REACT_APP_BACKEND_URL;
       var target = `${target_url}/get_projects?user=${user}`
     }
     else {
@@ -73,7 +73,7 @@ const ProjectList = (props) => {
 
     const deleteProject = (project) => {
         // call the backend to delete the project
-        fetch(`${process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL}/delete_project`, {
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_project`, {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ const ProjectList = (props) => {
                 let newData = {'key':tempKey,  'title': tempTitle, 'description': tempDescription}
                 // call the backend to add the new data
                 if (process.env.NODE_ENV === "development") {
-                  var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+                  var target_url = process.env.REACT_APP_BACKEND_URL;
                   var target = `${target_url}/set_project`
                 }
                 else {

@@ -244,7 +244,7 @@ export function MetadataTable(props) {
     
     let serverUrl = ''
     if (process.env.NODE_ENV === "development") {
-      serverUrl = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+      serverUrl = process.env.REACT_APP_BACKEND_URL;
     } else {
       serverUrl = ''
     }
