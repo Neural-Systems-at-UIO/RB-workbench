@@ -29,11 +29,12 @@ function AppsAndAnalysisPage(props) {
 
 
     // disable the "Created Brains" menu if WebIlastik or NutilWeb is selected
-    if (appUrl.includes("https://app.ilastik.org/")) {
-          iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
-    } else {
-      iframe.removeAttribute("sandbox")
-    }
+    if (iframe) {
+        if (appUrl.includes("https://app.ilastik.org/")) {
+            iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+        } else {
+            iframe.removeAttribute("sandbox");
+        }
     if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
