@@ -32,7 +32,7 @@ function AppsAndAnalysisPage(props) {
     if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
-      setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
+      setSelectedApp(`${appUrl}`);
     } else {
       setBrainMenuHeader("Select one brain")
 
@@ -118,7 +118,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect("https://127.0.0.1:3000/")} style={{ display: "flex", alignItems: "center" }}>
+          <Menu.Item onClick={() => handleAppSelect(`https://127.0.0.1:3000/?clb-collab-id=${props.keyValue}`)} style={{ display: "flex", alignItems: "center" }}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>NutilWeb</span>
             <Tooltip title="Launch NutilWeb">
               <Button shape="circle" size="small" style={{ marginLeft: "1rem", marginRight: ".3125rem" }}>
