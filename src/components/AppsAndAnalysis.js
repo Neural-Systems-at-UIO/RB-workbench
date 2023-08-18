@@ -119,7 +119,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect("https://nutil.apps-dev.hbp.eu/")} style={{ display: "flex", alignItems: "center" }}>
+          <Menu.Item onClick={() => handleAppSelect("https://127.0.0.1:3000/")} style={{ display: "flex", alignItems: "center" }}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>NutilWeb</span>
             <Tooltip title="Launch NutilWeb">
               <Button shape="circle" size="small" style={{ marginLeft: "1rem", marginRight: ".3125rem" }}>
