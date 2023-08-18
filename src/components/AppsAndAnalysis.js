@@ -32,8 +32,7 @@ function AppsAndAnalysisPage(props) {
     if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
-      setSelectedApp(`${appUrl}`)
-
+      setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
     } else {
       setBrainMenuHeader("Select one brain")
 
