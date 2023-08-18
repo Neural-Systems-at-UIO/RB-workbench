@@ -113,7 +113,7 @@ function AppsAndAnalysisPage(props) {
           <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?ebrains_bucket_name=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}`)}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebIlastik</span>
             <Tooltip title="Launch WebIlastik">
-              <Button shape="circle" size="small" style={{ marginLeft: "0.8rem", marginRight: ".3125rem" }} >
+              <Button shape="circle" size="small" style={{ marginLeft: "0.8rem", marginRigfht: ".3125rem" }} >
                 <InfoCircleOutlined />
               </Button>
             </Tooltip>
@@ -209,7 +209,7 @@ function AppsAndAnalysisPage(props) {
     <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>Please select a brain to view in the app.</span>    
   </div>
 ) : (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100vh', width: '100%', border: '0' }} sandbox="allow-scripts allow-same-origin"></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100vh', width: '100%', border: '0' }} ></iframe>
 )}
     </div>
     </div>
