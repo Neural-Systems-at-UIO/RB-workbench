@@ -29,7 +29,7 @@ function AppsAndAnalysisPage(props) {
 
 
     // disable the "Created Brains" menu if WebIlastik or NutilWeb is selected
-    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://nutil.apps-dev.hbp.eu/")) {
+    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
       setSelectedApp(`${appUrl}`)
