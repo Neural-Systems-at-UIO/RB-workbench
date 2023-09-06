@@ -14,7 +14,7 @@ const Workbench = (props) => {
   const token = props.token
   console.log('workbench received key', props.keyValue)
   console.log(props)
-  // document.domain = "https://ebrains-workbench.apps-dev.hbp.eu"
+
   return (
 
     <div className='App' style={{ overflow: 'hidden', height: '100%' }} >
@@ -29,9 +29,14 @@ const Workbench = (props) => {
             >
       
               <Tabs type='card' className='TabWrapper' size='large' destroyInactiveTabPane={true}>
-                <TabPane tab='Metadata' key='2'>
-                  <MetaDataPage setPage = {props.setPage} user = {props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
-                </TabPane>
+                {'metadata' === process.env.REACT_APP_APPLICATION && (
+                  <TabPane tab='Metadata' key='2'>
+                    <MetaDataPage setPage={props.setPage} user={props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
+                  </TabPane>
+                )}
+
+                {'EBworkbench' === process.env.REACT_APP_APPLICATION && (
+                  <>
                 <TabPane tab='File Creator' key='3' style={{"height":"100%"}}>
                   {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
               
@@ -44,6 +49,12 @@ const Workbench = (props) => {
                 <TabPane tab='Apps & Analysis' key='4' style={{"height":"100%"}}>
                   <AppsAndAnalysisPage keyValue={props.keyValue}/>
                 </TabPane>
+                
+                  <TabPane tab='Metadata' key='2'>
+                    <MetaDataPage setPage={props.setPage} user={props.user} page={props.page} project={props.project} projectDataTable={props.projectDataTable}/>
+                  </TabPane>
+                  </>
+                )}
                 <TabPane tab='Share Data' key='5' style={{"height":"100%"}}>
                 </TabPane>
               </Tabs>

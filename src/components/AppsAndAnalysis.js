@@ -29,17 +29,19 @@ function AppsAndAnalysisPage(props) {
 
 
     // disable the "Created Brains" menu if WebIlastik or NutilWeb is selected
-    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://nutil.apps-dev.hbp.eu/")) {
+    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
-
+      setSelectedApp(`${appUrl}`);
     } else {
       setBrainMenuHeader("Select one brain")
 
       setDisableCreatedBrains(false);
+      setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
+
     }
     console.log('currentlySelectedBrain', currentlySelectedBrain)
-    setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
+
   }
   const [progressWidgetOpen, setProgressWidgetOpen] = useState(false);
   const launchProgressWidget = () => {
@@ -108,7 +110,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?clb-collab-id=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}`)}>
+          <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?ebrains_bucket_name=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}`)}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebIlastik</span>
             <Tooltip title="Launch WebIlastik">
               <Button shape="circle" size="small" style={{ marginLeft: "0.8rem", marginRight: ".3125rem" }} >
@@ -116,7 +118,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect("https://nutil.apps-dev.hbp.eu/")} style={{ display: "flex", alignItems: "center" }}>
+          <Menu.Item onClick={() => handleAppSelect(`https://127.0.0.1:3000/?clb-collab-id=${props.keyValue}`)} style={{ display: "flex", alignItems: "center" }}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>NutilWeb</span>
             <Tooltip title="Launch NutilWeb">
               <Button shape="circle" size="small" style={{ marginLeft: "1rem", marginRight: ".3125rem" }}>

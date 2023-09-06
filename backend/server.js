@@ -71,16 +71,7 @@ app.get('/', function (req, res) {
   }
 
 })
-app.get('/app', function (req, res) {
-  if (process.env.NODE_ENV === 'development') {
-    // send user to localhost:3000
-    res.redirect('https://localhost:3000' + req.url)
-  }
-  else {
-    res.sendFile(path.resolve(__dirname, '../build/', 'index.html'), (err) => { console.log(err) }) 
-  }
 
-})
 
 
 // api endpoint for getting the data from the api
@@ -99,16 +90,15 @@ function get_token(code, res) {
  
   redirect_uri = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
   
-  console.log(process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_ID, process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_SECRET)
-  console.log('redirect_uri:', redirect_uri)
+
   const params = new URLSearchParams({
     grant_type: "authorization_code",
     client_id: process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_ID,
     code: code,
     client_secret: process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_SECRET,
-    redirect_uri: `${redirect_uri}/app`,
+    redirect_uri: `${redirect_uri}`,
   });
-  
+  console.log(params.toString())
   // make POST request to get token
   axios({
     method: "post",

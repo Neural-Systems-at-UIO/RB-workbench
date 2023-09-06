@@ -13,7 +13,7 @@ export function ProjectListElement(props) {
     return new Promise((resolve, reject) => {
 
       if (process.env.NODE_ENV === "development") {
-        var target_url = process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL;
+        var target_url = process.env.REACT_APP_BACKEND_URL;
         var target = `${target_url}/readTable?project=${project}&user=${user}`
       }
       else {
@@ -46,7 +46,7 @@ const handleSubmit = (values) => {
     key: props.itemkey
   }
   console.log(req_body)
-  fetch(`${process.env.REACT_APP_OIDC_CLIENT_REDIRECT_URL}/edit_project`, {
+  fetch(`${process.env.REACT_APP_BACKEND_URL}/edit_project`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
