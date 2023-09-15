@@ -29,7 +29,7 @@ function AppsAndAnalysisPage(props) {
 
 
     // disable the "Created Brains" menu if WebIlastik or NutilWeb is selected
-    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://127.0.0.1:3000/")) {
+    if (appUrl.includes("https://app.ilastik.org/") || appUrl.includes("https://pynutil-test.apps.hbp.eu/")) {
       setDisableCreatedBrains(true);
       setSelectedApp(appUrl);
       setSelectedApp(`${appUrl}`);
@@ -118,7 +118,7 @@ function AppsAndAnalysisPage(props) {
               </Button>
             </Tooltip>
           </Menu.Item>
-          <Menu.Item onClick={() => handleAppSelect(`https://127.0.0.1:3000/?clb-collab-id=${props.keyValue}`)} style={{ display: "flex", alignItems: "center" }}>
+          <Menu.Item onClick={() => handleAppSelect(`https://pynutil-test.apps.hbp.eu/?clb-collab-id=${props.keyValue}`)} style={{ display: "flex", alignItems: "center" }}>
             <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>NutilWeb</span>
             <Tooltip title="Launch NutilWeb">
               <Button shape="circle" size="small" style={{ marginLeft: "1rem", marginRight: ".3125rem" }}>
