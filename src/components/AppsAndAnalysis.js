@@ -209,7 +209,7 @@ function AppsAndAnalysisPage(props) {
     <span style={{ fontSize: '2em', fontWeight: 'bold', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', background: 'white' }}>Please select a brain to view in the app.</span>    
   </div>
 ) : (
-  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: '100vh', width: '100%', border: '0' }} ></iframe>
+  <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: 'calc(100vh - 3.875rem)', width: '100%', border: '0' }} ></iframe>
 )}
     </div>
     </div>
