@@ -41,7 +41,7 @@ const Workbench = (props) => {
                   {/* make an iframe pointing to https://quint-ebrainsworkbench.apps.hbp.eu/*/}
               
                  <div  style={{"background":"white", "height":"100vh", "width":"100%"}}>
-                <iframe title="File Creator" src={`https://tif-dzi-tar-svc-test.apps.hbp.eu/?clb-collab-id=${props.keyValue}`} style={{"background":"white", "height":"100%", "width":"100%", border:"0"}}></iframe>                    
+                <iframe title="File Creator" src={`https://tif-dzi-tar-svc-test.apps.hbp.eu/?clb-collab-id=${props.keyValue}`} style={{"background":"white", "height":'calc(100vh - 3.875rem)', "width":"100%", border:"0"}}></iframe>                    
 
                   </div>                    
 

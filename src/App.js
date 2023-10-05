@@ -25,6 +25,14 @@ const Loading = () => {
    </div>
   )
 }
+window.addEventListener('beforeunload', event => {
+  const target = event.target;
+  console.log('tag name', target.tagName)
+  // if (target.tagName === 'IFRAME') {
+    event.preventDefault();
+    event.returnValue = ''; // required for Chrome
+  // }
+});
 
 const ProfileAvatar = ({user}) => {
   //console.log('pfa user',  user)
