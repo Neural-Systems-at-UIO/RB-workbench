@@ -13,9 +13,11 @@ function getToken() {
     return new Promise((resolve, reject) => {
         const code = getCodeFromURL();
         const xhr = new XMLHttpRequest();
-
+        console.log("process.env.NODE_ENV ", process.env.NODE_ENV)
         if (process.env.NODE_ENV === "development") {
+
             var redirect_uri = process.env.REACT_APP_BACKEND_URL;
+            console.log('redirect_uri', redirect_uri)
             xhr.open("GET", `${redirect_uri}/auth?code=${code}`, true);
         } else {
             xhr.open("GET", `auth?code=${code}`, true);

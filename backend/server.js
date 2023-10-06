@@ -98,6 +98,7 @@ function get_token(code, res) {
     client_secret: process.env.REACT_APP_WORKBENCH_OIDC_CLIENT_SECRET,
     redirect_uri: `${redirect_uri}`,
   });
+  console.log('params')
   console.log(params.toString())
   // make POST request to get token
   axios({

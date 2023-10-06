@@ -25,14 +25,7 @@ const Loading = () => {
    </div>
   )
 }
-window.addEventListener('beforeunload', event => {
-  const target = event.target;
-  console.log('tag name', target.tagName)
-  // if (target.tagName === 'IFRAME') {
-    event.preventDefault();
-    event.returnValue = ''; // required for Chrome
-  // }
-});
+
 
 const ProfileAvatar = ({user}) => {
   //console.log('pfa user',  user)
@@ -70,8 +63,7 @@ const ProfileAvatar = ({user}) => {
  
     </Popover>
     <div style={{    marginTop:'-1.8rem',marginLeft:'2rem'}}>
-      <Avatar size={120} icon={<EbrainsLogo />} style={{ backgroundColor: 'transparent'}} />
-    </div>
+    <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', width: 120, height:80 }} />    </div>
     </div>
   )
 }
