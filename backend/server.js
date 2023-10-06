@@ -293,34 +293,75 @@ function readTable (user, project) {
   })
 }
 
-function delete_project(user, project) {
+function delete_project(user, project, token) {
   return new Promise((resolve, reject) => {
     let projects = JSON.parse(fs.readFileSync('./persistent_storage/projects.json', 'utf8'))
     console.log('user: ', user)
     console.log('project: ', project)
     console.log('projects: ', projects)
     let filtered_projects = projects.filter((proj) => {
-      if (!((proj.owner == user) && (proj.title == project))) {
+      if (((proj.owner == user) && (proj.title == project))) {
         return proj
       }
+    })
+    console.log('filtered projects: ', filtered_projects)
+    let target = filtered_projects[0].key
+    console.log('target: ', target)
+
+    let dataproxyURL = `https://data-proxy.ebrains.eu/api/v1/buckets/${target}`
+    console.log('dataproxyURL: ', dataproxyURL)
+
+    let headers = {
+      'Content-Type': 'application/json',
+      'accept': '*/*',
+      'Authorization': 'Bearer ' + token
+    };
+
+
+    axios.delete(dataproxyURL, { headers: headers })
+    .then((response) => {
+      'success dp'
+      console.log(response)
     }
     )
-
-    // delete the project from the projects
- 
-    // write the projects to the local storage
-    fs.writeFile('./persistent_storage/projects.json', JSON.stringify(filtered_projects), (err) => {
-      if (err) {
-        reject(err)
-      }
-      else {
-        resolve('success')
-      }
+    .catch((err) => {
+      'fail dp'
+      console.log(err)
+    }
+    )
+    
+      // .then(() => {
+    let CollabURL = `https://wiki.ebrains.eu/rest/v1/collabs/${target}`;
+    axios.delete(CollabURL, { headers: headers }).then((response) => {
+      console.log(response)
     })
-
+    // .then(() => {
+      // delete the project from the projects
+      // write the projects to the local storage
+ 
+    // })
+        
+      // })
+   
+      .catch((err) => { 
+        console.log(err)
+        // reject(err)
+      })
+      filtered_projects = projects.filter((proj) => {
+        if (!((proj.owner == user) && (proj.title == project))) {
+          return proj
+        }
+      })
+      fs.writeFile('./persistent_storage/projects.json', JSON.stringify(filtered_projects), (err) => {
+        if (err) {
+          reject(err)
+        }
+        else {
+          resolve('success')
+        }
+      })
   })
 }
-
 function initialise_collab(token, collabId) {
   
   return new Promise((resolve, reject) => {
@@ -404,7 +445,9 @@ function initialise_collab(token, collabId) {
 app.post('/delete_project', function (req, res) {
   let project = req.body.project
   let user = req.body.user
-  delete_project(user, project).then(function (result) {
+  let token = req.headers.authorization
+  console.log('delete project token is ', token)
+  delete_project(user, project, token).then(function (result) {
     res.send('ok')
   })
 })

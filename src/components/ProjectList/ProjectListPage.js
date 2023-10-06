@@ -76,7 +76,8 @@ const ProjectList = (props) => {
         fetch(`${process.env.REACT_APP_BACKEND_URL}/delete_project`, {
           method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'authorization': props.token,
             },
             body: JSON.stringify({
                 user: props.user["http://schema.org/alternateName"],
