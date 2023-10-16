@@ -102,7 +102,9 @@ const ProfileAvatar = ({user}) => {
         <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>Documentation</span>
 
       </div>
-    <div style={{    marginTop:'-1.8rem',marginLeft:'2rem'}}>
+    <div style={{marginTop:'-1.8rem', marginLeft:'2rem', cursor: 'pointer'}} onClick={
+      () => window.open('https://ebrains.eu', '_blank')
+    }>
     <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', width: 120, height:80 }} />    </div>
     </div>
   )
