@@ -170,7 +170,7 @@ const ProjectList = (props) => {
     return (
         
         <Layout className = "metadata-page-container" style={{  minHeight: '92.55vh' }}>
-        <Header className="header" style={{backgroundColor:'transparent', minHeight:'4.5rem'}}>
+        <Header className="header" style={{backgroundColor:'transparent'}}>
         </Header>
         {/* <SidePanelLeft onButtonClick={handleSelectTable}></SidePanelLeft> */}
         
