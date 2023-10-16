@@ -3,7 +3,7 @@ import { ReactComponent as EbrainsLogo } from './resources/ebrains-ai-cropped.sv
 
 import { Layout, Tabs, Spin, Avatar, Popover, Button} from 'antd'
 import { Header } from 'antd/lib/layout/layout'
-import { UserOutlined, HomeOutlined} from '@ant-design/icons';
+import { UserOutlined, HomeOutlined, DownloadOutlined, BookOutlined} from '@ant-design/icons';
 
 import './styles/App.css'
 import './styles/index.css'
@@ -43,16 +43,35 @@ const ProfileAvatar = ({user}) => {
   }
 
   return (
-    <div style={containerStyle}>
-    <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
-      <div zIndex={9} onClick={() => {console.log('clicked')}} style={{    
+    <div style={containerStyle} >
+      <div zIndex={9}  onClick={() => 
+    window.open('https://data.kg.ebrains.eu/zip?container=https%3A%2F%2Fdata-proxy.ebrains.eu%2Fapi%2Fv1%2Fbuckets%2Fdemodatasetquintworkflow%3Fprefix%3Dspace-for-testing-the-nutil-web-applicat-tg-ArcSwe_mice_TIFF%2F', '_blank')
+    } style={{    
         paddingRight: '1rem',
         paddingTop: '0.1rem',
         borderRadius: '1.5rem',
         backgroundColor: '#d3adf7',
         marginTop: '0.7rem',
         height:'2.75rem',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        }}>
+        
+        <Avatar size={40} icon={<DownloadOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
+
+        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>Download Demo Dataset</span>
+
+      </div>
+    <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
+      <div zIndex={9} style={{    
+        paddingRight: '1rem',
+        paddingTop: '0.1rem',
+        borderRadius: '1.5rem',
+        backgroundColor: '#d3adf7',
+        marginTop: '0.7rem',
+        height:'2.75rem',
+        cursor: 'pointer',
+        marginLeft: '2rem'
+
         }}>
         
         <Avatar size={40} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
@@ -62,6 +81,27 @@ const ProfileAvatar = ({user}) => {
       </div>
  
     </Popover>
+    <div zIndex={9} style={{    
+        paddingRight: '1rem',
+        paddingTop: '0.1rem',
+        borderRadius: '1.5rem',
+        backgroundColor: '#d3adf7',
+        marginTop: '0.7rem',
+        height:'2.75rem',
+        cursor: 'pointer',
+        marginLeft: '2rem'
+
+        }}
+        onClick={() =>
+          window.open('https://quint-webtools.readthedocs.io/en/latest/', '_blank')
+        }
+        >
+        
+        <Avatar size={40} icon={<BookOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
+
+        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>Documentation</span>
+
+      </div>
     <div style={{    marginTop:'-1.8rem',marginLeft:'2rem'}}>
     <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', width: 120, height:80 }} />    </div>
     </div>
@@ -98,6 +138,8 @@ const HomeButton = ({setPage}) => {
     </div>
   )
 }
+
+
 const App = () => {
 
   const [loading, setLoading] = React.useState(true)
