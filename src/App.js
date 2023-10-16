@@ -165,7 +165,7 @@ const App = () => {
   const [isSmallScreen, setIsSmallScreen] = React.useState(false);
   React.useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < (window.screen.width * 0.70)); // set breakpoint here
+      setIsSmallScreen(window.innerWidth < (1760)); // set breakpoint here
     };
     window.addEventListener('resize', handleResize);
 
