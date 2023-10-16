@@ -165,7 +165,7 @@ const App = () => {
   const [isSmallScreen, setIsSmallScreen] = React.useState(false);
   React.useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 1768); // set breakpoint here
+      setIsSmallScreen(window.innerWidth < (window.screen.width * 0.70)); // set breakpoint here
     };
     window.addEventListener('resize', handleResize);
 
@@ -217,7 +217,7 @@ const App = () => {
 
         {page !== 'projectList' && <HomeButton setPage={setPage}></HomeButton>}
         <ProfileAvatar user={user}></ProfileAvatar>
-        {(isSmallScreen & page !== 'projectList') && <div style={{ height: '3rem' }}></div>}
+        {(isSmallScreen && page !== 'projectList') && <div style={{ height: '3rem' }}></div>}
 
         <PageSwitcher token={token} user={user} page={page} setPage={setPage} />
         </Layout>
