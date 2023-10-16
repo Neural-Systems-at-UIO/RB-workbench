@@ -18,6 +18,7 @@ function AppsAndAnalysisPage(props) {
     // setMenuItems(menuItems.map(item => ({ ...item, props: { ...item.props} })));
     
     const iframe = document.getElementById("apps-iframe");
+    
     // if iframe exists change the style
     // if (iframe) {
     //     // hack bc ilastik resizes the iframe 
@@ -72,7 +73,59 @@ function AppsAndAnalysisPage(props) {
   };
 
   const [menuItems, setMenuItems] = useState([]);
+  const [onGoingBrains, setOnGoingBrains] = useState({});
+  // dictionary of brain names, and their status on each app
+  const updateOnGoingBrains = () => {
+    let onGoingBrainsTemp = [];
+    let index = 0;
+    fetch(`https://data-proxy.ebrains.eu/api/v1/buckets/${props.keyValue}?prefix=.nesysWorkflowFiles/alignmentJsons/&delimiter=%2F&limit=50`)
+      .then(response => response.json())
+      .then(data => {
+        const items = data.objects.slice(1).map((object, index) => {
+          const name = object.name.substring(object.name.lastIndexOf("/") + 1);
+          const nameWithoutExtension = name.split(".").slice(0, -1).join(".");
+          // request each json and check if it has a "markers" field
+          fetch(`https://data-proxy.ebrains.eu/api/v1/buckets/${props.keyValue}/${object.name}?inline=false&redirect=false`)
+            .then(response => response.json())
+            .then(data => data.url)
+            .then(req_url => {
+              console.log("req_url", req_url)
+              fetch(req_url)
+                .then(resp => {
+                  console.log("resp", resp.json())
+                  // if it has a markers field, then it is a completed brain
+                  let WebWarp;
+                  if (data.markers) {
+                    WebWarp = true;
+                  }
+                  else {
+                    WebWarp = false;
+                  }
+                  // update onGoingBrains
+                  let temp_data = {
+                    "key": index,
+                    "BrainID": nameWithoutExtension,
+                    "WebAlign": true,
+                    "WebWarp": WebWarp,
+                    "WebIlastik": false,
+                    "NutilWeb": false
+                  };
+                  onGoingBrainsTemp.push(temp_data);
+                  index++;
+                  if (index === items.length) {
+                    setOnGoingBrains(onGoingBrainsTemp);
+                    console.log("onGoingBrains", onGoingBrains)
+                  }
+                });
+            });
+        });
+      });
+  };
+
   
+  useEffect(() => {
+    updateOnGoingBrains();
+  }, []);
   useEffect(() => {
     fetch(`https://data-proxy.ebrains.eu/api/v1/buckets/${props.keyValue}?prefix=.nesysWorkflowFiles/alignmentJsons/&delimiter=%2F&limit=50`)
       .then(response => response.json())
@@ -152,35 +205,7 @@ function AppsAndAnalysisPage(props) {
     title: 'NutilWeb',
     dataIndex: 'NutilWeb',
   },
-]} dataSource={[
-  {
-    key: '1',
-    BrainID: '71717640',
-    // tick emoji
-    WebAlign:'✔️',
-    WebWarp: '❌',
-    WebIlastik: '❌',
-    NutilWeb: '❌',
-  },
-  {
-    key: '2',
-    BrainID: '71717641',
-    // tick emoji
-    WebAlign:'✔️',
-    WebWarp: '❌',
-    WebIlastik: '❌',
-    NutilWeb: '❌',
-  },
-  {
-    key: '3',
-    BrainID: '71717642',
-    // tick emoji
-    WebAlign:'✔️',
-    WebWarp: '❌',
-    WebIlastik: '❌',
-    NutilWeb: '❌',
-  },
-]} size="small" />
+]} dataSource={onGoingBrains} size="small" />
     </Modal>
     </div>
       <div id="sideBarBrains" style={{ ...menuStyle, 'white-space': 'nowrap',  maxWidth: disableCreatedBrains ? 0 : '10vw', width:'10vw', overflow: 'hidden', transition: 'max-width 0.5s ease-in-out' }}>
