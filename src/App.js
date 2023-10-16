@@ -141,7 +141,6 @@ const HomeButton = ({setPage}) => {
   )
 }
 
-
 const App = () => {
 
   const [loading, setLoading] = React.useState(true)
@@ -163,7 +162,19 @@ const App = () => {
     window.location.href = newURL;
   }
 
+  const [isSmallScreen, setIsSmallScreen] = React.useState(false);
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < (window.screen.width * 0.70)); // set breakpoint here
+    };
+    window.addEventListener('resize', handleResize);
 
+    // call handleResize initially to set the initial state
+    handleResize();
+
+    // cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   // Why does it not work to use this in the getUser.then() ??
   function handleUserReceived(user) {
     setUser(user)
@@ -200,13 +211,14 @@ const App = () => {
     let LayoutStyle = {
       height: '100vh'
     }
-
     return (
       <div className='App' style = {AppStyle}>
         <Layout style={LayoutStyle}>
-        <useHookTest></useHookTest>
+
         {page !== 'projectList' && <HomeButton setPage={setPage}></HomeButton>}
         <ProfileAvatar user={user}></ProfileAvatar>
+        {(isSmallScreen && page !== 'projectList') && <div style={{ height: '3rem' }}></div>}
+
         <PageSwitcher token={token} user={user} page={page} setPage={setPage} />
         </Layout>
       </div>
