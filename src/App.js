@@ -27,7 +27,7 @@ const Loading = () => {
 }
 
 
-const ProfileAvatar = ({user}) => {
+const ProfileAvatar = ({user, isSmallScreen}) => {
   //console.log('pfa user',  user)
 
   // Todo: What is the purpose of the container that gets this style??
@@ -41,6 +41,7 @@ const ProfileAvatar = ({user}) => {
     display: 'flex',
 
   }
+  console.log("isSmallScreen", isSmallScreen)
 
   return (
     <div style={containerStyle} >
@@ -54,11 +55,15 @@ const ProfileAvatar = ({user}) => {
         marginTop: '0.7rem',
         height:'2.75rem',
         cursor: 'pointer',
-        }}>
+        }}
+        title="Click to download demo dataset"
+        >
         
-        <Avatar size={40} icon={<DownloadOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
+        <Avatar size={40} icon={<DownloadOutlined />} style={{ backgroundColor: 'transparent', color: 'black', marginLeft: isSmallScreen ? '1rem' : '0rem' }} />
 
-        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>Download Demo Dataset</span>
+        {isSmallScreen ? null : (
+  <span style={{fontSize: '1rem', marginLeft: '0.5rem', color: 'black'}}>
+Download Demo Dataset</span>)}
 
       </div>
     <Popover placement="bottom" trigger="click" content={<UserProfileCard user={user} />} >
@@ -72,11 +77,17 @@ const ProfileAvatar = ({user}) => {
         cursor: 'pointer',
         marginLeft: '2rem'
 
-        }}>
-        
-        <Avatar size={40} icon={<UserOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
+        }}
+        title="Click to view your user information"
 
-        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>User</span>
+
+        >
+        
+        <Avatar size={40} icon={<UserOutlined />} style={{ backgroundColor: 'transparent', color: 'black', marginLeft: isSmallScreen ? '1rem' : '0rem' }}/>
+        {isSmallScreen ? null : (
+  <span style={{fontSize: '1rem', marginLeft: '0.5rem', color: 'black'}}>
+
+User</span>)}
 
       </div>
  
@@ -95,17 +106,22 @@ const ProfileAvatar = ({user}) => {
         onClick={() =>
           window.open('https://quint-webtools.readthedocs.io/en/latest/', '_blank')
         }
+        title="Click to view the workbench documentation"
         >
         
-        <Avatar size={40} icon={<BookOutlined />} style={{ backgroundColor: 'transparent' , color:'black'}} />
+        <Avatar size={40} icon={<BookOutlined />} style={{ backgroundColor: 'transparent', color: 'black', marginLeft: isSmallScreen ? '1rem' : '0rem' }} />
+{isSmallScreen ? null : (
+  <span style={{fontSize: '1rem', marginLeft: '0.5rem', color: 'black'}}>
 
-        <span style={{fontSize: '1rem', marginLeft: '0.5rem',color:'black'}}>Documentation</span>
+    Documentation
+  </span>
+)}
 
       </div>
     <div style={{marginTop:'-1.8rem', marginLeft:'2rem', cursor: 'pointer'}} onClick={
       () => window.open('https://ebrains.eu', '_blank')
     }>
-    <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', width: 120, height:80 }} />    </div>
+    <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', color: 'black', marginLeft: isSmallScreen ? '1rem' : '0rem' }} />    </div>
     </div>
   )
 }
@@ -147,6 +163,7 @@ const App = () => {
   const [token, setToken] = React.useState(null)
   const [user, setUser] = React.useState(null)
   const [page, setPage] = React.useState('projectList')
+  const [isSmallScreen, setIsSmallScreen] = React.useState(false);
 
   function handleTokenReceived(token) {
     window.history.pushState({}, document.title, "/") // clear url 
@@ -162,19 +179,21 @@ const App = () => {
     window.location.href = newURL;
   }
 
-  const [isSmallScreen, setIsSmallScreen] = React.useState(false);
   React.useEffect(() => {
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < (1760)); // set breakpoint here
+      console.log('window.innerWidth', window.innerWidth)
+      setIsSmallScreen((window.innerWidth < 1760) && (page != "projectList")); // set breakpoint here
+
     };
     window.addEventListener('resize', handleResize);
+    console.log('page', page)
 
     // call handleResize initially to set the initial state
     handleResize();
 
     // cleanup
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isSmallScreen, page]);
   // Why does it not work to use this in the getUser.then() ??
   function handleUserReceived(user) {
     setUser(user)
@@ -216,8 +235,7 @@ const App = () => {
         <Layout style={LayoutStyle}>
 
         {page !== 'projectList' && <HomeButton setPage={setPage}></HomeButton>}
-        <ProfileAvatar user={user}></ProfileAvatar>
-        {(isSmallScreen && page !== 'projectList') && <div style={{ height: '3rem' }}></div>}
+        <ProfileAvatar user={user} isSmallScreen={isSmallScreen}></ProfileAvatar>
 
         <PageSwitcher token={token} user={user} page={page} setPage={setPage} />
         </Layout>
