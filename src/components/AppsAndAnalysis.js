@@ -35,7 +35,7 @@ function AppsAndAnalysisPage(props) {
       setSelectedApp(appUrl);
       setSelectedApp(`${appUrl}`);
     } else {
-      setBrainMenuHeader("Select one brain")
+      setBrainMenuHeader("Brains")
 
       setDisableCreatedBrains(false);
       setSelectedApp(`${appUrl}&filename=.nesysWorkflowFiles/alignmentJsons/${currentlySelectedBrain}.waln`);
@@ -159,7 +159,7 @@ function AppsAndAnalysisPage(props) {
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       <div id="sideBar" style={{ ...menuStyle, display: "flex", flexDirection: "row" }}>
-        <div id="sideBarApps" style={{ ...menuStyle, width: "10vw" }}>
+        <div id="sideBarApps" style={{ ...menuStyle, width: "12rem" }}>
           <div style={{ fontWeight: 'bold', marginTop: '3rem', marginBottom: '1rem', fontSize: '1.5em' }}>Apps</div>
           <Menu style={{ justifyContent: "center", backgroundColor: '#fbf8fc' }}>
             <Menu.Item onClick={() => handleAppSelect(`https://webalign.apps-dev.hbp.eu/?clb-collab-id=${props.keyValue}`)}>
@@ -178,7 +178,7 @@ function AppsAndAnalysisPage(props) {
                 </Button>
               </Tooltip>
             </Menu.Item>
-            <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?output_path_pattern=/.nesysWorkflowFiles/ilastikOutputs/{parent_dir_name}/{name}.{extension}&ebrains_bucket_name=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}&confirm_exit_when_session_running=false`)}>
+            <Menu.Item onClick={() => handleAppSelect(`https://app.ilastik.org/public/nehuba/index.html?output_path_pattern=/.nesysWorkflowFiles/ilastikOutputs/{parent_dir_name}/{name}.{extension}&confirm_exit_when_session_running=false&ebrains_bucket_name=${props.keyValue}&ebrains_bucket_path=.nesysWorkflowFiles/zippedPyramids/#!{"layout":"xy"}`)}>
               <span style={{ marginLeft: ".3125rem", marginRight: ".3125rem" }}>WebIlastik</span>
               <Tooltip title="Launch WebIlastik">
                 <Button shape="circle" size="small" style={{ marginLeft: "0.8rem", marginRight: ".3125rem" }} >
@@ -223,7 +223,7 @@ function AppsAndAnalysisPage(props) {
             ]} dataSource={onGoingBrains} size="small" />
           </Modal>
         </div>
-        <div id="sideBarBrains" style={{ ...menuStyle, 'white-space': 'nowrap', maxWidth: disableCreatedBrains ? 0 : '10vw', width: '10vw', overflow: 'hidden', transition: 'max-width 0.5s ease-in-out' }}>
+        <div id="sideBarBrains" style={{ ...menuStyle, 'white-space': 'nowrap', maxWidth: disableCreatedBrains ? 0 : '12rem', width: '12rem', overflow: 'hidden', transition: 'max-width 0.5s ease-in-out' }}>
           <div style={{ fontWeight: 'bold', marginTop: '3rem', fontSize: '1.5em', marginBottom: '1rem' }}>{BrainMenuHeader}</div>
           <Menu disabled={disableCreatedBrains} onSelect={handleMenuSelect} selectedKeys={selectedKeys} style={{ backgroundColor: '#fbf8fc' }}>
             {menuItems}
