@@ -230,7 +230,7 @@ function AppsAndAnalysisPage(props) {
           </Menu>
         </div>
       </div>
-      <div id="iframeContainer" style={{ width: '90vw', height: '100vh', float: 'right' }}>
+      <div id="iframeContainer" style={{ width: 'calc(100vw - 12rem)', height: '100vh', float: 'right' }}>
         {(disableCreatedBrains & (selectedApp !== "")) ? (
           <iframe id="apps-iframe" title="Apps and Analysis" src={selectedApp} style={{ background: 'white', height: 'calc(100vh - 3.875rem)', width: '100%', border: '0', overflow: 'auto' }}></iframe>
         ) : (menuItems.length == 0) ? (
