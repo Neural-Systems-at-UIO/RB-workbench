@@ -35,8 +35,7 @@ const ProfileAvatar = ({user, isSmallScreen}) => {
     position: 'absolute',
     zIndex:1,
     float: 'left',
-    right: '11vw',
-    
+    right: isSmallScreen ? '4vw' : '9vw',
     // set flex
     display: 'flex',
     height: 0,
@@ -76,7 +75,7 @@ Download Demo Dataset</span>)}
         marginTop: '0.7rem',
         height:'2.75rem',
         cursor: 'pointer',
-        marginLeft: '2rem'
+        marginLeft: isSmallScreen ? '1rem' : '2rem'
 
         }}
         title="Click to view your user information"
@@ -101,7 +100,7 @@ User</span>)}
         marginTop: '0.7rem',
         height:'2.75rem',
         cursor: 'pointer',
-        marginLeft: '2rem'
+        marginLeft: isSmallScreen ? '1rem' : '2rem'
 
         }}
         onClick={() =>
@@ -119,7 +118,7 @@ User</span>)}
 )}
 
       </div>
-    <div style={{marginTop:'-1.8rem', marginLeft:'2rem', cursor: 'pointer'}} onClick={
+    <div style={{marginTop:'-1.8rem', marginLeft: isSmallScreen ? '0.5rem' : '2rem', cursor: 'pointer'}} onClick={
       () => window.open('https://ebrains.eu', '_blank')
     }>
     <Avatar size={120} icon={<EbrainsLogo />} shape='square' style={{ backgroundColor: 'transparent', color: 'black', marginLeft: isSmallScreen ? '1rem' : '0rem' }} />    </div>
