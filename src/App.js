@@ -39,6 +39,7 @@ const ProfileAvatar = ({user, isSmallScreen}) => {
     
     // set flex
     display: 'flex',
+    height: 0,
 
   }
   console.log("isSmallScreen", isSmallScreen)
